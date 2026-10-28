@@ -1,0 +1,43 @@
+# IDE / editor
+.idea/
+.vscode/
+*.iml
+*.code-workspace
+
+# OS
+.DS_Store
+._*
+Thumbs.db
+
+# Node
+node_modules/
+
+# Local env
+.env
+.env.local
+
+# Terraform
+**/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+
+# Private local configuration and generated artifacts
+.env.*
+!.env.example
+!.env.sample
+backend.hcl
+*.tfplan
+*.plan
+node_modules/
+[Bb]in/
+[Oo]bj/
+dist/
+build/
+__pycache__/
+*.pyc
+/frontend/restaurant-frontend-app/src/**/*.css
+/frontend/restaurant-frontend-app/src/**/*.css.map

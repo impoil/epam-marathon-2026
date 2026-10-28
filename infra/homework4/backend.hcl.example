@@ -1,0 +1,10 @@
+# Copy to ignored backend.hcl and replace BOTH placeholders before remote init.
+# No credentials belong in backend configuration.
+# allowed_account_ids checks the caller account, not the bucket owner.
+# Separately verify STS identity and S3 --expected-bucket-owner before use.
+bucket              = "REPLACE_WITH_YOUR_PRIVATE_STATE_BUCKET"
+allowed_account_ids = ["REPLACE_WITH_YOUR_12_DIGIT_AWS_ACCOUNT_ID"]
+key                 = "homework4/group-preorder/terraform.tfstate"
+region              = "eu-north-1"
+encrypt             = true
+use_lockfile        = true
