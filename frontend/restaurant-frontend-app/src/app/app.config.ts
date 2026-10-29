@@ -8,12 +8,14 @@ import { provideDaterangepickerLocale } from 'ngx-daterangepicker-bootstrap';
 
 import { environment } from '../environments/environment';
 import { API_BASE_URL } from './shared/config/api-base-url.token';
+import { homeworkInterceptors, homeworkProviders } from './shared/config/homework.providers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    ...homeworkProviders,
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideHttpClient(withXhr(), withInterceptors([tokenInterceptor])),
+    provideHttpClient(withXhr(), withInterceptors([tokenInterceptor, ...homeworkInterceptors])),
     provideDaterangepickerLocale({
       separator: ' - ',
       applyLabel: 'Apply',

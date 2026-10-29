@@ -1,12 +1,12 @@
 /**
- * Fails the build if the produced bundle still contains configuration placeholders.
+ * Fails the build if configuration placeholders or homework demo code reach production.
  * Runs automatically after `npm run build` (npm "postbuild" hook).
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 
 const BUNDLE_DIR = resolve('dist/restaurant-frontend-app/browser');
-const FORBIDDEN = ['BACKEND_URL_PLACEHOLDER'];
+const FORBIDDEN = ['BACKEND_URL_PLACEHOLDER', 'green-and-tasty-demo', 'owner@demo.test', 'demo-invite-token'];
 
 function walk(dir) {
   return readdirSync(dir).flatMap((entry) => {
@@ -28,7 +28,7 @@ for (const file of walk(BUNDLE_DIR).filter((f) => /\.(js|css|html)$/.test(f))) {
 }
 
 if (failed) {
-  console.error('\nBundle is not deployable: configuration placeholders were not substituted.');
+  console.error('\nBundle is not deployable: forbidden configuration or homework demo markers found.');
   process.exit(1);
 }
 

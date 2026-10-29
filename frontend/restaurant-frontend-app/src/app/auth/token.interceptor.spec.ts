@@ -37,6 +37,28 @@ describe('tokenInterceptor', () => {
     httpMock.verify();
   });
 
+  it('keeps guest authorization and payload unchanged', () => {
+    const body = { guestName: 'Guest' };
+    http.post('https://test.api/guest/sessions', body, {
+      headers: { Authorization: 'Bearer guest-session-token' },
+    }).subscribe();
+    const request = httpMock.expectOne('https://test.api/guest/sessions');
+    expect(request.request.headers.get('Authorization')).toBe('Bearer guest-session-token');
+    expect(request.request.body).toEqual(body);
+    request.flush({});
+  });
+
+  it('supports silent errors on guest endpoints used for homework polling', () => {
+    let status: number | undefined;
+    http.get('https://test.api/guest/groups/real-group/status', {
+      context: new HttpContext().set(SKIP_ERROR_TOAST, true),
+    }).subscribe({ error: (error) => (status = error.status) });
+    httpMock.expectOne('https://test.api/guest/groups/real-group/status')
+      .flush({ error: 'Unavailable' }, { status: 503, statusText: 'Unavailable' });
+    expect(status).toBe(503);
+    expect(toastService.error).not.toHaveBeenCalled();
+  });
+
   it('shows the server message in a toast for a 400 response', () => {
     http.post(URL, {}).subscribe({ error: () => undefined });
 
