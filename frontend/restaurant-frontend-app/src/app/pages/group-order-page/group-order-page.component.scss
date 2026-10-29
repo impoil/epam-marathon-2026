@@ -1,0 +1,241 @@
+@use 'app/shared/styles/abstracts/colors' as color;
+
+:host {
+  display: block;
+  padding: 32px 16px;
+  background: color.$neutral-0;
+}
+.page {
+  box-sizing: border-box;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 40px;
+  border-radius: 24px;
+  background: color.$neutral-100;
+}
+.page-header {
+  padding-bottom: 16px;
+  border-bottom: 1px solid color.$bg-green;
+}
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+h1 {
+  font-size: 26px;
+  line-height: 1.5;
+  font-weight: 500;
+}
+.group-status {
+  padding: 4px 12px;
+  border-radius: 6px;
+  background: color.$neutral-200;
+  font-size: 12px;
+}
+.group-status--sent {
+  background: color.$orange-100;
+}
+ul {
+  list-style: none;
+}
+.reservation-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-top: 16px;
+  font-size: 14px;
+}
+.reservation-details li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-wrap: anywhere;
+}
+.reservation-details img {
+  flex-shrink: 0;
+}
+.sync-bar {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 16px 0;
+  font-size: 12px;
+}
+.sync-bar p,
+.sync-bar span {
+  color: color.$neutral-600;
+}
+.notice {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: color.$orange-30;
+  border: 1px solid color.$orange-100;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.participants {
+  display: grid;
+  gap: 24px;
+}
+.consolidated {
+  margin-top: 24px;
+  padding: 24px;
+  background: color.$neutral-0;
+  border-radius: 16px;
+}
+.consolidated h2 {
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.consolidated li {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 8px 0;
+  font-size: 14px;
+}
+.consolidated li span:first-child {
+  overflow-wrap: anywhere;
+}
+.consolidated li span:last-child {
+  white-space: nowrap;
+}
+.consolidated p {
+  color: color.$neutral-600;
+  font-size: 14px;
+}
+.order-summary {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 2px solid color.$bg-green;
+}
+.grand-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  font-size: 26px;
+  font-weight: 500;
+}
+.grand-total strong {
+  color: color.$green-800;
+  font-weight: 500;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+}
+button:focus-visible {
+  outline: 2px solid color.$green-600;
+  outline-offset: 4px;
+}
+.primary,
+.danger {
+  padding: 12px 24px;
+  border: 1px solid color.$green-600;
+  border-radius: 8px;
+  background: color.$green-gradient;
+  color: color.$neutral-0;
+  font-size: 14px;
+  font-weight: 600;
+}
+.submit-order {
+  width: 100%;
+  margin-top: 16px;
+  min-height: 56px;
+}
+button:disabled {
+  cursor: default;
+}
+.primary:disabled {
+  background: color.$neutral-400;
+  border-color: color.$neutral-400;
+}
+.text-button {
+  padding: 4px 0;
+  border: 0;
+  border-bottom: 1px solid currentColor;
+  background: transparent;
+  font-size: 14px;
+}
+.text-button:disabled {
+  color: color.$neutral-600;
+}
+.danger {
+  border-color: color.$red-400;
+  color: color.$red-400;
+  background: color.$neutral-0;
+}
+.danger:disabled {
+  opacity: 0.6;
+}
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  width: 100%;
+}
+.dialog-total {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+.error {
+  color: color.$red-400;
+  font-size: 14px;
+}
+.state {
+  padding: 24px 0;
+  line-height: 1.6;
+}
+.state button {
+  margin-top: 16px;
+}
+.read-only {
+  margin-top: 16px;
+  padding: 16px;
+  border-radius: 8px;
+  background: color.$neutral-200;
+  text-align: center;
+  font-size: 14px;
+}
+@media (max-width: 600px) {
+  :host {
+    padding: 16px 8px;
+  }
+  .page {
+    padding: 20px 12px;
+    border-radius: 16px;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  .reservation-details {
+    gap: 12px;
+  }
+  .reservation-details li:first-child {
+    width: 100%;
+  }
+  .notice {
+    padding: 12px;
+  }
+  .participants {
+    gap: 16px;
+  }
+  .consolidated {
+    padding: 16px;
+  }
+  .grand-total {
+    font-size: 22px;
+  }
+  .dialog-actions {
+    flex-wrap: wrap;
+  }
+}

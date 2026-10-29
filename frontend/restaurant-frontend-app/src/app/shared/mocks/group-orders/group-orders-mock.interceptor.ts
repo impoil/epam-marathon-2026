@@ -66,5 +66,11 @@ export const groupOrdersMockInterceptor: HttpInterceptorFn = (req, next) => {
     return respond(() => []);
   }
 
+  // A demo session must never be forwarded to the deployed API. Sign out and
+  // use a real Cognito login before accessing a non-demo reservation.
+  if (isDemoAuthorization(req.headers.get('Authorization'))) {
+    return respond(() => { throw new MockHttpError(403, 'Sign out of demo mode to use the real API.'); });
+  }
+
   return next(req);
 };

@@ -91,6 +91,7 @@ export class GroupOrdersMockStore {
   }
 
   remove(guestSessionId: string): GroupSessionsResponse {
+    if (this.status !== 'Open') throw new MockHttpError(400, 'Cannot remove guests after submission.');
     const participant = this.participants.find((p) => p.id === guestSessionId);
     if (!participant) throw new MockHttpError(404, `Guest session with id ${guestSessionId} not found.`);
     if (participant.type === 'Owner') throw new MockHttpError(400, 'Owner session cannot be removed.');

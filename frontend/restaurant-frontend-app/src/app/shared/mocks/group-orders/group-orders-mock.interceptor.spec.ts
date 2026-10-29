@@ -15,15 +15,18 @@ describe('homework mock backend integration', () => {
   let http: HttpClient;
   let backend: HttpTestingController;
   let toast: jasmine.SpyObj<ToastService>;
+  let authentication: jasmine.SpyObj<AuthenticationService>;
 
   beforeEach(() => {
     groupOrdersMockStore.reset();
     toast = jasmine.createSpyObj<ToastService>('ToastService', ['error']);
+    authentication = jasmine.createSpyObj<AuthenticationService>('AuthenticationService', ['getTokens']);
+    authentication.getTokens.and.returnValue(DEMO_TOKENS);
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(withInterceptors([tokenInterceptor, groupOrdersMockInterceptor])),
         provideHttpClientTesting(),
-        { provide: AuthenticationService, useValue: { getTokens: () => DEMO_TOKENS } },
+        { provide: AuthenticationService, useValue: authentication },
         { provide: ToastService, useValue: toast },
       ],
     });
@@ -107,21 +110,32 @@ describe('homework mock backend integration', () => {
   }));
 
   it('passes real reservation IDs through to the configured backend', () => {
+    authentication.getTokens.and.returnValue({ idToken: 'cognito-id-token', accessToken: 'cognito-access-token' });
     http.get(`${API}/reservations/real-reservation/invite-token`).subscribe();
     const request = backend.expectOne(`${API}/reservations/real-reservation/invite-token`);
     expect(request.request.method).toBe('GET');
-    expect(request.request.headers.get('Authorization')).toBe('Bearer ' + DEMO_TOKENS.idToken);
+    expect(request.request.headers.get('Authorization')).toBe('Bearer cognito-id-token');
     request.flush({ token: 'real-invite' });
   });
 
-  it('preserves the guest session token on requests for real groups', () => {
+  it('preserves the guest session token on requests for real guest sessions', () => {
     http
-      .get(`${API}/guest/groups/real-group/sessions`, {
+      .get(`${API}/guest/sessions/real-guest-session`, {
         headers: { Authorization: 'Bearer guest-token' },
       })
       .subscribe();
-    const request = backend.expectOne(`${API}/guest/groups/real-group/sessions`);
+    const request = backend.expectOne(`${API}/guest/sessions/real-guest-session`);
     expect(request.request.headers.get('Authorization')).toBe('Bearer guest-token');
     request.flush({ participants: [], total: 0 });
   });
+
+  it('blocks demo authorization on non-demo reservations before any real HTTP request', fakeAsync(() => {
+    let status: number | undefined;
+    http.get(`${API}/reservations/real-reservation/invite-token`)
+      .subscribe({ error: (error) => (status = error.status) });
+    tick(400);
+    expect(status).toBe(403);
+    backend.expectNone(() => true);
+    expect(toast.error).toHaveBeenCalledWith('Sign out of demo mode to use the real API.', 'Forbidden');
+  }));
 });

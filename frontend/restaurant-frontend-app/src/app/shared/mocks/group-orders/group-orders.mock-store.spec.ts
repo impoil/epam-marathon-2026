@@ -32,4 +32,18 @@ describe('GroupOrdersMockStore', () => {
   it('returns 404 for an unknown session', () => {
     expect(() => store.remove('nope')).toThrowMatching((e) => e instanceof MockHttpError && e.status === 404);
   });
+
+  it('rejects removing the Owner and preserves the snapshot', () => {
+    const before = store.snapshot();
+    const owner = before.participants.find((person) => person.type === 'Owner')!;
+    expect(() => store.remove(owner.id)).toThrowMatching((error) => error instanceof MockHttpError && error.status === 400);
+    expect(store.snapshot()).toEqual(before);
+  });
+
+  it('rejects removal after submission and preserves the snapshot', () => {
+    store.submit(DEMO_RESERVATION_ID);
+    const before = store.snapshot();
+    expect(() => store.remove('gs-mariia')).toThrowMatching((error) => error instanceof MockHttpError && error.status === 400);
+    expect(store.snapshot()).toEqual(before);
+  });
 });

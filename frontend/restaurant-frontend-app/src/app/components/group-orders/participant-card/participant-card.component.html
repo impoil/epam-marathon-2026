@@ -1,0 +1,44 @@
+<article class="card">
+  <header class="card-header">
+    <div>
+      <h2>{{ title() }}</h2>
+      <span class="cart-status" [class.cart-status--submitted]="participant().isSubmitted">
+        {{ participant().isSubmitted ? 'Submitted' : 'Still choosing' }}
+      </span>
+    </div>
+    @if (canRemove() && participant().type === 'Guest' && !isMe()) {
+      <button
+        type="button"
+        class="remove-link"
+        [attr.aria-label]="'Remove ' + participant().name"
+        (click)="remove()"
+      >
+        Remove Guest
+      </button>
+    }
+  </header>
+
+  @if (participant().items.length) {
+    <ul class="items" aria-label="Selected dishes">
+      @for (item of participant().items; track item.dish.id) {
+        <li class="dish">
+          @if (item.dish.imageUrl) {
+            <img [src]="item.dish.imageUrl" alt="" width="40" height="40" loading="lazy" />
+          } @else {
+            <span class="dish-initial" aria-hidden="true">{{ item.dish.name.charAt(0) }}</span>
+          }
+          <span class="dish-name">{{ item.dish.name }}</span>
+          <span class="dish-quantity" [attr.aria-label]="'Quantity: ' + item.quantity"
+            >× {{ item.quantity }}</span
+          >
+          <span class="dish-price">{{ item.dish.price * item.quantity | currency }}</span>
+        </li>
+      }
+    </ul>
+  } @else {
+    <p class="empty-cart">No dishes yet</p>
+  }
+  <p class="subtotal">
+    <span>Subtotal</span><span>{{ participant().total | currency }}</span>
+  </p>
+</article>

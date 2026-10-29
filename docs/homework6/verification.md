@@ -1,49 +1,70 @@
-# Starter verification
+# Homework #6 verification
 
-Verified on 2026-10-29 against `main` commit `04c7998`.
+Основа: feature/homework-6-frontend-starter, `86f1781bbf302e63bfaae974f7c17ad0e86d5a5d`.
+Перед разработкой проверены commit, homework-frontend.md и homework-tests/.
+GitHub branch/commit и локальные объекты проверены по SHA. Архив повторно не импортировался.
 
-| Check | Result |
+## Итоговые проверки
+
+| Проверка | Результат |
 | --- | --- |
-| TypeScript application (`tsconfig.app.json --noEmit`) | Passed |
-| TypeScript specs (`tsconfig.spec.json --noEmit`) | Passed |
-| Development build | Passed; demo markers present |
-| Production build, `BACKEND_URL=https://example.com` | Passed; initial bundle 789.36 kB |
-| Production bundle checker | Passed; no placeholder or demo markers |
-| `test:starter`, ChromeHeadless | **49 passed** |
-| `test:hw`, ChromeHeadless, before activating future UI tests | **26 passed** |
-| Full `test` script on the feature branch | **221 passed, 47 failed** |
-| Full test suite on an isolated copy of clean `main` | **195 passed, 47 failed** |
-| Comparison of failing test names | All 47 names match; no new failures |
-| `git diff --check` and staged diff check | Passed |
+| tsc -p tsconfig.app.json --noEmit | Passed |
+| tsc -p tsconfig.spec.json --noEmit | Passed |
+| BACKEND_URL=https://example.com npm run build | Passed |
+| postbuild / check-bundle.mjs | Passed |
+| npm run test:hw -- --browsers=ChromeHeadless | 78 passed |
+| npm run test:starter -- --browsers=ChromeHeadless | 58 passed |
+| npm test -- --watch=false --browsers=ChromeHeadless | 282 passed, 47 failed |
+| 47 failing names vs saved clean-main baseline | Identical; no additions or omissions |
+| Original activated homework specs vs source | All 7 files byte-identical |
+| Scoped ESLint new card/page/service and safety spec | 0 errors, 0 warnings |
+| Playwright development browser-check.cjs | Passed |
+| Playwright production-browser-check.cjs | Passed |
+| git diff --check | Passed |
 
-The full suite's existing failures include missing test providers/required
-inputs in legacy component specs. They were reproduced on an isolated source
-snapshot of `main` using the same dependencies and Chrome. Existing tests were
-preserved; fixing them is outside this starter integration.
+Node 24.16.0, Chrome Headless 154.0.0.0. npm доступен; новых пакетов не установлено.
+Production initial: 647.89 kB / 133.98 kB transfer; group-order lazy chunk: 23.30 kB / 5.95 kB transfer.
+Существующие budget/CommonJS warnings остаются; пороги не ослаблялись.
 
-The production build retains the existing bundle/style budget and CommonJS
-warnings. Budgets and dependency versions were not changed.
+## Baseline и регрессии
 
-The environment had Node.js 24.22.1 and Chrome Headless 155, but no npm binary.
-The existing bundled pnpm 11.25.0 executed the scripts from `package.json` with
-`--config.verify-deps-before-run=false`. Dependencies were prepared from the
-existing npm lockfile through a temporary pnpm import; no Windows tools were
-installed. The npm lockfile remains byte-for-byte unchanged, and the temporary
-pnpm lockfile is not part of this branch. Production prebuild, Angular build
-and postbuild commands were also run directly with Node.
+Сохранённая проверка чистого main `04c7998`: 195 passed, 47 failed.
+Starter `86f1781`: 221 passed, 47 failed.
+Текущая реализация: **282 passed, 47 failed** — 61 дополнительный passing test относительно starter.
 
-Preservation checks confirmed:
+Имена всех 47 падений автоматически извлечены из текущего полного Karma log,
+отсортированы и сравнены с `/workspace/.cloud-setup/logs/frontend-failures.txt`
+(сохранённый отчёт проверки main в этой среде). Добавленных/исчезнувших имён — 0.
+Список для ревью: [baseline-failures.txt](baseline-failures.txt).
+Падения baseline не исправлялись и не отключались в рамках этого ДЗ.
 
-- All 28 imported lesson files, including the PNGs, match the organizers'
-  archive byte for byte.
-- No existing tracked files were deleted.
-- Backend, infrastructure, Homework #4/#5 files, existing routes, production
-  environment generation, package metadata/version/dependencies and original
-  npm scripts are unchanged.
-- The existing development backend URL is preserved.
-- The staged changes contain no dependencies, build output, generated CSS/maps,
-  production environment file, credentials or Terraform state.
-- Development JavaScript contains the demo issuer, email and invite token;
-  production JavaScript contains none of these markers.
+Все активированные оригинальные homework specs сохранены без правок:
+practice (карточка), level-2 (страница/сервис), level-3 (sync страницы/сервиса),
+level-3-bonus (Remove страницы/сервиса). Helpers сохранены.
+Новые safety-тесты проверяют loading, последовательность запросов, один таймер при retry,
+сохранение полного снимка при ошибке status, остановку на Submitted/Closed,
+Owner protection, повторный DELETE/Submit, retry, unsubscribe при destroy.
 
-No deployment or AWS commands were executed.
+## Production и визуальная проверка
+
+Production checker просмотрел JS/CSS/HTML всех chunks: нет backend placeholder,
+demo issuer, demo email или demo invite-token. Production browser на свежем storage:
+`?demo` не создаёт сессию, Owner route перенаправляется на /login. Обращения landing-page
+к example.com заменены локальными fixtures; реального API в этой проверке нет.
+
+Development browser проверил 1440×1000 и 375×812, отсутствие overflow и broken images,
+диалоги и Escape/focus restoration, Remove (включая ошибку/retry), изменение totals,
+Submit pending/error/retry/read-only, silent refresh error/recovery, initial error/retry.
+Необработанных ошибок и запросов к deployed API — 0.
+UI failure cases используют инъекцию failed Observable, не реальные сетевые сбои .NET.
+Скриншоты и воспроизводимые scripts связаны из [README.md](README.md).
+
+## Сохранность репозитория и границы проверки
+
+Backend, infrastructure, ДЗ №4/№5, организаторские homework-tests/ и макеты не изменялись.
+Зависимости/lock integrity сохранены. Версия 1.2.0; lockfile меняет только root version в двух местах.
+Generated production environment, node_modules, dist, credentials и Terraform state не коммитятся.
+
+AWS не использовался. Доступ к production .NET, Cognito sign-in с реальными аккаунтами,
+создание заказов в DynamoDB и доставка в restaurant order не проверялись.
+Это отдельный E2E этап после deployment. PR предназначен для ревью; merge не выполняется.
