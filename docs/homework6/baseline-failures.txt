@@ -1,0 +1,51 @@
+Базовий стан: main 04c7998 / starter 86f1781
+Поточний повний набір тестів: 282 passed / 47 failed
+47 імен тестів зі збоями точно збігаються зі збереженим базовим станом main; 0 нових збоїв.
+
+AppComponent should render title
+CardReservationComponent should create
+DishModalComponent should create
+DishSelectCardComponent should create
+GeneralInformationComponent aborts an unfinished FileReader when destroyed
+GeneralInformationComponent accepts 50 characters and rejects 51 in firstName
+GeneralInformationComponent accepts 50 characters and rejects 51 in lastName
+GeneralInformationComponent accepts apostrophes and hyphens in names
+GeneralInformationComponent accepts the exact size and dimension limits
+GeneralInformationComponent blocks saving while a file is being read or validated
+GeneralInformationComponent creates the component and loads the current user photo
+GeneralInformationComponent does not mark a newer selection saved when an earlier upload finishes
+GeneralInformationComponent does not reload the image for a same-user update
+GeneralInformationComponent handles FileReader errors and preserves the displayed photo
+GeneralInformationComponent handles a profile image fetch failure
+GeneralInformationComponent ignores an old image fetch after a new photo was saved
+GeneralInformationComponent marks empty names touched and blocks saving
+GeneralInformationComponent prevents duplicate submissions while saving
+GeneralInformationComponent rejects dimensions 200 × 4097
+GeneralInformationComponent rejects dimensions 4097 × 200
+GeneralInformationComponent rejects empty files before reading
+GeneralInformationComponent rejects files larger than 5 MB before reading
+GeneralInformationComponent rejects images that cannot be decoded
+GeneralInformationComponent rejects the first name "Alice Smith"
+GeneralInformationComponent rejects the first name "Alice!"
+GeneralInformationComponent rejects the first name "Alice1"
+GeneralInformationComponent rejects unsupported file type image/svg+xml before reading
+GeneralInformationComponent rejects unsupported file type text/plain before reading
+GeneralInformationComponent reports a partial save and retries only the failed photo
+GeneralInformationComponent saves changed names with the correct arguments without uploading an unchanged photo
+GeneralInformationComponent shows an error when saving names fails
+GeneralInformationComponent tears down a pending image fetch and stops listening for user updates
+GeneralInformationComponent tears down a pending name save when destroyed
+GeneralInformationComponent tears down a pending photo upload when destroyed
+GeneralInformationComponent treats a falsy profile response as a failure
+GeneralInformationComponent uploads a selected photo without resaving unchanged names
+MakeReservationComponent should create
+MenuPageComponent should create
+PlaceOrderWaiterComponent should create
+RegisterComponent should create
+ReportingDashboardComponent should create
+ReservationConfirmedComponent should create
+ReservationDashboardComponent should create
+TimeSlotComponent should create
+TimeSlotsModalComponent should create
+WaiterDashboardComponent should create
+WaiterPreOrderPageComponent should create

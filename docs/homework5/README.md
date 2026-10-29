@@ -1,17 +1,17 @@
-# Homework #5 — Green&Tasty Backend (.NET)
+# Домашнє завдання №5 — Green&Tasty Backend (.NET)
 
-Реализация всех трёх уровней в исходном C# backend: Lambda → handlers → services → repositories → DynamoDB. Спецификация: [homework-backend.md](../../homework-backend.md). Python Lambda и стек `infra/homework4` не изменены.
+Реалізація всіх трьох рівнів у вихідному C# backend: Lambda → handlers → services → repositories → DynamoDB. Специфікація: [homework-backend.md](../../homework-backend.md). Python Lambda та стек `infra/homework4` не змінені.
 
-| Уровень | Операция | Реализация |
+| Рівень | Операція | Реалізація |
 |---|---|---|
-| 1 | `GET /guest/groups/{groupReservationId}/sessions` | Snapshot всех участников, включая Owner, блюда, quantity, decimal total и isSubmitted |
-| 2 | `GET /reservations/{reservationId}/guest-session-id` | Только собственная owner session владельца reservation |
-| 2 | `POST /group-reservations/{groupReservationId}/submit` | reservationId из JSON; только submitted sessions; агрегация dishId; Order=SubmittedByCustomer и Group=Submitted атомарно |
-| 3 | `DELETE /guest/groups/{groupReservationId}/sessions/{guestSessionId}` | Переиспользован существующий метод; Owner-only, принадлежность группе, защита owner session, обновлённый snapshot |
+| 1 | `GET /guest/groups/{groupReservationId}/sessions` | Знімок даних усіх учасників, включно з Owner, страви, quantity, decimal total та isSubmitted |
+| 2 | `GET /reservations/{reservationId}/guest-session-id` | Лише власна owner session власника reservation |
+| 2 | `POST /group-reservations/{groupReservationId}/submit` | reservationId із JSON; лише submitted sessions; агрегація dishId; Order=SubmittedByCustomer та Group=Submitted атомарно |
+| 3 | `DELETE /guest/groups/{groupReservationId}/sessions/{guestSessionId}` | Повторно використано наявний метод; Owner-only, належність до групи, захист owner session, оновлений знімок даних |
 
-Все четыре операции используют доверенный Cognito `sub`, а не userId из тела или query. Отсутствие аутентификации → 401, другой владелец → 403. Полные request/response и ошибки: [ApiRoutes.md](../../backend/restaurant-backend-app/docs/ApiRoutes.md).
+Усі чотири операції використовують довірений Cognito `sub`, а не userId із тіла чи query. Відсутність автентифікації → 401, інший власник → 403. Повні request/response та помилки: [ApiRoutes.md](../../backend/restaurant-backend-app/docs/ApiRoutes.md).
 
-Примеры ответов:
+Приклади відповідей:
 
 ```json
 {"participants":[{"id":"guest-1","type":"Guest","name":"Andrii","items":[{"dish":{"id":"dish1","name":"Caesar Salad","price":180},"quantity":2}],"total":360,"isSubmitted":true}],"total":360}
@@ -21,25 +21,25 @@
 {"guestSessionId":"owner-session-123"}
 ```
 
-POST с телом `{"reservationId":"reservation-123"}` возвращает:
+POST із тілом `{"reservationId":"reservation-123"}` повертає:
 
 ```json
 [{"dishId":"dish1","quantity":3},{"dishId":"dish2","quantity":2}]
 ```
 
-После удаления последнего guest при пустой owner session ответ содержит owner с `items:[]`, `total:0`; удаление самой owner session запрещено. Повторный submit → 400, повторное удаление отсутствующей session → 404.
+Після видалення останнього guest за порожньої owner session відповідь містить owner з `items:[]`, `total:0`; видалення самої owner session заборонено. Повторний submit → 400, повторне видалення відсутньої session → 404.
 
-## Основные изменения
+## Основні зміни
 
-- [GuestSessionService](../../backend/restaurant-backend-app/dnapp/lambdas/api-handler/Services/GuestSessions/GuestSessionService.cs): общая сборка snapshot для GET/DELETE, поиск собственной owner session, валидация до удаления; target исключается локально, без зависимости от задержки GSI.
-- [GroupReservationService](../../backend/restaurant-backend-app/dnapp/lambdas/api-handler/Services/GroupReservations/GroupReservationService.cs): агрегация, проверки, detached copies перед записью; существующий `CreateGroupOwnerSessionAsync` подключён к созданию группы. Подсчёт вместимости учитывает Owner один раз.
-- [GroupReservationRepository](../../backend/restaurant-backend-app/dnapp/lambdas/api-handler/Repositories/GroupReservations/GroupReservationRepository.cs): одна условная `TransactWriteItems` для order и group, защита от повторного/конкурентного submit. Существующие права `dynamodb:PutItem` покрывают условные Put в этой транзакции.
-- [RouteRegistry](../../backend/restaurant-backend-app/dnapp/lambdas/api-handler/Routing/RouteRegistry.cs) и [API Gateway config](../../backend/restaurant-backend-app/deployment_resources.json): все четыре маршрута с Cognito authorizer; исправлено `guest/group` → `guest/groups`. Registry допускает проверку DI с моками без подключения к AWS.
-- [Unit tests](../../backend/restaurant-backend-app/Tests/Homework5): handlers, сервисы, реальные DynamoDB mappings с mock-клиентом, маршруты и DI.
+- [GuestSessionService](../../backend/restaurant-backend-app/dnapp/lambdas/api-handler/Services/GuestSessions/GuestSessionService.cs): спільне формування знімка даних для GET/DELETE, пошук власної owner session, валідація до видалення; target виключається локально, без залежності від затримки GSI.
+- [GroupReservationService](../../backend/restaurant-backend-app/dnapp/lambdas/api-handler/Services/GroupReservations/GroupReservationService.cs): агрегація, перевірки, detached copies перед записом; наявний `CreateGroupOwnerSessionAsync` підключено до створення групи. Підрахунок місткості враховує Owner один раз.
+- [GroupReservationRepository](../../backend/restaurant-backend-app/dnapp/lambdas/api-handler/Repositories/GroupReservations/GroupReservationRepository.cs): одна умовна `TransactWriteItems` для order та group, захист від повторного/конкурентного submit. Наявні права `dynamodb:PutItem` охоплюють умовні Put у цій транзакції.
+- [RouteRegistry](../../backend/restaurant-backend-app/dnapp/lambdas/api-handler/Routing/RouteRegistry.cs) та [конфігурація API Gateway](../../backend/restaurant-backend-app/deployment_resources.json): усі чотири маршрути з Cognito authorizer; виправлено `guest/group` → `guest/groups`. Registry дає змогу перевіряти DI з моками без підключення до AWS.
+- [Модульні тести](../../backend/restaurant-backend-app/Tests/Homework5): handlers, сервіси, реальні зіставлення DynamoDB з mock-клієнтом, маршрути та DI.
 
-## Проверка
+## Перевірка
 
-Нужен официальный .NET SDK 10: проекты уже на `net10.0`. Проверено в Codex Cloud SDK `10.0.403`. Установка на компьютер пользователя не выполнялась.
+Потрібен офіційний .NET SDK 10: проєкти вже на `net10.0`. Перевірено в Codex Cloud SDK `10.0.403`. Установлення на комп'ютер користувача не виконувалося.
 
 ```bash
 cd backend/restaurant-backend-app
@@ -48,12 +48,12 @@ dotnet test restaurant-backend-app.sln --configuration Release --no-build --no-r
 dotnet test Tests/APIHandler.Tests.csproj --configuration Release --no-build --no-restore --filter FullyQualifiedName~Homework5
 ```
 
-Для restricted cloud, где домашняя директория read-only, задать `DOTNET_CLI_HOME` и `NUGET_PACKAGES` на доступные для записи каталоги. Тесты AWS используют только mocks; credentials и AWS-подключение не нужны.
+Для обмеженого хмарного середовища, де домашній каталог доступний лише для читання, слід спрямувати `DOTNET_CLI_HOME` та `NUGET_PACKAGES` на каталоги, доступні для запису. Тести AWS використовують лише моки; облікові дані та підключення до AWS не потрібні.
 
-Исходный commit `77d1e2aa4e95af77700b3090f39d0b78d474b0da`: **141 passed, 0 failed, 0 skipped**. Финальный результат приведён в [verification.md](verification.md). Проверяются успех, отсутствующие ресурсы, 400/401/403/404, пустые и draft sessions, одинаковые dishId, статусы, удаление и total, повторные операции, ошибки хранилища без изменения загруженных объектов.
+Вихідний коміт `77d1e2aa4e95af77700b3090f39d0b78d474b0da`: **141 passed, 0 failed, 0 skipped**. Підсумковий результат наведено в [verification.md](verification.md). Перевіряються успіх, відсутні ресурси, 400/401/403/404, порожні та draft sessions, однакові dishId, статуси, видалення й total, повторні операції, помилки сховища без зміни завантажених об'єктів.
 
-NuGet сообщает о существующих уязвимостях ImageSharp и System.Security.Cryptography.Pkcs/Xml; также остаются исходные nullable/xUnit warnings. Тесты исходной версии не падают. Обновление этих зависимостей требует отдельной проверки изображений и отчётов до публичного развёртывания.
+NuGet повідомляє про наявні вразливості ImageSharp та System.Security.Cryptography.Pkcs/Xml; також залишаються вихідні попередження nullable/xUnit. Тести вихідної версії не мають збоїв. Оновлення цих залежностей потребує окремої перевірки зображень і звітів до публічного розгортання.
 
-## Готовность к сдаче и Fresh Deploy
+## Готовність до здачі та Fresh Deploy
 
-Код и unit-проверка пригодны для проверки ДЗ. Публичный AWS URL не создавался, работа в AWS не проверялась. Оценка для `071954286972 / eu-north-1`, перечень компонентов и ограничения: [FreshDeploy.md](FreshDeploy.md).
+Код і модульні перевірки придатні для перевірки ДЗ. Публічна AWS URL-адреса не створювалася, робота в AWS не перевірялася. Оцінка для `071954286972 / eu-north-1`, перелік компонентів та обмеження: [FreshDeploy.md](FreshDeploy.md).

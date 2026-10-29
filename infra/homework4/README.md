@@ -1,76 +1,76 @@
-# EPAM Homework #4 — Group Pre-Order Summary
+# Домашнє завдання EPAM №4 — Group Pre-Order Summary
 
-Независимое учебное приложение, вдохновлённое Green Tasty. Все его файлы находятся
-в `infra/homework4/`; исходное приложение и `infra/terraform/` не используются.
-**Homework #4 успешно развёрнуто и проверено 27.10.2026.** Lambda, HTTP API Gateway,
-IAM и CloudWatch Logs работают в AWS; Terraform state хранится в защищённом S3
-backend. Инфраструктура остаётся активной для демонстрации. S3 state bucket
-существует отдельно и не управляется этим Terraform root.
+Незалежний навчальний застосунок, натхненний Green Tasty. Усі його файли містяться
+в `infra/homework4/`; вихідний застосунок та `infra/terraform/` не використовуються.
+**Домашнє завдання №4 успішно розгорнуто й перевірено 27.10.2026.** Lambda, HTTP API Gateway,
+IAM та CloudWatch Logs працюють в AWS; Terraform state зберігається в захищеному S3
+backend. Інфраструктура залишається активною для демонстрації. S3 state bucket
+існує окремо й не керується цим Terraform root.
 
-## Результат deployment 27 октября 2026
+## Результат розгортання 27 жовтня 2026
 
-Развёрнуто в аккаунте `071954286972`, регион `eu-north-1`, профиль `fresh-deploy`.
-AWS CLI 2.38.6, Terraform 1.17.0; providers AWS 6.70.0 и archive 2.8.1.
-Перед apply выполнены STS и S3 `--expected-bucket-owner` проверки. Новый сохранённый
-план в основном репозитории показал **10 Add / 0 Change / 0 Destroy** и совпал
-с согласованной диагностической конфигурацией, включая IAM и Lambda ZIP.
-Применён только этот `homework4.tfplan`: **10 added, 0 changed, 0 destroyed**.
-Создано ровно 10 управляемых ресурсов.
-Проверочный plan после apply: **0 Add / 0 Change / 0 Destroy**, drift отсутствует.
+Розгорнуто в обліковому записі `071954286972`, регіон `eu-north-1`, профіль `fresh-deploy`.
+AWS CLI 2.38.6, Terraform 1.17.0; providers AWS 6.70.0 та archive 2.8.1.
+Перед apply виконано перевірки STS та S3 `--expected-bucket-owner`. Новий збережений
+план в основному репозиторії показав **10 Add / 0 Change / 0 Destroy** і збігся
+з узгодженою діагностичною конфігурацією, включно з IAM та Lambda ZIP.
+Застосовано лише цей `homework4.tfplan`: **10 added, 0 changed, 0 destroyed**.
+Створено рівно 10 керованих ресурсів.
+Перевірний plan після apply: **0 Add / 0 Change / 0 Destroy**, відхилень немає.
 
-Фактический endpoint:
+Фактичний endpoint:
 <https://xv3cbcohed.execute-api.eu-north-1.amazonaws.com/group-preorder>
 
-Выполнен один GET: HTTP **200**, корректный JSON, `currency=USD`, `group_total=64`.
-Независимый пересчёт строк подтвердил итог; участников 4, выбрали блюда 3,
-ожидается выбор 1, порций 5. CloudWatch подтвердил один access log со статусом 200
-и Lambda REPORT без ошибок. У обеих групп логов retention 7 дней.
-Lambda активна, Python 3.14 ARM64, 128 МБ, timeout 3 секунды; загруженный код
-совпадает с сохранённым планом. IAM execution role имеет только согласованную
-inline policy записи собственных логов; attached managed policies отсутствуют.
-Дополнительных ресурсов проекта по его префиксу и тегу не обнаружено.
+Виконано один GET: HTTP **200**, коректний JSON, `currency=USD`, `group_total=64`.
+Незалежний перерахунок рядків підтвердив підсумок; учасників 4, обрали страви 3,
+очікується вибір 1, порцій 5. CloudWatch підтвердив один access log зі статусом 200
+і Lambda REPORT без помилок. В обох групах журналів строк зберігання становить 7 днів.
+Lambda активна, Python 3.14 ARM64, 128 МБ, timeout 3 секунди; завантажений код
+збігається зі збереженим планом. IAM execution role має лише узгоджену
+inline policy запису власних журналів; підключених managed policies немає.
+Додаткових ресурсів проєкту за його префіксом і тегом не виявлено.
 
-Remote state существует в `epam-hw4-state-freshdeploy-20261027` под ключом
-`homework4/group-preorder/terraform.tfstate`, шифрование AES256, versioning включён.
-S3 backend использует `allowed_account_ids=["071954286972"]`, `encrypt=true`,
-`use_lockfile=true`; активного lock после проверки нет. TLS Deny policy сохранена.
-История версий state и удалённых lock-объектов остаётся в S3.
+Віддалений state існує в `epam-hw4-state-freshdeploy-20261027` за ключем
+`homework4/group-preorder/terraform.tfstate`, шифрування AES256, versioning увімкнено.
+S3 backend використовує `allowed_account_ids=["071954286972"]`, `encrypt=true`,
+`use_lockfile=true`; активного блокування після перевірки немає. TLS Deny policy збережено.
+Історія версій state і видалених об'єктів блокування залишається в S3.
 
-Исходная бизнес-логика и состав ресурсов не изменены. Credentials в проект не
-добавлены; локальные backend, plan, ZIP и служебные отчёты игнорируются Git.
-В GitHub публикуются исходные файлы, provider lockfile, пример backend и README.
-Инфраструктура остаётся активной для демонстрации; автоматическое удаление
-не настроено. Последующее удаление требует отдельного разрешения и review
-destroy plan; до завершения cleanup сохраняйте тот же remote state.
+Вихідна бізнес-логіка та склад ресурсів не змінені. Облікові дані до проєкту не
+додано; локальні backend, plan, ZIP і службові звіти ігноруються Git.
+У GitHub публікуються вихідні файли, provider lockfile, приклад backend і README.
+Інфраструктура залишається активною для демонстрації; автоматичне видалення
+не налаштовано. Подальше видалення потребує окремого дозволу й рев'ю
+destroy plan; до завершення очищення зберігайте той самий віддалений state.
 
-## Как работает приложение
+## Як працює застосунок
 
-`GET /group-preorder` возвращает сводку фиксированного учебного группового заказа.
-API Gateway HTTP API передаёт запрос Python Lambda в формате payload 2.0.
-Функция не использует AWS SDK, базу данных, внешнюю сеть или сторонние библиотеки.
-Каждый ответ рассчитывается заново; состояние между запросами не сохраняется.
+`GET /group-preorder` повертає зведення фіксованого навчального групового замовлення.
+API Gateway HTTP API передає запит Python Lambda у форматі payload 2.0.
+Функція не використовує AWS SDK, базу даних, зовнішню мережу чи сторонні бібліотеки.
+Кожна відповідь обчислюється заново; стан між запитами не зберігається.
 
-| Участник | Заказ | Количество порций | Подытог | Статус |
+| Учасник | Замовлення | Кількість порцій | Проміжний підсумок | Статус |
 | --- | --- | ---: | ---: | --- |
 | Owner | Fresh Strawberry Mint Salad × 1; Roasted Sweet Potato & Lentils Salad × 1 | 2 | $27 | `selected` |
 | Anna | Fresh Strawberry Mint Salad × 1 | 1 | $17 | `selected` |
 | Oleh | Roasted Sweet Potato & Lentils Salad × 2 | 2 | $20 | `selected` |
-| Maria | Пока ничего не выбрано | 0 | $0 | `pending` |
+| Maria | Поки нічого не обрано | 0 | $0 | `pending` |
 
-Цена первого блюда — $17, второго — $10. Групповой итог **$64** вычисляется как
-`27 + 17 + 20 + 0`, а не записан константой в реализации.
-Участников — 4, выбрали блюда — 3, ожидается выбор — 1, порций — 5.
-Статус `selected` означает только наличие блюд, а не оплату или подтверждение.
+Ціна першої страви — $17, другої — $10. Груповий підсумок **$64** обчислюється як
+`27 + 17 + 20 + 0`, а не записаний константою в реалізації.
+Учасників — 4, обрали страви — 3, очікується вибір — 1, порцій — 5.
+Статус `selected` означає лише наявність страв, а не оплату чи підтвердження.
 
-JSON содержит `schema_version`, `currency`, массив `participants`, счётчики
+JSON містить `schema_version`, `currency`, масив `participants`, лічильники
 `participant_count`, `participants_with_orders`, `participants_pending`,
-`total_quantity` и `group_total`. Для каждого участника возвращаются идентификатор,
-имя, роль, статус, `orders`, количество и `subtotal`. Каждая строка заказа содержит
-идентификатор и название блюда, `unit_price`, `quantity` и `line_total`.
-Денежные поля JSON выражены числом в USD, например `64.0`. Вся арифметика выполняется
-в целых центах; перевод в USD происходит только при формировании ответа.
+`total_quantity` та `group_total`. Для кожного учасника повертаються ідентифікатор,
+ім'я, роль, статус, `orders`, кількість і `subtotal`. Кожен рядок замовлення містить
+ідентифікатор і назву страви, `unit_price`, `quantity` та `line_total`.
+Грошові поля JSON подано числом у USD, наприклад `64.0`. Уся арифметика виконується
+в цілих центах; переведення в USD відбувається лише під час формування відповіді.
 
-Фрагмент ответа для Oleh:
+Фрагмент відповіді для Oleh:
 
 ```json
 {
@@ -92,54 +92,54 @@ JSON содержит `schema_version`, `currency`, массив `participants`,
 }
 ```
 
-Ответ имеет `Content-Type: application/json` и `Cache-Control: no-store`.
-Только `GET /group-preorder` зарегистрирован в API Gateway: отсутствуют `$default`
-route, маршруты `ANY`, POST/PUT/PATCH/DELETE и Lambda Function URL. Стадия `$default`
-существует, но это не catch-all маршрут. Lambda дополнительно отклоняет методы,
-отличные от GET, кодом 405 и другие пути кодом 404. API Gateway отклоняет запросы
-без совпадающего маршрута ещё до Lambda. Параметры query и тело запроса не изменяют
-заказ. CORS не включён: работа через curl возможна, доступ из чужого браузерного
-origin не заявляется. Endpoint публичный и без авторизации: здесь только фиктивные
-учебные данные, не персональные данные настоящих посетителей.
+Відповідь має `Content-Type: application/json` та `Cache-Control: no-store`.
+Лише `GET /group-preorder` зареєстрований в API Gateway: немає маршруту `$default`,
+маршрутів `ANY`, POST/PUT/PATCH/DELETE та Lambda Function URL. Стадія `$default`
+існує, але це не маршрут для всіх запитів. Lambda додатково відхиляє методи,
+відмінні від GET, кодом 405 та інші шляхи кодом 404. API Gateway відхиляє запити
+без відповідного маршруту ще до Lambda. Параметри query та тіло запиту не змінюють
+замовлення. CORS не ввімкнено: робота через curl можлива, доступ зі стороннього браузерного
+origin не заявляється. Endpoint публічний і без авторизації: тут лише вигадані
+навчальні дані, а не персональні дані справжніх відвідувачів.
 
-## Развёрнутая инфраструктура
+## Розгорнута інфраструктура
 
-Регион закреплён: **eu-north-1**. Имя по умолчанию — `epam-hw4-group-preorder`;
-переменная `name` позволяет изолировать дополнительный экземпляр.
+Регіон зафіксовано: **eu-north-1**. Ім'я за замовчуванням — `epam-hw4-group-preorder`;
+змінна `name` дає змогу ізолювати додатковий екземпляр.
 
-- Lambda: **Python 3.14**, ARM64, **128 МБ**, **3 секунды**, без VPC, layers,
-  provisioned concurrency и опубликованных версий. ZIP содержит только
-  `lambda_function.py`; обработчик — `lambda_function.handler`.
-- IAM execution role с trust policy только для Lambda и inline policy только на
-  создание log streams / запись событий в собственную группу логов. Функция не
-  получает прав на S3, DynamoDB или изменение инфраструктуры.
-- HTTP API, Lambda proxy integration, один GET route и автоматически развёртываемая
-  стадия `$default` с ограничением **1 запрос/секунду**, burst **2**.
-- Resource-based permission на вызов Lambda только API Gateway этого API,
-  только для `GET /group-preorder`.
-- Две CloudWatch Log Groups — для Lambda и access logs API — с retention **7 дней**.
-  Access logs содержат идентификатор запроса, маршрут, статус и технические сведения,
-  но не тело ответа или заказа.
+- Lambda: **Python 3.14**, ARM64, **128 МБ**, **3 секунди**, без VPC, layers,
+  provisioned concurrency та опублікованих версій. ZIP містить лише
+  `lambda_function.py`; обробник — `lambda_function.handler`.
+- IAM execution role з trust policy лише для Lambda та inline policy лише на
+  створення log streams / запис подій у власну групу журналів. Функція не
+  отримує прав на S3, DynamoDB чи зміну інфраструктури.
+- HTTP API, Lambda proxy integration, один GET route та стадія `$default`
+  з автоматичним розгортанням і обмеженням **1 запит/секунду**, burst **2**.
+- Resource-based permission на виклик Lambda лише API Gateway цього API,
+  лише для `GET /group-preorder`.
+- Дві CloudWatch Log Groups — для Lambda та access logs API — зі строком зберігання **7 днів**.
+  Access logs містять ідентифікатор запиту, маршрут, статус і технічні відомості,
+  але не тіло відповіді чи замовлення.
 
-`integration_method = "POST"` в Terraform — внутренний протокол вызова Lambda
-из API Gateway, а не публичный POST-маршрут.
-HTTP API использует доставку access logs сервисом AWS; Lambda role не выдаются
-права на API logs. В целевом аккаунте работают необходимые служебные
-механизмы CloudWatch delivery: access log успешного GET подтверждён после deployment.
-Локальный `validate` сам по себе не проверяет доставку логов.
+`integration_method = "POST"` у Terraform — внутрішній протокол виклику Lambda
+з API Gateway, а не публічний POST-маршрут.
+HTTP API використовує доставлення access logs сервісом AWS; Lambda role не отримує
+прав на API logs. У цільовому обліковому записі працюють необхідні службові
+механізми CloudWatch delivery: access log успішного GET підтверджено після розгортання.
+Локальний `validate` сам по собі не перевіряє доставлення журналів.
 
-Всего определено 10 управляемых ресурсов плюс локальный `archive_file` data source.
-S3 bucket для state **намеренно не входит** в этот проект. Не создаются CloudFront,
-NAT Gateway, EC2, база данных, custom domain, дополнительные API или исходный backend.
+Загалом визначено 10 керованих ресурсів і локальне джерело даних `archive_file`.
+S3 bucket для state **навмисно не входить** до цього проєкту. Не створюються CloudFront,
+NAT Gateway, EC2, база даних, custom domain, додаткові API чи вихідний backend.
 
-## Локальная проверка без AWS
+## Локальна перевірка без AWS
 
-Требуются Terraform **>= 1.10, < 2**, Python **3.14**, доступ к официальным
-Terraform registry/release destinations только для загрузки инструментов и providers.
-Версии providers фиксируются отслеживаемым файлом `.terraform.lock.hcl`.
-У Python нет pip-зависимостей.
+Потрібні Terraform **>= 1.10, < 2**, Python **3.14**, доступ до офіційних
+адрес реєстру/релізів Terraform лише для завантаження інструментів і providers.
+Версії providers зафіксовано у відстежуваному файлі `.terraform.lock.hcl`.
+Python не має pip-залежностей.
 
-Из `infra/homework4/`:
+Із `infra/homework4/`:
 
 ```bash
 terraform fmt
@@ -148,132 +148,132 @@ terraform validate
 python3.14 -m unittest -v
 ```
 
-Или `bash validate.sh`: скрипт проверяет Python 3.14, запускает `fmt -check`,
-`init -backend=false`, `validate` и unit tests. Он также находит инструменты,
-установленные локально в игнорируемой `.tools/`, либо принимает пути через
-`TERRAFORM_BIN` и `PYTHON_BIN`. Каждый шаг должен завершиться успешно; код ошибки
-не скрывается. Для первоначального создания lockfile использован обычный
-`terraform init -backend=false -input=false`; дальнейшие проверки запрещают
-неявное изменение lockfile.
+Або `bash validate.sh`: скрипт перевіряє Python 3.14, запускає `fmt -check`,
+`init -backend=false`, `validate` та модульні тести. Він також знаходить інструменти,
+встановлені локально в ігнорованому каталозі `.tools/`, або приймає шляхи через
+`TERRAFORM_BIN` та `PYTHON_BIN`. Кожен крок має завершитися успішно; код помилки
+не приховується. Для початкового створення lockfile використано звичайний
+`terraform init -backend=false -input=false`; подальші перевірки забороняють
+неявну зміну lockfile.
 
-`init -backend=false` скачивает providers и не обращается к S3. `validate`
-проверяет конфигурацию и схемы providers, не выполняя AWS API-запросы.
-Тесты проверяют итог $64, строки заказов, статусы, изменяемые цены и количества,
-точность арифметики в центах, пустую группу, отсутствие мутаций данных, ошибки
-входных данных и HTTP-ответы. Они не используют AWS credentials и сеть.
+`init -backend=false` завантажує providers і не звертається до S3. `validate`
+перевіряє конфігурацію та схеми providers, не виконуючи запитів до AWS API.
+Тести перевіряють підсумок $64, рядки замовлень, статуси, змінювані ціни й кількості,
+точність арифметики в центах, порожню групу, відсутність мутацій даних, помилки
+вхідних даних і HTTP-відповіді. Вони не використовують облікові дані AWS та мережу.
 
-Эти offline-проверки сами по себе не проверяют AWS runtime, IAM-разрешения и
-публичный URL. Дополнительно 27.10.2026 выполнены настоящий deployment Lambda ARM64,
-один GET к рабочему endpoint и проверка CloudWatch Logs; результаты приведены выше.
+Ці автономні перевірки самі по собі не перевіряють AWS runtime, IAM-дозволи й
+публічну URL-адресу. Додатково 27.10.2026 виконано справжнє розгортання Lambda ARM64,
+один GET до робочого endpoint і перевірку CloudWatch Logs; результати наведено вище.
 
-Результаты первоначальной offline-проверки 27 октября 2026 (до deployment):
+Результати початкової автономної перевірки 27 жовтня 2026 (до розгортання):
 
-| Проверка | Результат |
+| Перевірка | Результат |
 | --- | --- |
-| `terraform fmt`, затем `fmt -check` | Успешно |
-| `terraform init -backend=false` | Успешно; backend не подключался |
-| Повторный init с `-lockfile=readonly` | Успешно; зафиксированные версии переиспользованы |
+| `terraform fmt`, потім `fmt -check` | Успішно |
+| `terraform init -backend=false` | Успішно; backend не підключався |
+| Повторний init із `-lockfile=readonly` | Успішно; зафіксовані версії використано повторно |
 | `terraform validate` | `Success! The configuration is valid.` |
 | Python unit tests | **14 passed**, 0 failed, 0 skipped |
-| Проверка границ изменений | Только новые файлы внутри `infra/homework4/` |
+| Перевірка меж змін | Лише нові файли всередині `infra/homework4/` |
 
-Инструменты первоначальной offline-проверки: Terraform **1.14.0**, CPython **3.14.8**; providers
-`hashicorp/aws` **6.70.0** и `hashicorp/archive` **2.8.1**. Terraform ZIP проверен
-по SHA-256 из официального release manifest; providers установлены с проверкой
-подписи HashiCorp. Полный локальный журнал — `.build/validation.log` (игнорируется
-Git). На этом первоначальном offline-этапе AWS credentials не использовались и
-state не создавался. При последующем deployment использована временная login-сессия,
-а действующий state сохранён в защищённом S3 backend.
+Інструменти початкової автономної перевірки: Terraform **1.14.0**, CPython **3.14.8**; providers
+`hashicorp/aws` **6.70.0** та `hashicorp/archive` **2.8.1**. Terraform ZIP перевірено
+за SHA-256 з офіційного маніфесту релізу; providers встановлено з перевіркою
+підпису HashiCorp. Повний локальний журнал — `.build/validation.log` (ігнорується
+Git). На цьому початковому автономному етапі облікові дані AWS не використовувалися та
+state не створювався. Під час подальшого розгортання використано тимчасову login-сесію,
+а чинний state збережено в захищеному S3 backend.
 
-## Проверка Windows/Linux provider checksums
+## Перевірка контрольних сум providers для Windows/Linux
 
-В lockfile добавлены официальные `h1` для Windows AMD64; версии providers остались
-AWS 6.70.0 и archive 2.8.1, Linux AMD64 hashes сохранены. Пакеты проверены по
-подписям HashiCorp. Для согласованного обновления platform hashes используется:
+До lockfile додано офіційні `h1` для Windows AMD64; версії providers залишилися
+AWS 6.70.0 та archive 2.8.1, хеші Linux AMD64 збережено. Пакети перевірено за
+підписами HashiCorp. Для узгодженого оновлення хешів платформ використовується:
 
 ```powershell
 terraform providers lock -platform=windows_amd64 -platform=linux_amd64
 ```
 
-Обычный init выполняйте с `-lockfile=readonly`. `zh` проверяет исходный ZIP,
-а проверка распакованного provider cache использует подходящий платформе `h1`.
-Не исправляйте mismatch отключением проверки или удалением доверенных checksums.
+Звичайний init виконуйте з `-lockfile=readonly`. `zh` перевіряє вихідний ZIP,
+а перевірка розпакованого provider cache використовує відповідний платформі `h1`.
+Не виправляйте невідповідність вимкненням перевірки чи видаленням довірених контрольних сум.
 
-## Постоянное состояние: обязательный отдельный S3 bucket
+## Постійний стан: обов'язковий окремий S3 bucket
 
-Codex Cloud эфемерен: локальный `terraform.tfstate` может исчезнуть вместе с задачей.
-Для настоящего деплоя обязателен удалённый S3 backend. В `backend.tf` уже объявлен
-частичный `backend "s3" {}`: не удаляйте его и не переходите на local backend.
-После локального `init -backend=false` нельзя сразу запускать deployment commands.
+Codex Cloud є тимчасовим середовищем: локальний `terraform.tfstate` може зникнути разом із задачею.
+Для справжнього розгортання обов'язковий віддалений S3 backend. У `backend.tf` уже оголошено
+частковий `backend "s3" {}`: не видаляйте його й не переходьте на local backend.
+Після локального `init -backend=false` не можна одразу запускати команди розгортання.
 
-Используется существующий bucket `epam-hw4-state-freshdeploy-20261027` в аккаунте
-`071954286972`, регион `eu-north-1`; повторно создавать его не нужно. Проверены
-versioning, SSE-S3, все четыре Block Public Access, Bucket owner enforced и TLS Deny.
-При подготовке другого окружения bucket создаётся отдельно, не этим Terraform root.
-Требования к защите backend:
+Використовується наявний bucket `epam-hw4-state-freshdeploy-20261027` в обліковому записі
+`071954286972`, регіон `eu-north-1`; створювати його повторно не потрібно. Перевірено
+versioning, SSE-S3, усі чотири Block Public Access, Bucket owner enforced та TLS Deny.
+Під час підготовки іншого середовища bucket створюється окремо, а не цим Terraform root.
+Вимоги до захисту backend:
 
-1. Выберите свой AWS-аккаунт и `eu-north-1`, задайте уникальное имя bucket.
-2. Включите **Block all public access** — все четыре настройки. Object Ownership —
-   **Bucket owner enforced**, ACL отключены.
-3. Включите **S3 Versioning** для восстановления предыдущего state.
-4. Установите Default encryption **SSE-S3 (AES-256)**. `encrypt = true` дополнительно
-   требует server-side encryption при записи backend. Для этой задачи отдельный
-   платный customer-managed KMS key не нужен.
-5. Bucket policy должна запрещать запросы без TLS (`aws:SecureTransport = false`).
-   Доступ разрешается только выделенным deployment identities/администраторам,
-   а не публично и не execution role нашей Lambda.
-6. Ограничьте IAM: `s3:ListBucket` на bucket с необходимыми префиксами;
+1. Виберіть свій обліковий запис AWS та `eu-north-1`, задайте унікальне ім'я bucket.
+2. Увімкніть **Block all public access** — усі чотири налаштування. Object Ownership —
+   **Bucket owner enforced**, ACL вимкнено.
+3. Увімкніть **S3 Versioning** для відновлення попереднього state.
+4. Установіть Default encryption **SSE-S3 (AES-256)**. `encrypt = true` додатково
+   вимагає server-side encryption під час запису backend. Для цієї задачі окремий
+   платний customer-managed KMS key не потрібен.
+5. Bucket policy має забороняти запити без TLS (`aws:SecureTransport = false`).
+   Доступ дозволяється лише виділеним deployment identities/адміністраторам,
+   а не публічно й не execution role нашої Lambda.
+6. Обмежте IAM: `s3:ListBucket` на bucket із необхідними префіксами;
    `s3:GetObject` / `s3:PutObject` на
    `homework4/group-preorder/terraform.tfstate`;
    `s3:GetObject` / `s3:PutObject` / `s3:DeleteObject` на
    `homework4/group-preorder/terraform.tfstate.tflock`.
-   Для обычного управления state право удаления самого state не требуется.
-7. Не включайте Object Lock, запрещающий удаление `.tflock`. Для state locking
-   используется **нативный S3 lockfile**, `use_lockfile = true` (Terraform 1.10+).
-   DynamoDB locking table не нужна. Не используйте `-lock=false`.
+   Для звичайного керування state право видалення самого state не потрібне.
+7. Не вмикайте Object Lock, який забороняє видалення `.tflock`. Для блокування state
+   використовується **нативний S3 lockfile**, `use_lockfile = true` (Terraform 1.10+).
+   Таблиця блокування DynamoDB не потрібна. Не використовуйте `-lock=false`.
 
-Скопируйте `backend.hcl.example` в игнорируемый `backend.hcl`, замените имя bucket
-и единственный элемент `allowed_account_ids` на настоящий 12-значный account ID.
-Фиксированные `region`, `key`, `encrypt` и `use_lockfile` оставьте. Никаких credentials
-в HCL. `allowed_account_ids` относится именно к S3 backend и проверяет аккаунт
-вызывающей identity. Это не проверка владельца бакета в каждом S3-запросе.
-Параметр `expected_bucket_owner` не поддерживается Terraform S3 backend; для проверки
-владельца отдельно используйте AWS CLI `--expected-bucket-owner` перед подключением.
-Для одного экземпляра используйте один и тот же bucket/key во всех будущих задачах.
-Дополнительному независимому экземпляру нужен другой key, а не общий state.
+Скопіюйте `backend.hcl.example` в ігнорований `backend.hcl`, замініть ім'я bucket
+і єдиний елемент `allowed_account_ids` на справжній 12-значний account ID.
+Фіксовані `region`, `key`, `encrypt` та `use_lockfile` залиште. Жодних облікових даних
+у HCL. `allowed_account_ids` стосується саме S3 backend і перевіряє обліковий запис
+identity, що здійснює виклик. Це не перевірка власника bucket у кожному S3-запиті.
+Параметр `expected_bucket_owner` не підтримується Terraform S3 backend; для перевірки
+власника окремо використовуйте AWS CLI `--expected-bucket-owner` перед підключенням.
+Для одного екземпляра використовуйте той самий bucket/key у всіх майбутніх задачах.
+Додатковому незалежному екземпляру потрібен інший key, а не спільний state.
 
-Versioning и locking решают разные задачи: первое даёт историю, второе предотвращает
-одновременную запись. State чувствителен и не должен попадать в Git, сообщения,
-публичные artifacts или общедоступные backups. Не публикуйте `.terraform/`:
-там сохраняется backend metadata. И state, и plan-файлы могут содержать секреты.
-Lockfile `.terraform.lock.hcl` содержит только версии и контрольные суммы providers,
-а не секреты или Terraform state.
+Versioning і locking розв'язують різні задачі: перше дає історію, друге запобігає
+одночасному запису. State містить чутливі дані й не має потрапляти до Git, повідомлень,
+публічних артефактів чи загальнодоступних резервних копій. Не публікуйте `.terraform/`:
+там зберігаються метадані backend. І state, і plan-файли можуть містити секрети.
+Lockfile `.terraform.lock.hcl` містить лише версії та контрольні суми providers,
+а не секрети чи Terraform state.
 
-Если кто-то ранее случайно сделал deployment с local state, сначала сохраните
-его защищённую копию и отдельно согласуйте миграцию через `init -migrate-state`.
-Не теряйте этот файл и не создавайте второй набор ресурсов с пустым state.
-Deployment использует remote S3 state; отдельный local deployment state не применялся.
+Якщо хтось раніше випадково виконав розгортання з local state, спочатку збережіть
+його захищену копію й окремо узгодьте міграцію через `init -migrate-state`.
+Не втрачайте цей файл і не створюйте другий набір ресурсів із порожнім state.
+Розгортання використовує віддалений S3 state; окремий локальний state розгортання не застосовувався.
 
-## Временная авторизация и воспроизводимый workflow
+## Тимчасова авторизація та відтворюваний робочий процес
 
-**Все действия выполняются вручную в согласованном аккаунте; apply запускается только для проверенного сохранённого плана.**
-Перед работой в вашем AWS Free Plan проверьте в Billing активный план, остаток
-кредитов, срок их действия, доступность Lambda/HTTP API и квоты в `eu-north-1`.
-Название Free Plan не означает бессрочную бесплатность или нулевую стоимость всех
-ресурсов. Не переключайте аккаунт на платный план без отдельного решения владельца.
+**Усі дії виконуються вручну в узгодженому обліковому записі; apply запускається лише для перевіреного збереженого плану.**
+Перед роботою у вашому AWS Free Plan перевірте в Billing активний план, залишок
+кредитів, строк їхньої дії, доступність Lambda/HTTP API та квоти в `eu-north-1`.
+Назва Free Plan не означає безстрокової безоплатності чи нульової вартості всіх
+ресурсів. Не переводьте обліковий запис на платний план без окремого рішення власника.
 
-Для человеческого доступа предпочтительна короткая сессия IAM Identity Center
-(AWS CLI v2 SSO). Для автоматизации — короткоживущая STS-сессия через доверенный
-OIDC/федеративный механизм, если его предоставляет ваша организация/платформа.
-Execution role Lambda и deployment identity — разные роли: последней нужны также
-ограниченные права создавать и удалять перечисленные ресурсы, `iam:PassRole`
-только для execution role и права backend, описанные выше.
+Для доступу користувача перевага надається короткій сесії IAM Identity Center
+(AWS CLI v2 SSO). Для автоматизації — короткочасна STS-сесія через довірений
+OIDC/федеративний механізм, якщо його надає ваша організація/платформа.
+Execution role Lambda та deployment identity — різні ролі: останній також потрібні
+обмежені права створювати й видаляти перелічені ресурси, `iam:PassRole`
+лише для execution role та права backend, описані вище.
 
-Не используйте root credentials, долгоживущие IAM access keys, ключи из чужого
-проекта, секреты в chat, `backend.hcl`, `.tfvars`, коде или shell history.
-Не предполагайте, что HTTP-proxy placeholder секрета является пригодным raw AWS
-credential для SigV4. Настройка авторизации должна поддерживаться AWS SDK/CLI.
-Альтернативный пример интерактивной SSO-сессии:
+Не використовуйте root credentials, довготривалі IAM access keys, ключі зі стороннього
+проєкту, секрети в чаті, `backend.hcl`, `.tfvars`, коді чи shell history.
+Не припускайте, що HTTP-proxy placeholder секрету є придатними необробленими обліковими даними AWS
+для SigV4. Налаштування авторизації має підтримуватися AWS SDK/CLI.
+Альтернативний приклад інтерактивної SSO-сесії:
 
 ```bash
 aws configure sso --profile homework4
@@ -283,12 +283,12 @@ export AWS_REGION=eu-north-1
 aws sts get-caller-identity
 ```
 
-Для текущего Windows workflow проверены AWS CLI 2.38.6, Terraform 1.17.0 и профиль
-`fresh-deploy`, использующий браузерный `aws login`. Секреты вводятся пользователем
-только на странице AWS; Terraform читает временную сессию напрямую. Если сессия
-истекла, обновите её командой `aws login --profile fresh-deploy --region eu-north-1`.
+Для поточного робочого процесу Windows перевірено AWS CLI 2.38.6, Terraform 1.17.0 та профіль
+`fresh-deploy`, який використовує браузерний `aws login`. Секрети вводяться користувачем
+лише на сторінці AWS; Terraform читає тимчасову сесію безпосередньо. Якщо сесія
+спливла, оновіть її командою `aws login --profile fresh-deploy --region eu-north-1`.
 
-Перед init, plan и apply выполните PowerShell-проверки аккаунта и владельца бакета:
+Перед init, plan та apply виконайте PowerShell-перевірки облікового запису й власника bucket:
 
 ```powershell
 $env:AWS_PROFILE = "fresh-deploy"
@@ -301,23 +301,23 @@ aws s3api head-bucket --bucket epam-hw4-state-freshdeploy-20261027 --expected-bu
 if ($LASTEXITCODE -ne 0) { throw "Unexpected bucket owner or unavailable bucket" }
 ```
 
-`backend.hcl` должен содержать `allowed_account_ids = ["071954286972"]`,
-`region = "eu-north-1"`, `encrypt = true`, `use_lockfile = true` и ключ
-`homework4/group-preorder/terraform.tfstate`. Не отключайте проверки credentials,
-checksums, подписей или TLS. `terraform validate` не проверяет параметры S3 backend:
-для этого требуется успешный remote init и проверка эффективной конфигурации backend.
+`backend.hcl` має містити `allowed_account_ids = ["071954286972"]`,
+`region = "eu-north-1"`, `encrypt = true`, `use_lockfile = true` та ключ
+`homework4/group-preorder/terraform.tfstate`. Не вимикайте перевірки облікових даних,
+контрольних сум, підписів чи TLS. `terraform validate` не перевіряє параметри S3 backend:
+для цього потрібні успішний remote init і перевірка фактичної конфігурації backend.
 
-Проверьте Account и ARN перед изменениями. Не выводите значения токенов/переменных.
-Авторизуйтесь только в отдельной задаче для разрешённого деплоя; не публикуйте
-снимок среды с активными credentials или SSO caches. После завершения завершите
-сессию (`aws sso logout` в выделенной рабочей среде; команда затрагивает её SSO
-sessions), удалите только собственные временные credentials/plan artifacts и
-дайте STS-сессии истечь. Не удаляйте вслепую общие пользовательские credential files.
+Перевірте Account та ARN перед змінами. Не виводьте значення токенів/змінних.
+Авторизуйтеся лише в окремій задачі для дозволеного розгортання; не публікуйте
+знімок середовища з активними обліковими даними чи кешами SSO. Після завершення закрийте
+сесію (`aws sso logout` у виділеному робочому середовищі; команда зачіпає його SSO
+sessions), видаліть лише власні тимчасові облікові дані/артефакти плану та
+дайте STS-сесії спливти. Не видаляйте наосліп спільні файли облікових даних користувача.
 
-Ниже workflow, использованный для deployment. Повторять apply можно только после
-отдельного согласования нового сохранённого плана; для текущего deployment
-финальный проверочный plan уже показал отсутствие изменений.
-Из этого каталога:
+Нижче наведено робочий процес, використаний для розгортання. Повторювати apply можна лише після
+окремого узгодження нового збереженого плану; для поточного розгортання
+підсумковий перевірний plan уже показав відсутність змін.
+Із цього каталогу:
 
 ```powershell
 terraform init -reconfigure "-backend-config=backend.hcl" -input=false -lockfile=readonly
@@ -328,54 +328,54 @@ git check-ignore -- homework4.tfplan backend.hcl
 if ($LASTEXITCODE -ne 0) { throw "Local deployment files must be ignored" }
 terraform plan "-out=homework4.tfplan" -input=false -lock-timeout=30s
 if ($LASTEXITCODE -ne 0) { throw "Terraform plan failed" }
-# Проверить plan: ровно согласованные ресурсы, account/region, IAM и стоимость.
-# Выполнять следующую команду только после разрешения именно этого плана:
+# Перевірити plan: лише узгоджені ресурси, account/region, IAM і вартість.
+# Виконувати наступну команду лише після дозволу саме на цей план:
 terraform apply -input=false homework4.tfplan
 if ($LASTEXITCODE -ne 0) { throw "Terraform apply failed" }
 terraform output -raw group_preorder_url
 ```
 
-`homework4.tfplan`, `backend.hcl`, `.terraform/`, ZIP и файлы в `.build/` игнорируются
-Git. Не добавляйте их принудительно: state и plan могут содержать чувствительные
-данные. Не запускайте apply без имени согласованного сохранённого плана.
+`homework4.tfplan`, `backend.hcl`, `.terraform/`, ZIP і файли в `.build/` ігноруються
+Git. Не додавайте їх примусово: state і plan можуть містити чутливі
+дані. Не запускайте apply без імені узгодженого збереженого плану.
 
-`-reconfigure` подключает уже подготовленный удалённый backend; это не миграция
-существующего local state. В новой локальной Windows-сессии восстановите временную
-авторизацию и используйте тот же bucket/key и backend config. Запуск deployment
-из другой среды также должен использовать этот remote state.
-Не сохраняйте deploy commands в автоматическом startup/install сценарии среды.
-Рабочий URL и результат выполненного smoke test приведены в начале README.
-Для отдельно согласованной повторной проверки используйте GET по output URL и
-сравните итог $64 и статусы; неподдерживаемые маршруты должны отклоняться.
-Не отправляйте реальные персональные данные в этот публичный demo API.
+`-reconfigure` підключає вже підготовлений віддалений backend; це не міграція
+наявного local state. У новій локальній Windows-сесії відновіть тимчасову
+авторизацію та використовуйте той самий bucket/key і backend config. Запуск розгортання
+з іншого середовища також має використовувати цей віддалений state.
+Не зберігайте команди розгортання в автоматичному сценарії запуску/встановлення середовища.
+Робоча URL-адреса й результат виконаного smoke test наведені на початку README.
+Для окремо узгодженої повторної перевірки використовуйте GET за output URL і
+порівняйте підсумок $64 та статуси; непідтримувані маршрути мають відхилятися.
+Не надсилайте справжні персональні дані до цього публічного demo API.
 
-## Расходы и ограничения
+## Витрати й обмеження
 
-- Оплачиваемыми могут быть Lambda invocations/duration, API Gateway requests,
-  CloudWatch ingestion/storage, S3 storage/requests/version history и исходящий
-  трафик. Фактическое покрытие Free Plan проверяется в вашем аккаунте.
-- Lambda ARM64/128 МБ/3 секунды, HTTP API, лимит 1 request/sec и короткий retention
-  уменьшают расходы. Throttling — best effort, **не жёсткий денежный лимит**.
-  Публичный GET тоже можно многократно вызывать; при подозрении на злоупотребление
-  отключите endpoint/удалите учебный stack после проверки.
-- Не создаются постоянно работающие серверы, NAT Gateway и базы данных.
-  Reserved concurrency не задана, чтобы не требовать резервирования квоты нового
-  аккаунта; учитывайте общую Lambda concurrency quota вашего аккаунта.
-- Через Billing Console заранее настройте небольшие budget alerts и уведомления
-  по кредитам. Это не создаётся данным Terraform; alerts не останавливают расходы.
-  Не добавляйте платные вспомогательные услуги без проверки их цены.
-- Сейчас demo остаётся активным для демонстрации. После её завершения согласуйте
-  cleanup отдельно. Retention 7 дней не удаляет сами log groups; Terraform удалит
-  обе группы при cleanup. Старые S3 state versions сохраняются отдельно.
+- Оплачуватися можуть Lambda invocations/duration, API Gateway requests,
+  CloudWatch ingestion/storage, S3 storage/requests/version history і вихідний
+  трафік. Фактичне покриття Free Plan перевіряється у вашому обліковому записі.
+- Lambda ARM64/128 МБ/3 секунди, HTTP API, ліміт 1 request/sec і короткий строк зберігання
+  зменшують витрати. Throttling — best effort, **не жорсткий грошовий ліміт**.
+  Публічний GET також можна викликати багаторазово; за підозри на зловживання
+  вимкніть endpoint/видаліть навчальний стек після перевірки.
+- Не створюються постійно запущені сервери, NAT Gateway та бази даних.
+  Reserved concurrency не задано, щоб не вимагати резервування квоти нового
+  облікового запису; враховуйте загальну Lambda concurrency quota свого облікового запису.
+- Через Billing Console заздалегідь налаштуйте невеликі бюджетні сповіщення та повідомлення
+  про кредити. Це не створюється цим Terraform; сповіщення не зупиняють витрати.
+  Не додавайте платні допоміжні послуги без перевірки їхньої ціни.
+- Зараз демо залишається активним для демонстрації. Після її завершення узгодьте
+  очищення окремо. Строк зберігання 7 днів не видаляє самі log groups; Terraform видалить
+  обидві групи під час очищення. Старі версії S3 state зберігаються окремо.
 
-## Безопасное удаление в дальнейшем — только после отдельного разрешения
+## Безпечне видалення надалі — лише після окремого дозволу
 
-Инфраструктура сейчас активна. Команды ниже описывают последующий cleanup и при
-финализации Homework #4 не выполняются. Сначала восстановите профиль `fresh-deploy`,
-выполните приведённые выше STS и S3 owner checks для аккаунта `071954286972` и
-подключите **тот же S3 backend**. Не удаляйте ресурсы вручную в обход Terraform.
+Інфраструктура зараз активна. Наведені нижче команди описують подальше очищення й під час
+завершення домашнього завдання №4 не виконуються. Спочатку відновіть профіль `fresh-deploy`,
+виконайте наведені вище перевірки STS та власника S3 для облікового запису `071954286972` і
+підключіть **той самий S3 backend**. Не видаляйте ресурси вручну в обхід Terraform.
 
-После отдельного разрешения на подготовку cleanup из `infra/homework4/`:
+Після окремого дозволу на підготовку очищення з `infra/homework4/`:
 
 ```powershell
 $env:AWS_PROFILE = "fresh-deploy"
@@ -384,27 +384,27 @@ terraform init -reconfigure "-backend-config=backend.hcl" -input=false -lockfile
 if ($LASTEXITCODE -ne 0) { throw "Terraform init failed" }
 terraform plan -destroy "-out=homework4-destroy.tfplan" -input=false -lock-timeout=30s
 if ($LASTEXITCODE -ne 0) { throw "Destroy plan failed" }
-# Проверить: только десять managed resources Homework #4, без посторонних ресурсов.
-# Получить отдельное разрешение на применение именно этого destroy plan.
-# Следующую команду не запускать до этого разрешения:
+# Перевірити: лише десять керованих ресурсів ДЗ №4, без сторонніх ресурсів.
+# Отримати окремий дозвіл на застосування саме цього destroy plan.
+# Наступну команду не запускати до отримання цього дозволу:
 terraform apply -input=false homework4-destroy.tfplan
 if ($LASTEXITCODE -ne 0) { throw "Cleanup failed; preserve remote state" }
 ```
 
-Это удалит API, Lambda, execution role/policy, permission и обе группы логов.
-Bucket state не управляется этим stack и останется. Не удаляйте state или bucket
-до подтверждённого завершения cleanup. После проверки пустого state и отсутствия
-ресурсов решите отдельно, сколько хранить защищённую историю для аудита/восстановления.
-Если bucket выделен только этому заданию и больше не нужен, его удаление — отдельная
-операция владельца: нужно удалить все версии и delete markers, убедиться в отсутствии
-активного `.tflock` и других проектов. Не применяйте рекурсивное удаление к общему
-bucket и не удаляйте активный lock; force-unlock допустим лишь после проверки,
-что никакой Terraform процесс больше не работает, и отдельного согласования.
+Це видалить API, Lambda, execution role/policy, permission та обидві групи журналів.
+Bucket state не керується цим стеком і залишиться. Не видаляйте state чи bucket
+до підтвердженого завершення очищення. Після перевірки порожнього state та відсутності
+ресурсів вирішіть окремо, скільки зберігати захищену історію для аудиту/відновлення.
+Якщо bucket виділений лише цьому завданню й більше не потрібен, його видалення — окрема
+операція власника: потрібно видалити всі версії та delete markers, переконатися у відсутності
+активного `.tflock` та інших проєктів. Не застосовуйте рекурсивне видалення до спільного
+bucket і не видаляйте активний lock; force-unlock припустимий лише після перевірки,
+що жоден процес Terraform більше не працює, та окремого узгодження.
 
-Официальные справочные материалы:
+Офіційні довідкові матеріали:
 
-- [S3 backend, versioning и locking](https://developer.hashicorp.com/terraform/language/backend/s3)
+- [S3 backend, versioning і locking](https://developer.hashicorp.com/terraform/language/backend/s3)
 - [Python runtime Lambda](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python.html)
 - [HTTP API Lambda integration payload 2.0](https://docs.aws.amazon.com/apigateway/latest/developerguide/http-api-develop-integrations-lambda.html)
-- [Временный доступ AWS CLI через IAM Identity Center](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)
+- [Тимчасовий доступ AWS CLI через IAM Identity Center](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sso.html)
 - [AWS Free Tier / Free Plan](https://aws.amazon.com/free/)

@@ -1,5 +1,8 @@
 # Deployment Guide
 
+Homework #6 frontend starter materials and local commands:
+[docs/homework6/README.md](docs/homework6/README.md).
+
 This repo uses three deployment tracks:
 
 - Terraform for shared AWS infrastructure under `infra/terraform`
