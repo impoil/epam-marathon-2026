@@ -1,6 +1,8 @@
 # Реальный AWS deployment Green&Tasty — подготовка ДЗ №5–6
 
-29 октября 2026, Windows. Основа — `main ab483fc`, PR #1 объединён. **Deployment не выполнялся.** AWS-ресурсы не создавались/не менялись; apply/destroy, seed upload и создание пользователей не запускались. `infra/homework4` и его state не изменены, ничего из старого стека не импортируется.
+29 октября 2026, Windows. Основа — `main ab483fc`, PR #1 объединён. После отдельного разрешения **единственный apply создал 22 из 32 ресурсов и остановился на CloudFront account verification**. Повторного apply, destroy, seed, пользователей и upload не было. Актуальные outputs, remaining plan **10/0/0** и блокер: [deployment report](../../docs/homework6/aws-deployment.md). `infra/homework4`, HelloWorld и старый state не изменены.
+
+Разделы ниже описывают подготовку и первоначальный план 32/0/0. Теперь remote state уже содержит 22 ресурса: после разблокировки AWS продолжать нужно из того же key, со свежим планом оставшихся 10; не создавать другой state и не повторять первоначальный план.
 
 ## Готовность и блокеры
 
@@ -8,7 +10,7 @@
 
 После восстановления AWS CLI выполнены проверки через настоящий аккаунт: STS подтвердил **071954286972**, временную роль `AccountFullAccessRole`, источник credentials `login`. В профиле отсутствует явный region; CLI, provider и backend используют **eu-north-1** явно. Free Plan **FREE / ACTIVE**, остаток **$140**, срок плана **26.04.2027 20:11:35 Europe/Kyiv**. Free Tier usage API вернул пустой список — это не подтверждение нулевого текущего счёта.
 
-**Полноценный remote plan от 29.10.2026 23:26 Europe/Kyiv: 32 Add / 0 Change / 0 Destroy, replacements 0**, без target, refresh=false или обхода STS. S3 backend подтверждён и подключён; отдельный key `hw6-greentasty/terraform.tfstate`, `encrypt=true`, `use_lockfile=true`. Для строго read-only plan использован `-lock=false`; ни state, ни lock object в S3 не созданы. План сохранён локально в ignored `build/hw6.tfplan`; binary plan/state в Git не включены. Полный перечень, AWS-инвентарь, смета и доказательства изоляции: [AWS verification](../../docs/homework6/aws-verification.md).
+**Первоначальный remote plan от 29.10.2026 23:26 Europe/Kyiv: 32 Add / 0 Change / 0 Destroy, replacements 0**, без target, refresh=false или обхода STS. S3 backend подтверждён и подключён; отдельный key `hw6-greentasty/terraform.tfstate`, `encrypt=true`, `use_lockfile=true`. На этапе read-only подготовки использован `-lock=false`, без state/lock записи. Затем разрешённый apply прошёл обычный locking и сохранил partial state; актуальное состояние приведено выше. Binary plan/state в Git не включены. Исходный перечень и смета: [AWS verification](../../docs/homework6/aws-verification.md).
 
 Важное ограничение: фактическая региональная квота Lambda — **5**. Окончательный план использует **`-var-file=demo.tfvars.example`**, где `reserved_concurrency=null` (в плане `-1`, без резерва). Исходный default 2 тоже даёт 32/0/0, но непригоден для запуска при требовании AWS оставить 100 unreserved executions. Квота не менялась. Новый стек будет делить concurrency с ДЗ №4/HelloWorld; это ограничение изоляции на уровне аккаунта. Реальный BACKEND_URL появится после отдельно разрешённого создания API.
 

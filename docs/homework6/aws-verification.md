@@ -1,5 +1,7 @@
 # AWS: проверка аккаунта и remote plan Green&Tasty
 
+**Исторический отчёт pre-apply.** После него отдельно разрешённый apply создал 22 ресурса и остановился на CloudFront account verification; актуальный remaining plan **10 Add / 0 Change / 0 Destroy** и реальные outputs: [deployment report](aws-deployment.md).
+
 Проверено **29 октября 2026**, Windows, профиль `fresh-deploy`, регион ресурсов `eu-north-1`. Финальный plan: **23:26:34 Europe/Kyiv / 21:26:34 UTC**. Временная AWS-сессия восстановлена; предыдущий блокер истёкшей сессии снят.
 
 **Результат: 32 Add / 0 Change / 0 Destroy, 0 replacements.** Это полноценный remote Terraform plan, не offline/targeted план. `apply`, `destroy`, import, миграция state, изменение квот, создание пользователей, запись seed, upload и изменение настроек существующих AWS-ресурсов не выполнялись. PR #2 остаётся draft и не объединён.
