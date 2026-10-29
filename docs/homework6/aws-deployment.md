@@ -1,5 +1,7 @@
 # AWS deployment Green&Tasty: частичное создание и блокер CloudFront
 
+**Историческая попытка 29.10.2026.** Пользователь выбрал внешний Cloudflare Pages вместо AWS distribution; новый вариант подготовки от 30.10.2026 не требует разблокировки CloudFront CreateDistribution и даёт **8/0/0**, сохраняя все 22 ресурса. Актуальная инструкция: [Cloudflare runbook](cloudflare-pages.md). Новый apply не выполнялся.
+
 **29 октября 2026. Разрешённый apply выполнен один раз и остановился на AWS account verification. Создано 22 из 32 согласованных Terraform resources. Повторный apply не выполнялся.**
 
 ## Проверки перед apply

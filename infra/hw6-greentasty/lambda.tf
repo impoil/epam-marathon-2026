@@ -45,7 +45,7 @@ resource "aws_lambda_function" "api" {
       REGION                            = "eu-north-1"
       COGNITO_USER_POOL_ID              = aws_cognito_user_pool.app.id
       COGNITO_USER_POOL_CLIENT_ID       = aws_cognito_user_pool_client.app.id
-      CORS_ALLOWED_ORIGIN               = "https://${aws_cloudfront_distribution.frontend.domain_name}"
+      CORS_ALLOWED_ORIGIN               = var.frontend_origin
       reservationsTable                 = aws_dynamodb_table.app["Reservations"].name
       groupReservationsTable            = aws_dynamodb_table.app["GroupReservations"].name
       guestSessionTable                 = aws_dynamodb_table.app["GuestSessions"].name

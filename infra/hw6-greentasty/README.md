@@ -1,5 +1,9 @@
 # Реальный AWS deployment Green&Tasty — подготовка ДЗ №5–6
 
+**Актуальный вариант от 30.10.2026: AWS backend + внешний Cloudflare Pages frontend.** Remote plan **8 Add / 0 Change / 0 Destroy**, все созданные 22 ресурса сохранены. `frontend_origin` обязателен; в `demo.tfvars.example` указан выбранный пользователем, ещё не зарезервированный `https://greentasty-epam-impoil.pages.dev`. Инструкции Pages, CORS, точный список Add и предложение отдельной очистки шести unused hosting resources: [Cloudflare runbook](../../docs/homework6/cloudflare-pages.md). Apply, очистка и публикация не выполнялись.
+
+Разделы ниже сохранены как **история первоначального CloudFront-варианта**. Для дальнейшей подготовки использовать новый runbook; старые 32/0/0 и 10/0/0 планы/инструкции S3 upload больше не соответствуют текущей конфигурации. Terraform backend bucket/key и исходники backend не менялись.
+
 29 октября 2026, Windows. Основа — `main ab483fc`, PR #1 объединён. После отдельного разрешения **единственный apply создал 22 из 32 ресурсов и остановился на CloudFront account verification**. Повторного apply, destroy, seed, пользователей и upload не было. Актуальные outputs, remaining plan **10/0/0** и блокер: [deployment report](../../docs/homework6/aws-deployment.md). `infra/homework4`, HelloWorld и старый state не изменены.
 
 Разделы ниже описывают подготовку и первоначальный план 32/0/0. Теперь remote state уже содержит 22 ресурса: после разблокировки AWS продолжать нужно из того же key, со свежим планом оставшихся 10; не создавать другой state и не повторять первоначальный план.

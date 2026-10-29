@@ -1,6 +1,6 @@
 locals {
   routes = jsondecode(file("${path.module}/routes.json"))
-  origin = "https://${aws_cloudfront_distribution.frontend.domain_name}"
+  origin = var.frontend_origin
   cors_headers = {
     "Access-Control-Allow-Origin"  = { type = "string" }
     "Access-Control-Allow-Methods" = { type = "string" }

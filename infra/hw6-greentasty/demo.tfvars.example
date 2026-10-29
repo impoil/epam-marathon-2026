@@ -3,3 +3,7 @@
 # This reviewed demo variant shares the existing regional pool; no quota changes.
 # Use -var-file=demo.tfvars.example for planning. Never pass null via numeric -var.
 reserved_concurrency = null
+
+# User-selected production origin; project name is not yet reserved in Cloudflare.
+# Confirm it before any final plan/apply. This is not a deployed frontend URL.
+frontend_origin = "https://greentasty-epam-impoil.pages.dev"

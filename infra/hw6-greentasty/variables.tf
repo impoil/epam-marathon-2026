@@ -1,3 +1,16 @@
+variable "frontend_origin" {
+  description = "Exact production HTTPS origin for Cloudflare Pages/custom domain, without path, trailing slash, query, credentials, port or wildcard. Confirm ownership before apply."
+  type        = string
+  nullable    = false
+  validation {
+    condition = length(var.frontend_origin) <= 261 && can(regex(
+      "^https://([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]([a-z0-9-]{0,61}[a-z0-9])?$",
+      var.frontend_origin
+    ))
+    error_message = "Set one exact lower-case HTTPS DNS origin, e.g. https://your-project.pages.dev; no trailing slash, path, query, credentials, port or wildcard."
+  }
+}
+
 variable "lambda_zip" {
   description = "Path to the real .NET 10 linux-x64 publish ZIP, built by scripts/package.ps1."
   type        = string
