@@ -6,9 +6,11 @@
 
 Готовы настоящий .NET ZIP, отдельный Terraform root, production build workflow Angular, генератор тестовых данных и E2E checklist. Статические JSON и моки не заменяют endpoints. `routes.json`/`tables.json` — определения инфраструктуры, а не ответы API.
 
-AWS CLI `fresh-deploy` несколько раз вернул `Your session has expired`, в том числе после сообщений о повторном входе. Login cache на этой машине последний раз записан 27.10.2026; проверены только timestamp/expiry, токены не выводились. Успешный STS **не получен**. Аккаунт `071954286972` и регион `eu-north-1` заданы конфигурацией; фактическая identity, Free Plan/credits, ресурсы, квоты и S3 backend **не подтверждены**. В профиле отсутствует явный region; команды/provider/backend указывают его отдельно.
+После восстановления AWS CLI выполнены проверки через настоящий аккаунт: STS подтвердил **071954286972**, временную роль `AccountFullAccessRole`, источник credentials `login`. В профиле отсутствует явный region; CLI, provider и backend используют **eu-north-1** явно. Free Plan **FREE / ACTIVE**, остаток **$140**, срок плана **26.04.2027 20:11:35 Europe/Kyiv**. Free Tier usage API вернул пустой список — это не подтверждение нулевого текущего счёта.
 
-Выполнены `terraform init -backend=false`, `fmt -check`, `validate`. Remote init/plan не выполнялись из-за AWS-сессии. Предварительно ожидаются **32 managed resources, только создание** — это подсчёт конфигурации, **не результат plan**. Реальный BACKEND_URL нового API появится только после отдельно разрешённого deployment.
+**Полноценный remote plan от 29.10.2026 23:26 Europe/Kyiv: 32 Add / 0 Change / 0 Destroy, replacements 0**, без target, refresh=false или обхода STS. S3 backend подтверждён и подключён; отдельный key `hw6-greentasty/terraform.tfstate`, `encrypt=true`, `use_lockfile=true`. Для строго read-only plan использован `-lock=false`; ни state, ни lock object в S3 не созданы. План сохранён локально в ignored `build/hw6.tfplan`; binary plan/state в Git не включены. Полный перечень, AWS-инвентарь, смета и доказательства изоляции: [AWS verification](../../docs/homework6/aws-verification.md).
+
+Важное ограничение: фактическая региональная квота Lambda — **5**. Окончательный план использует **`-var-file=demo.tfvars.example`**, где `reserved_concurrency=null` (в плане `-1`, без резерва). Исходный default 2 тоже даёт 32/0/0, но непригоден для запуска при требовании AWS оставить 100 unreserved executions. Квота не менялась. Новый стек будет делить concurrency с ДЗ №4/HelloWorld; это ограничение изоляции на уровне аккаунта. Реальный BACKEND_URL появится после отдельно разрешённого создания API.
 
 ## Минимальный полноценный стек
 
@@ -37,7 +39,7 @@ VPC/NAT, EC2, ALB, provisioned concurrency, SQS/SES/report Lambdas и Swagger ho
 - Корзина Owner синхронизируется из настоящих Orders в owner GuestSession. Для группы личный submit подтверждает только её корзину, сохраняя Order Created до общего Submit. Edit снимает подтверждение; legacy unsubmit не может снова открыть Submitted/Closed группу. Одиночные брони сохраняют прежнее поведение. Синхронизация Orders/owner session выполняет отдельные записи, поэтому после частичного отказа нужен повтор/проверка; общий финальный Submit остаётся условной атомарной транзакцией Orders/GroupReservations. Конкурентные изменения корзин при общем Submit требуют отдельного нагрузочного/интеграционного теста.
 - Runtime IAM: чтение только новых таблиц/индексов; запись только Reservations, GroupReservations, GuestSessions, Orders, Waiters, Notifications; AdminGetUser/ListUsers/AdminListGroupsForUser только нового pool. Транзакция DynamoDB авторизуется через PutItem/ConditionCheckItem. Нет management/S3/SQS/SES/IAM grants или доступа к ресурсам ДЗ №4.
 - CORS в Lambda/OPTIONS/Gateway errors — точный HTTPS origin новой CloudFront distribution, без credentials. CORS не заменяет authorization.
-- Throttling API 5 requests/s, burst 10, reserved concurrency Lambda 2. Лимиты best effort, не hard spending cap. Проверить concurrency quota до apply: AWS требует оставить 100 unreserved; в новом аккаунте reservation может быть запрещена. При отказе остановиться и отдельно рассмотреть `reserved_concurrency=null`, не менять квоты автоматически.
+- Throttling API 5 requests/s, burst 10. Окончательный remote plan учитывает измеренную Lambda quota 5 и использует `demo.tfvars.example` без reserved concurrency. Default 2 оставлен как отдельный ограничительный вариант, требующий подходящей квоты; не применять его в текущем аккаунте. Лимиты best effort, не hard spending cap; общая квота может приводить к взаимному throttling с ДЗ №4. Не менять квоты автоматически.
 - Lambda logs retention 7 дней; request path/query/headers/body не логируются, invite URL содержит bearer capability. REST execution/data tracing и CloudFront access/query logs выключены. Общая account-level CloudWatch role для REST API не меняется. Старые handlers могут писать ID/описания ошибок — использовать только синтетические данные.
 - Cognito: self-signup выключен; admin-only recovery, пароль ≥14, ID/access tokens 30 минут. Нет SMS/автоматических писем/паролей в Terraform. MFA выключена для учебного демо.
 - S3 закрыт, AES256, TLS-only, OAC только своей distribution; HTTPS redirect, nosniff, frame DENY, no-referrer. DynamoDB/Cognito защищены от случайного удаления, S3 force_destroy=false.
@@ -62,7 +64,8 @@ VPC/NAT, EC2, ALB, provisioned concurrency, SQS/SES/report Lambdas и Swagger ho
 | Полный frontend | 283 passed / 47 failed; все 47 имён совпадают с сохранённым baseline, новых failures нет |
 | Browser production `?demo` | Storage пуст, protected route перенаправляет на `/login` |
 | Terraform fmt/init backend=false/validate | Passed, lockfile Windows/Linux |
-| Remote plan / deployed E2E | Не выполнены |
+| Remote init/plan | Passed: 32 Add / 0 Change / 0 Destroy, profile `demo.tfvars.example` |
+| Deployed E2E | Не выполнен: deployment не разрешён и не выполнялся |
 
 Сохраняются nullable/obsolete .NET warnings и CommonJS/style/bundle warnings Angular. Initial bundle близок к error budget 1 MB; бюджет не повышен. Исходные homework tests не переписаны и не отключены.
 
@@ -83,11 +86,11 @@ Dependencies фиксируются `dotnet/packages.lock.json`. ZIP/publish, se
 
 ## AWS-проверки и получение плана
 
-1. В том же Windows окружении реально завершить `aws login --profile fresh-deploy`, затем STS с `--region eu-north-1`. При другой identity/ошибке остановиться. Credentials/JWT не присылать.
+1. Перед будущим deployment повторно проверить `aws sts get-caller-identity --profile fresh-deploy --region eu-north-1`; при истечении сессии завершить `aws login --profile fresh-deploy`. Текущая проверка успешна. При другой identity/ошибке остановиться. Credentials/JWT не присылать.
 2. `scripts/inspect-aws.ps1 -OutputPath build/aws-inventory.json` — только чтение, остановка при первой ошибке. Проверить Free Plan, остаток/срок credits в Billing, доступность сервисов, инвентарь и concurrency. Free Tier API обслуживается в us-east-1; ресурсы — eu-north-1. Cost Explorer API ради проверки не используется.
-3. Bucket `epam-hw4-state-freshdeploy-20261027` известен из отчёта ДЗ №4, сейчас не подтверждён. Проверить `--expected-bucket-owner 071954286972`, region, versioning, AES256, public access block и TLS Deny policy. IAM должен позволять новый prefix. Отдельный key: **`hw6-greentasty/terraform.tfstate`**. Старый `homework4/group-preorder/terraform.tfstate` не использовать.
-4. Скопировать пример в ignored `backend.hcl`, проверить настройки. Remote init: `terraform -chdir=infra/hw6-greentasty init -reconfigure -backend-config=backend.hcl`. Не использовать migrate-state/import/force-unlock и не запускать команды в ДЗ №4. Backend bucket не создавать.
-5. `terraform -chdir=infra/hw6-greentasty plan -input=false -lock=false -out=build/hw6.tfplan`. Здесь `-lock=false` сохраняет строго read-only подготовку: S3 lock object тоже запись. Других операций над hw6 state в это время быть не должно. Plan/state не публиковать. Ожидаются только новые hw6 resources; при change/delete, неожиданном ресурсе/расходе остановиться.
+3. Bucket `epam-hw4-state-freshdeploy-20261027` подтверждён с `--expected-bucket-owner 071954286972`: Stockholm, versioning Enabled, AES256, все четыре public access block flags, TLS Deny policy. Настройки bucket не менялись. Отдельный key: **`hw6-greentasty/terraform.tfstate`**. Старый `homework4/group-preorder/terraform.tfstate` не использовать. Его VersionId/ETag/LastModified и конфигурация Lambda ДЗ №4 до/после plan совпали.
+4. Пример скопирован в ignored `backend.hcl`. Windows remote init: `terraform '-chdir=infra/hw6-greentasty' init -input=false -reconfigure '-backend-config=backend.hcl'`. Кавычки вокруг аргумента с `.hcl` важны для PowerShell. Не использовать migrate-state/import/force-unlock и не запускать команды в ДЗ №4. Backend bucket не создавать.
+5. `terraform '-chdir=infra/hw6-greentasty' plan -input=false -lock=false '-var-file=demo.tfvars.example' '-out=build/hw6.tfplan'`. Null для numeric variable передаётся через tfvars, а не `-var=reserved_concurrency=null`. Здесь `-lock=false` сохраняет строго read-only подготовку: S3 lock object тоже запись. Других операций над hw6 state в это время быть не должно. Plan/state не публиковать. Получено только создание hw6 resources; при будущих change/delete, неожиданном ресурсе/расходе остановиться.
 6. Перед отдельно разрешённым apply получить новый plan с обычным state locking. Эти инструкции не разрешают apply, seed, users или upload. Budget/уведомление в Billing рассмотреть отдельно; budget не является hard cap и в этом PR не создаётся.
 
 ## Последовательность после отдельного разрешения
@@ -117,17 +120,17 @@ Dependencies фиксируются `dotnet/packages.lock.json`. ZIP/publish, se
 
 ## Расходы
 
-Ориентир на 29.10.2026, USD без налогов, только новый стек; Free Tier/credits не гарантируются. Существующие расходы аккаунта не проверены.
+Ориентир на 29.10.2026, USD без налогов, только новый стек. Ставки eu-north-1 и Europe CDN получены через настоящий AWS Price List API; подробная модель: [AWS verification](../../docs/homework6/aws-verification.md). FREE/ACTIVE и $140 credits подтверждены, но ниже консервативная стоимость до free allowances/credits, а не обещание размера счёта.
 
 | Сценарий | Оценка |
 | --- | --- |
 | Создание | Фиксированного setup fee нет; короткий seed/smoke обычно < $0.10 API/write charges плюс трафик frontend |
 | Простой | Нет compute/provisioned capacity fees; при малых данных storage обычно < $0.10/месяц |
-| Небольшое демо | 10 000 API requests/месяц, Lambda 512 MB × средние 0.5 s, ≤100 MB assets, ≤10 MB DynamoDB, ≤100 MB logs, 1–10 GB CDN traffic: резерв **$1–5/месяц** |
+| Небольшое демо | При явно заданной нагрузке: расчёт **$0.43–1.19/месяц** до льгот/credits, плюс переменный API egress; практический резерв **$1–5/месяц** |
 | Нежелательный трафик | Может существенно превысить $5; throttling не является денежным потолком, CDN egress/rejected API requests тоже учитываются |
 
 Пример без free quota: 10 000 × 0.5 GB × 0.5 s = 2 500 GB-s, около $0.042 Lambda compute плюс requests; REST API порядка $3.50/млн ($0.035 за 10 000). Остальное — DynamoDB/GSI writes, storage/log ingestion и CDN egress. Это оценка по публичным ставкам, точную региональную смету подтвердить в Calculator до apply. Малое число Cognito Lite users может покрываться MAU free quota; право аккаунта проверить отдельно.
 
 Источники: [Lambda](https://aws.amazon.com/lambda/pricing/), [API Gateway](https://aws.amazon.com/api-gateway/pricing/), [DynamoDB](https://aws.amazon.com/dynamodb/pricing/), [Cognito](https://aws.amazon.com/cognito/pricing/), [CloudFront](https://aws.amazon.com/cloudfront/pricing/), [S3](https://aws.amazon.com/s3/pricing/), [CloudWatch](https://aws.amazon.com/cloudwatch/pricing/), [Free Plan API](https://docs.aws.amazon.com/cli/latest/reference/freetier/get-account-plan-state.html), [.NET Lambda](https://docs.aws.amazon.com/lambda/latest/dg/lambda-csharp.html).
 
-Блокеры запуска: действительный STS; Free Plan/квоты/доступность сервисов; проверенный S3 и новый key; reviewed create-only plan; concurrency reservation; реальный URL; Linux Lambda cold start/latency и настоящий E2E. Полный legacy backend (uploads/reports/waiter/admin) безопасным этим PR не объявляется.
+Авторизация, Free Plan, S3 backend и create-only remote plan теперь подтверждены. Перед запуском остаются отдельное разрешение, обновление плана с locking, осознанный выбор profile без reservation при общей quota 5, проверка apply-time ограничений сервисов Free Plan, реальный URL, Linux Lambda cold start/latency и настоящий E2E. Terraform plan не создаёт ресурсы и не проверяет все Create API ограничения. Полный legacy backend (uploads/reports/waiter/admin) безопасным этим PR не объявляется.

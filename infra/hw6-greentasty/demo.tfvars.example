@@ -1,0 +1,5 @@
+# Measured on 2026-10-29: Lambda regional concurrency quota is only 5.
+# AWS requires 100 unreserved executions before any reservation is allocated.
+# This reviewed demo variant shares the existing regional pool; no quota changes.
+# Use -var-file=demo.tfvars.example for planning. Never pass null via numeric -var.
+reserved_concurrency = null
