@@ -1,6 +1,6 @@
 import { HttpClient, HttpContext } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, switchMap } from 'rxjs';
+import { map, Observable, of, switchMap } from 'rxjs';
 import { SKIP_ERROR_TOAST } from '@app/auth/skip-error-toast.context';
 import { GroupSessionsResponse } from '@app/models/group-orders/group-sessions-response.model';
 import { GroupStatusResponse } from '@app/models/group-orders/group-status.model';
@@ -22,7 +22,7 @@ export class GroupOrdersService {
   getGroupInvite$(reservationId: string): Observable<GuestInvite> {
     return this.invites
       .getInviteToken$(reservationId)
-      .pipe(switchMap(({ token }) => this.invites.getInvite$(token)));
+      .pipe(switchMap(({ token, invite }) => invite ? of(invite) : this.invites.getInvite$(token)));
   }
 
   getSessions$(

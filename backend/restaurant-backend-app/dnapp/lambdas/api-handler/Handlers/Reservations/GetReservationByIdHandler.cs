@@ -45,6 +45,9 @@ public class GetReservationByIdHandler : IApiRequestHandler
             return ResponseBuilder.CreateErrorResponse(404, $"Reservation with id '{reservationId}' was not found.", context.Logger);
         }
 
+        if (reservation.CustomerId != callerUserId && reservation.WaiterId != callerUserId)
+            return ResponseBuilder.CreateErrorResponse(403, "Only the customer or assigned waiter can access this reservation.", context.Logger);
+
         var location = await _locationService.GetLocationByTableIdAsync(reservation.TableId);
 
         if (location == null)

@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>APIHandler</AssemblyName>
+    <OutputType>Library</OutputType>
+    <Nullable>enable</Nullable>
+    <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <SourceRoot>../../../backend/restaurant-backend-app/dnapp/lambdas/api-handler</SourceRoot>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(SourceRoot)/**/*.cs"
+      Exclude="$(SourceRoot)/obj/**/*.cs;$(SourceRoot)/bin/**/*.cs;$(SourceRoot)/Handlers/**/*.cs;$(SourceRoot)/Routing/RouteRegistry.cs;$(SourceRoot)/Services/S3ImageService.cs;$(SourceRoot)/Services/Reports/**/*.cs;$(SourceRoot)/Repositories/Reports/**/*.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/IApiRequestHandler.cs" />
+    <Compile Include="RouteRegistry.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/SignInHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Users/GetAuthorizedUserHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Locations/GetLocationsHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Dishes/GetDishesByLocationIdHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Locations/GetLocationByIdHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Tables/GetAvailableTablesHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/TimeSlots/GetAvailableTimeSlotsHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Dishes/GetAllDishesHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Dishes/GetPopularDishesHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Dishes/GetDishByIdHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Reservations/CreateReservationHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Reservations/GetReservationsForUserHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Reservations/GetReservationByIdHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Order/GetOrdersByCustomerHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Order/GetOrderByReservationHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Order/CreateOrderHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Order/EditPreOrderHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Order/CancelPreOrderHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Order/SubmitOrderHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Order/UnsubmitOrderHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/GuestSessions/GetAllGuestSessionsHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/Reservations/GetOwnerSessionIdHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/GroupReservations/SubmitGroupReservationHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/GuestSessions/CreateGuestSessionHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/GuestSessions/GetGuestSessionHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/GuestSessions/AddDishToGuestSessionHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/GuestSessions/RemoveDishFromGuestSessionHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/GuestSessions/SubmitGuestCartHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/GuestSessions/GetGuestSessionMenuHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/GuestSessions/GetGroupReservationStatusHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/GroupReservations/GetGuestReservationHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/GroupReservations/GetInviteTokenHandler.cs" />
+    <Compile Include="$(SourceRoot)/Handlers/GuestSessions/DeleteGuestSessionHandler.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Amazon.Lambda.APIGatewayEvents" Version="2.4.0" />
+    <PackageReference Include="Amazon.Lambda.Core" Version="2.2.0" />
+    <PackageReference Include="Amazon.Lambda.Serialization.SystemTextJson" Version="2.2.0" />
+    <PackageReference Include="AWSSDK.CognitoIdentityProvider" Version="4.0.1.4" />
+    <PackageReference Include="AWSSDK.Core" Version="4.0.101" />
+    <PackageReference Include="AWSSDK.DynamoDBv2" Version="4.0.1.5" />
+    <PackageReference Include="AWSSDK.S3" Version="4.0.1.7" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
+    <PackageReference Include="Microsoft.IdentityModel.JsonWebTokens" Version="8.23.0" />
+    <PackageReference Include="Microsoft.IdentityModel.Protocols.OpenIdConnect" Version="8.23.0" />
+  </ItemGroup>
+</Project>

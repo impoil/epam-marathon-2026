@@ -1,0 +1,138 @@
+{
+  "Waiters": {
+    "hash": "userId",
+    "attributes": {
+      "userId": "S",
+      "locationId": "S"
+    },
+    "indexes": {
+      "locationId-index": {
+        "hash": "locationId"
+      }
+    }
+  },
+  "Tables": {
+    "hash": "id",
+    "attributes": {
+      "id": "S",
+      "locationId": "S",
+      "tableNumber": "N"
+    },
+    "indexes": {
+      "locationId-tableNumber-index": {
+        "hash": "locationId",
+        "range": "tableNumber"
+      }
+    }
+  },
+  "Dishes": {
+    "hash": "id",
+    "attributes": {
+      "id": "S"
+    },
+    "indexes": {}
+  },
+  "Reservations": {
+    "hash": "id",
+    "attributes": {
+      "id": "S",
+      "tableId": "S",
+      "waiterId": "S",
+      "customerId": "S"
+    },
+    "indexes": {
+      "GSI_ByTableId": {
+        "hash": "tableId"
+      },
+      "GSI_WaiterId": {
+        "hash": "waiterId"
+      },
+      "GSI_UserId": {
+        "hash": "customerId"
+      }
+    }
+  },
+  "Locations": {
+    "hash": "id",
+    "attributes": {
+      "id": "S"
+    },
+    "indexes": {}
+  },
+  "Orders": {
+    "hash": "orderId",
+    "attributes": {
+      "orderId": "S",
+      "customerId": "S",
+      "reservationId": "S"
+    },
+    "indexes": {
+      "GSI_CustomerId": {
+        "hash": "customerId"
+      },
+      "GSI_ReservationId": {
+        "hash": "reservationId"
+      }
+    },
+    "range": "customerId"
+  },
+  "GroupReservations": {
+    "hash": "groupReservationId",
+    "attributes": {
+      "groupReservationId": "S",
+      "reservationToken": "S",
+      "reservationId": "S"
+    },
+    "indexes": {
+      "reservationToken": {
+        "hash": "reservationToken"
+      },
+      "reservationId": {
+        "hash": "reservationId"
+      }
+    }
+  },
+  "GuestSessions": {
+    "hash": "guestSessionId",
+    "attributes": {
+      "guestSessionId": "S",
+      "groupReservationId": "S",
+      "guestSessionTokenHash": "S"
+    },
+    "indexes": {
+      "groupReservationId": {
+        "hash": "groupReservationId"
+      },
+      "guestSessionTokenHash": {
+        "hash": "guestSessionTokenHash"
+      }
+    }
+  },
+  "Notifications": {
+    "hash": "id",
+    "attributes": {
+      "id": "S",
+      "userId": "S"
+    },
+    "indexes": {
+      "UserIdIndex": {
+        "hash": "userId"
+      }
+    }
+  },
+  "Feedback": {
+    "hash": "reservationId",
+    "attributes": {
+      "reservationId": "S",
+      "createdAt": "S",
+      "locationId": "S"
+    },
+    "indexes": {
+      "locationId-createdAt-index": {
+        "hash": "locationId",
+        "range": "createdAt"
+      }
+    },
+    "range": "createdAt"
+  }
+}

@@ -1,0 +1,9 @@
+# Existing bucket must be verified with --expected-bucket-owner before remote init.
+# This root NEVER reads or migrates the homework4 state key.
+bucket              = "epam-hw4-state-freshdeploy-20261027"
+key                 = "hw6-greentasty/terraform.tfstate"
+region              = "eu-north-1"
+profile             = "fresh-deploy"
+allowed_account_ids = ["071954286972"]
+encrypt             = true
+use_lockfile        = true

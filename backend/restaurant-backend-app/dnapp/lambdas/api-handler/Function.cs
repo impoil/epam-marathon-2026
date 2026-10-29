@@ -34,7 +34,8 @@ public partial class Function
             return ResponseBuilder.CreateOptionsResponse();
         }
 
-        context.Logger.LogLine($"Received request: {method} {path}");
+        // Invite paths contain bearer capabilities. Never log paths, query strings or headers.
+        context.Logger.LogLine($"Received request: {method}; requestId={context.AwsRequestId}");
 
         // Use only for debugging purposes. May contain sensitive information.
         // var shortBody = request.Body?.Length > 500 ? request.Body.Substring(0, 500) + "..." : request.Body;

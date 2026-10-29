@@ -1,0 +1,7 @@
+aws-inventory.json
+*.part
+build/
+dotnet/bin/
+dotnet/obj/
+dotnet-tests/bin/
+dotnet-tests/obj/

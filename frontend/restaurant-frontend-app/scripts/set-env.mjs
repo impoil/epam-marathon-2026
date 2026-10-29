@@ -32,15 +32,22 @@ if (!backendUrl) {
   process.exit(1);
 }
 
-if (!/^https?:\/\//.test(backendUrl)) {
-  console.error(`BACKEND_URL must start with http:// or https:// (got: ${backendUrl})`);
+let parsedUrl;
+try {
+  parsedUrl = new URL(backendUrl);
+} catch {
+  console.error('BACKEND_URL must be a valid HTTPS URL.');
+  process.exit(1);
+}
+if (parsedUrl.protocol !== 'https:' || parsedUrl.username || parsedUrl.password || parsedUrl.search || parsedUrl.hash) {
+  console.error('BACKEND_URL must use HTTPS and contain no credentials, query string or fragment.');
   process.exit(1);
 }
 
 const contents = `// GENERATED FILE — do not edit, do not commit.
 // Produced by scripts/set-env.mjs from the BACKEND_URL environment variable.
 export const environment = {
-  backendUrl: '${backendUrl.replace(/\/$/, '')}',
+  backendUrl: ${JSON.stringify(parsedUrl.href.replace(/\/$/, ''))},
 };
 `;
 

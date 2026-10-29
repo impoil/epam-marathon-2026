@@ -1,5 +1,7 @@
 # Домашнє завдання №6 — Frontend Angular
 
+Підготовка реального deployment ДЗ №5–6, без apply: [infra/hw6-greentasty](../../infra/hw6-greentasty/README.md). Звіт нижче описує початкову реалізацію frontend.
+
 Реалізовано рівні 1–3 та бонус Remove Guest. Основа: `origin/feature/homework-6-frontend-starter`, коміт `86f1781`. Starter-файли не імпортувалися повторно. Backend, інфраструктура та ДЗ №4/№5 не змінювалися.
 
 ## Запуск
