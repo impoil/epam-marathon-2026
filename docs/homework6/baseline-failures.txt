@@ -1,6 +1,6 @@
-Baseline: main 04c7998 / starter 86f1781
-Current full suite: 282 passed / 47 failed
-47 failing names match the saved main baseline exactly; 0 new failures.
+Базовий стан: main 04c7998 / starter 86f1781
+Поточний повний набір тестів: 282 passed / 47 failed
+47 імен тестів зі збоями точно збігаються зі збереженим базовим станом main; 0 нових збоїв.
 
 AppComponent should render title
 CardReservationComponent should create

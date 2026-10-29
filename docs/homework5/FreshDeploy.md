@@ -1,42 +1,42 @@
-# Fresh Deploy: оценка без подключения к AWS
+# Fresh Deploy: оцінка без підключення до AWS
 
-Цель: отдельный настоящий .NET backend в account `071954286972`, `eu-north-1`, без изменений работающего `infra/homework4`. AWS API/CLI не вызывались, ресурсы не создавались. Доступность аккаунта, квоты, фактические цены и поддержка runtime в регионе не проверены.
+Мета: окремий справжній .NET backend в обліковому записі `071954286972`, `eu-north-1`, без змін чинного `infra/homework4`. AWS API/CLI не викликалися, ресурси не створювалися. Доступність облікового запису, квоти, фактичні ціни та підтримку runtime в регіоні не перевірено.
 
-**Технически отдельное малозатратное демо возможно, но текущая конфигурация не является готовым безопасным Fresh Deploy всего Green&Tasty.** Нужен отдельный reviewable IaC/пакет развёртывания. Статический JSON, Python Lambda и reuse ресурсов ДЗ №4 не подходят.
+**Технічно окреме маловитратне демо можливе, але поточна конфігурація не є готовим безпечним Fresh Deploy усього Green&Tasty.** Потрібен окремий IaC/пакет розгортання, доступний для рев'ю. Статичний JSON, Python Lambda та повторне використання ресурсів ДЗ №4 не підходять.
 
-## Минимальное демо четырёх операций
+## Мінімальне демо чотирьох операцій
 
-- Реальная Lambda `APIHandler::APIHandler.Function::FunctionHandler`, совместимый .NET 10 runtime/пакет, IAM role и CloudWatch Logs. Начать с 256–512 MB и проверить cold start; текущие 128 MB не проверены нагрузкой.
-- Новый API Gateway REST API: четыре маршрута из ДЗ, Cognito user-pool authorizer, Lambda invoke permissions, CORS, throttling. Для подготовки данных можно ограниченно добавить существующие guest/cart endpoints; публично открывать все management routes не требуется.
-- Новый Cognito User Pool и App Client, тестовый Owner и второй пользователь для проверки 403. Одной Lambda Function URL недостаточно для существующего контракта `RequestContext.Authorizer.Claims.sub`.
-- Пять новых DynamoDB tables: Reservations (id), GroupReservations (groupReservationId), GuestSessions (guestSessionId), Orders (orderId + customerId), Dishes (id). Индексы: GroupReservations.reservationId, GuestSessions.groupReservationId, Orders.GSI_ReservationId; token/cart endpoints дополнительно требуют индексы токенов. Полные схемы уже перечислены в backend deployment_resources.json.
-- Связанные seed-данные reservation/group/owner session/guest sessions/dishes/order; настоящие JWT и проверки всех четырёх операций. Существующий GET owner id возвращает 404, если у старой группы нет owner session; старым данным нужен контролируемый backfill, GET не создаёт данные скрыто.
-- Все env variables из lambda_config.json: Registry конструирует и другие handlers/services при cold start, поэтому надо задать также корректные конфигурационные значения для их зависимостей. Для ограниченного demo неиспользуемые S3/SQS/report ресурсы могут оставаться отключёнными за счёт отсутствия маршрутов; их env значения всё равно должны быть определены.
+- Реальна Lambda `APIHandler::APIHandler.Function::FunctionHandler`, сумісний .NET 10 runtime/пакет, IAM role та CloudWatch Logs. Почати з 256–512 MB і перевірити холодний старт; поточні 128 MB не перевірені навантаженням.
+- Новий API Gateway REST API: чотири маршрути з ДЗ, Cognito user-pool authorizer, дозволи на виклик Lambda, CORS, throttling. Для підготовки даних можна обмежено додати наявні guest/cart endpoints; публічно відкривати всі маршрути керування не потрібно.
+- Нові Cognito User Pool та App Client, тестовий Owner і другий користувач для перевірки 403. Однієї Lambda Function URL недостатньо для наявного контракту `RequestContext.Authorizer.Claims.sub`.
+- П'ять нових таблиць DynamoDB: Reservations (id), GroupReservations (groupReservationId), GuestSessions (guestSessionId), Orders (orderId + customerId), Dishes (id). Індекси: GroupReservations.reservationId, GuestSessions.groupReservationId, Orders.GSI_ReservationId; token/cart endpoints додатково потребують індексів токенів. Повні схеми вже перелічені в backend deployment_resources.json.
+- Пов'язані початкові дані reservation/group/owner session/guest sessions/dishes/order; справжні JWT і перевірки всіх чотирьох операцій. Наявний GET owner id повертає 404, якщо у старої групи немає owner session; старим даним потрібен контрольований backfill, GET не створює дані приховано.
+- Усі змінні середовища з lambda_config.json: Registry створює й інші handlers/services під час холодного старту, тому треба також задати коректні конфігураційні значення для їхніх залежностей. Для обмеженого демо невикористовувані ресурси S3/SQS/report можуть залишатися вимкненими завдяки відсутності маршрутів; їхні значення змінних середовища все одно мають бути визначені.
 
-Для реального end-to-end сценария с созданием бронирований через API понадобятся также Tables, Locations, Waiters и их индексы, тестовые стол/локация/официант. Seed-only demo проверяет ДЗ, но не весь жизненный цикл ресторана.
+Для реального end-to-end сценарію зі створенням бронювань через API знадобляться також Tables, Locations, Waiters та їхні індекси, тестові стіл/локація/офіціант. Демо лише з початковими даними перевіряє ДЗ, але не весь життєвий цикл ресторану.
 
-## Полный Green&Tasty
+## Повний Green&Tasty
 
-Кроме минимальных компонентов: все 13 DynamoDB tables и 14 GSI из backend конфигурации, S3 buckets изображений/профилей и при необходимости Swagger, SQS очередь отчётов, дополнительные `reports-handler` и `report-sender` Lambda, SES с верифицированным отправителем для рассылки, триггеры/расписания отчётов, Cognito группы/пользователи, IAM policies, корректная упаковка native dependencies для PDF/Excel. Frontend для публичного API URL не обязателен; для полного пользовательского интерфейса понадобится отдельный хостинг.
+Крім мінімальних компонентів: усі 13 таблиць DynamoDB та 14 GSI з конфігурації backend, S3 buckets зображень/профілів і за потреби Swagger, черга звітів SQS, додаткові Lambda `reports-handler` та `report-sender`, SES із підтвердженим відправником для розсилки, тригери/розклади звітів, групи/користувачі Cognito, IAM policies, коректне пакування native dependencies для PDF/Excel. Frontend для публічної API URL-адреси не обов'язковий; для повного користувацького інтерфейсу знадобиться окремий хостинг.
 
-Текущие определения содержат таблицы/API/политики и lambdas, но не полный самодостаточный стек Cognito/SQS/всех S3 ресурсов. В aliases указан `us-west-2`, общие имена вроде `Orders`, `GuestSessions` и placeholder имени Swagger bucket. `groupReservationsTable` и `guestSessionTable` в Lambda config заданы фиксированными именами. Нельзя применять эти шаблоны вслепую в Fresh Deploy: нужен новый namespace, физические имена/env mappings и регион, отдельный state/stack и проверка ownership ресурсов.
+Поточні визначення містять таблиці/API/політики та lambdas, але не повний самодостатній стек Cognito/SQS/усіх ресурсів S3. В aliases зазначено `us-west-2`, спільні імена на зразок `Orders`, `GuestSessions` і заповнювач імені Swagger bucket. `groupReservationsTable` та `guestSessionTable` у конфігурації Lambda задано фіксованими іменами. Не можна застосовувати ці шаблони наосліп у Fresh Deploy: потрібні новий namespace, фізичні імена/зіставлення змінних середовища й регіон, окремий state/stack і перевірка належності ресурсів.
 
-## Что необходимо перед публичным запуском
+## Що потрібно перед публічним запуском
 
-1. Создать отдельный IaC-план только для нового namespace (например `hw5-dotnet-*`), с review списка create/change/delete. Ничего не импортировать из `infra/homework4`.
-2. Закрыть лишние routes. Например, существующий `POST /waiters` в deployment_resources.json имеет `authorization_type: NONE`, а AddWaiterHandler не проверяет администратора. Полный исходный API требует отдельного аудита прав; эти старые операции не входят в scope ДЗ №5.
-3. Ограничить существующую общую IAM policy с `Resource: "*"` новыми таблицами/индексами/buckets/queues/user pool. Для условных Put в TransactWriteItems нужны права PutItem на обе новые таблицы.
-4. Обновить известные уязвимые NuGet dependencies и проверить обработку изображений/PDF; проверить пакет и runtime в `eu-north-1`, Linux/native dependencies, cold start и memory. Локальная сборка сама по себе этого не доказывает.
-5. Выполнить настоящие smoke tests с Cognito JWT: чужие reservation → 403, отсутствие ресурсов, submit и оба статуса в DynamoDB, delete и новый total. Согласовать удаление тестового стека после сдачи.
+1. Створити окремий IaC-план лише для нового namespace (наприклад `hw5-dotnet-*`), з рев'ю списку create/change/delete. Нічого не імпортувати з `infra/homework4`.
+2. Закрити зайві маршрути. Наприклад, наявний `POST /waiters` у deployment_resources.json має `authorization_type: NONE`, а AddWaiterHandler не перевіряє адміністратора. Повний вихідний API потребує окремого аудиту прав; ці старі операції не входять до обсягу ДЗ №5.
+3. Обмежити наявну спільну IAM policy з `Resource: "*"` новими таблицями/індексами/buckets/queues/user pool. Для умовних Put у TransactWriteItems потрібні права PutItem на обидві нові таблиці.
+4. Оновити відомі вразливі залежності NuGet і перевірити обробку зображень/PDF; перевірити пакет і runtime в `eu-north-1`, Linux/native dependencies, холодний старт і пам'ять. Локальна збірка сама по собі цього не доводить.
+5. Виконати справжні smoke tests із Cognito JWT: сторонні reservation → 403, відсутність ресурсів, submit і обидва статуси в DynamoDB, delete та новий total. Узгодити видалення тестового стека після здачі.
 
-## Стоимость и сложность
+## Вартість і складність
 
-Для короткого демо подходят Lambda по запросу без provisioned concurrency, API Gateway с лимитами, DynamoDB PAY_PER_REQUEST без постоянных provisioned capacity, короткое хранение logs. VPC/NAT Gateway, EC2, ALB и платный домен не нужны. Добавить бюджет/оповещение и лимит concurrency; free tier заранее не предполагается.
+Для короткого демо підходять Lambda за запитом без provisioned concurrency, API Gateway з лімітами, DynamoDB PAY_PER_REQUEST без постійних provisioned capacity, коротке зберігання журналів. VPC/NAT Gateway, EC2, ALB та платний домен не потрібні. Додати бюджет/сповіщення та ліміт concurrency; free tier заздалегідь не припускається.
 
-Ориентир при сотнях/тысячах тестовых запросов и малых данных — единицы USD за месяц, не гарантия цены или верхнего лимита. Текущий полный шаблон использует provisioned RCU/WCU для большинства таблиц/GSI, поэтому даже простой может стоить заметно больше; разумный бюджет полного учебного стека — десятки USD/месяц до уточнения AWS Calculator. Пользователи Cognito, email/SMS, логи, S3 и внешние вызовы оплачиваются отдельно по фактическому использованию.
+Орієнтир за сотень/тисяч тестових запитів і малих даних — одиниці USD на місяць, а не гарантія ціни чи верхньої межі. Поточний повний шаблон використовує provisioned RCU/WCU для більшості таблиць/GSI, тому навіть простій може коштувати помітно більше; розумний бюджет повного навчального стека — десятки USD/місяць до уточнення в AWS Calculator. Користувачі Cognito, email/SMS, журнали, S3 і зовнішні виклики оплачуються окремо за фактичним використанням.
 
-Оценка трудоёмкости: ограниченный demo с отдельным IaC и seed — примерно 0,5–1 рабочий день после доступа и утверждения плана; полный стек, исправление старых проблем доступа/зависимостей, наполнение данными и smoke tests — несколько рабочих дней. Это оценка по репозиторию, без cloud discovery. Развёртывание требует отдельного разрешения; в этом ДЗ оно не выполнялось.
+Оцінка трудомісткості: обмежене демо з окремим IaC та початковими даними — приблизно 0,5–1 робочий день після отримання доступу й затвердження плану; повний стек, виправлення старих проблем доступу/залежностей, наповнення даними та smoke tests — кілька робочих днів. Це оцінка за репозиторієм, без дослідження хмарного середовища. Розгортання потребує окремого дозволу; у цьому ДЗ воно не виконувалося.
 
-## Пределы текущей проверки
+## Межі поточної перевірки
 
-Unit tests подтверждают handlers/services, JSON, DI и содержание одной условной DynamoDB-транзакции с реальной SDK-сериализацией и mock transport. Они не заменяют интеграционные тесты настоящих DynamoDB/Cognito/API Gateway. Group/session GSI имеют eventual consistency: немедленный ответ DELETE локально исключает удалённую session, но отдельный GET или submit сразу после изменения участника может кратковременно видеть старый индекс. Перед production-нагрузкой нужны отдельная стратегия согласованности snapshot и проверка конкурентных guest edits/delete/submit; атомарность записи order+group уже обеспечена.
+Модульні тести підтверджують handlers/services, JSON, DI і вміст однієї умовної транзакції DynamoDB з реальною SDK-серіалізацією та mock transport. Вони не замінюють інтеграційних тестів справжніх DynamoDB/Cognito/API Gateway. GSI group/session мають eventual consistency: негайна відповідь DELETE локально виключає видалену session, але окремий GET або submit одразу після зміни учасника може короткочасно бачити старий індекс. Перед production-навантаженням потрібні окрема стратегія узгодженості знімка даних і перевірка конкурентних guest edits/delete/submit; атомарність запису order+group уже забезпечено.
