@@ -151,13 +151,31 @@ describe('ReservationInviteModalComponent', () => {
     expect(router.navigate).toHaveBeenCalledWith(['/reservations']);
   });
 
-  it('closes and navigates to the menu on Make Pre-Order', () => {
+  it('closes and navigates to the pre-order menu with the confirmed reservation context', () => {
     render(BASE_RESERVATION);
     spyOn(component.closed, 'emit');
 
     element.querySelector<HTMLButtonElement>('.pre-order-btn')!.click();
 
     expect(component.closed.emit).toHaveBeenCalled();
-    expect(router.navigate).toHaveBeenCalledWith(['/menu']);
+    expect(router.navigate).toHaveBeenCalledWith(['/menu'], { queryParams: {
+      preOrder: 'true',
+      reservationId: 'res-1',
+      reservationLabel: [
+        '48 Rustaveli Avenue', 'Table table-1', BASE_RESERVATION.startTime.toDateString(),
+        `${BASE_RESERVATION.startTime.toLocaleTimeString()} - ${BASE_RESERVATION.endTime.toLocaleTimeString()}`,
+      ].join(', '),
+    } });
+  });
+
+  it('uses the current reservation id after the input changes', () => {
+    render(BASE_RESERVATION);
+    render({ ...BASE_RESERVATION, id: 'confirmed-reservation-2' });
+
+    component.onMakePreOrder();
+
+    expect(router.navigate).toHaveBeenCalledWith(['/menu'], {
+      queryParams: jasmine.objectContaining({ preOrder: 'true', reservationId: 'confirmed-reservation-2' }),
+    });
   });
 });
