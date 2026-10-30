@@ -1,5 +1,7 @@
 # Реальный AWS deployment Green&Tasty — подготовка ДЗ №5–6
 
+**Коррекция drift 30.10.2026, без apply:** gateway templates соответствуют AWS, deployment trigger использует стабильные desired inputs. Два remote plan с refresh дали **1 Add / 1 Change / 1 Destroy**, остальные 28 no-op. Одна замена deployment нужна из-за новой формулы hash; применение остановлено. [Актуальный план и влияние на API](../../docs/homework6/terraform-drift-correction.md). Post-apply 0/0/0 ещё не подтверждён; следующие абзацы описывают предшествующий этап.
+
 **Фактическое состояние 30.10.2026:** отдельно разрешённый apply **8 Add / 0 Change / 0 Destroy** успешен, всего 30 resources. Backend **https://7srgpvk8of.execute-api.eu-north-1.amazonaws.com/demo** проверен. Контрольный plan **1 Add / 3 Change / 1 Destroy** выявил default gateway response template / нестабильный deployment trigger; повторный apply остановлен. [Актуальный отчёт](../../docs/homework6/aws-backend-deployment.md). Origin Pages подтверждён пользователем; следующие абзацы — история подготовки.
 
 **Подготовка Cloudflare-варианта до apply 30.10.2026.** Remote plan был **8 Add / 0 Change / 0 Destroy**, все созданные 22 ресурса сохранялись. `frontend_origin` обязателен; в `demo.tfvars.example` указан теперь подтверждённый `https://greentasty-epam-impoil.pages.dev`. Инструкции Pages, CORS и предложение отдельной очистки шести unused hosting resources: [Cloudflare runbook](../../docs/homework6/cloudflare-pages.md). Очистка и публикация по-прежнему не выполнялись; результат apply — в актуальном отчёте выше.

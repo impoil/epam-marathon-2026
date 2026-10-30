@@ -1,6 +1,6 @@
 # Домашнє завдання №6 — Frontend Angular
 
-Актуальное состояние 30.10.2026: [AWS backend deployment](aws-backend-deployment.md). Apply **8/0/0** успешен, настоящий API работает; контрольный plan **1 Add / 3 Change / 1 Destroy** — повторный apply остановлен. Angular не публиковался. Настройки Pages: [Cloudflare runbook](cloudflare-pages.md).
+Актуальное состояние 30.10.2026: [коррекция Terraform drift](terraform-drift-correction.md), новый remote plan **1 Add / 1 Change / 1 Destroy**, 28 no-op. Исправление ещё не применялось: нужен один replacement deployment и переключение stage. Настоящий API работает после успешного [apply 8/0/0](aws-backend-deployment.md). Post-apply 0/0/0 пока не подтверждён; Angular не публиковался. Настройки Pages: [Cloudflare runbook](cloudflare-pages.md).
 
 Підготовка реального deployment ДЗ №5–6, без apply: [infra/hw6-greentasty](../../infra/hw6-greentasty/README.md). Звіт нижче описує початкову реалізацію frontend.
 

@@ -6,6 +6,20 @@ locals {
     "Access-Control-Allow-Methods" = { type = "string" }
     "Access-Control-Allow-Headers" = { type = "string" }
   }
+  gateway_responses = {
+    for response_type in ["DEFAULT_4XX", "DEFAULT_5XX"] : response_type => {
+      response_parameters = {
+        "gatewayresponse.header.Access-Control-Allow-Origin"  = "'${local.origin}'"
+        "gatewayresponse.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'"
+        "gatewayresponse.header.Access-Control-Allow-Methods" = "'GET,POST,PUT,DELETE,OPTIONS'"
+        "gatewayresponse.header.Cache-Control"                = "'no-store'"
+      }
+      # API Gateway returns this default on read, even if omitted on creation.
+      response_templates = {
+        "application/json" = "{\"message\":$context.error.messageString}"
+      }
+    }
+  }
   api_definition = {
     swagger = "2.0"
     info    = { title = local.prefix, version = "1.0" }
@@ -71,8 +85,10 @@ resource "aws_api_gateway_deployment" "app" {
   rest_api_id = aws_api_gateway_rest_api.app.id
   triggers = {
     definition = sha256(jsonencode(local.api_definition))
-    responses  = sha256(jsonencode(aws_api_gateway_gateway_response.cors))
+    responses  = sha256(jsonencode(local.gateway_responses))
   }
+  # The trigger hashes desired values only; retain response update ordering.
+  depends_on = [aws_api_gateway_gateway_response.cors]
   lifecycle { create_before_destroy = true }
 }
 
@@ -98,13 +114,9 @@ resource "aws_api_gateway_method_settings" "limits" {
 }
 
 resource "aws_api_gateway_gateway_response" "cors" {
-  for_each      = toset(["DEFAULT_4XX", "DEFAULT_5XX"])
-  rest_api_id   = aws_api_gateway_rest_api.app.id
-  response_type = each.value
-  response_parameters = {
-    "gatewayresponse.header.Access-Control-Allow-Origin"  = "'${local.origin}'"
-    "gatewayresponse.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'"
-    "gatewayresponse.header.Access-Control-Allow-Methods" = "'GET,POST,PUT,DELETE,OPTIONS'"
-    "gatewayresponse.header.Cache-Control"                = "'no-store'"
-  }
+  for_each            = local.gateway_responses
+  rest_api_id         = aws_api_gateway_rest_api.app.id
+  response_type       = each.key
+  response_parameters = each.value.response_parameters
+  response_templates  = each.value.response_templates
 }

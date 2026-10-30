@@ -1,5 +1,7 @@
 # Green&Tasty: AWS backend и Cloudflare Pages frontend
 
+**Коррекция Terraform drift после создания backend:** [план 1/1/1](terraform-drift-correction.md), без apply, 28 no-op. Gateway templates исправлены, trigger стабилен; одна замена deployment и переключение stage ещё не применены.
+
 **Обновление после отдельно разрешённого apply 30.10.2026:** пользователь создал Pages project и подтвердил origin `https://greentasty-epam-impoil.pages.dev`. Созданы оставшиеся **8** AWS resources; backend **https://7srgpvk8of.execute-api.eu-north-1.amazonaws.com/demo** работает. Контрольный plan **1/3/1**; повторный apply не выполнялся. Фактические проверки и блокер: [deployment report](aws-backend-deployment.md). Ниже сохранена история подготовки до apply; инструкции monorepo/SPA по-прежнему применимы, Angular агентом не публиковался.
 
 Подготовлено **30 октября 2026** на Windows в `feature/hw6-greentasty-aws-deployment`, PR #2. Cloudflare project не создавался, frontend не публиковался. AWS apply/destroy, state rm/import/force-unlock/migration, users/seed и изменения квот не выполнялись.

@@ -1,5 +1,7 @@
 # Green&Tasty: фактическое развёртывание AWS backend, 30.10.2026
 
+**Следующий этап — исправление drift, без apply:** [актуальный отчёт](terraform-drift-correction.md). Gateway templates теперь явно соответствуют AWS, trigger использует стабильные desired inputs. Новый remote plan **1/1/1**, 28 no-op; необходима одна замена deployment и переключение stage. Post-apply 0/0/0 ещё не проверен. Ниже — результаты предшествующего создания backend и исходный контрольный plan 1/3/1.
+
 Настоящий .NET backend создан и отвечает по HTTPS: **https://7srgpvk8of.execute-api.eu-north-1.amazonaws.com/demo**. Разрешённый saved-plan apply завершился успешно: **8 Add / 0 Change / 0 Destroy**. Всего в отдельном hw6 state теперь **30 managed resources**. Все исходные 22 ресурса сохранены; HW4 и HelloWorld не изменились.
 
 **Проверка сходимости не пройдена:** контрольный remote plan показал **1 Add / 3 Change / 1 Destroy** вместо 0/0/0. Повторный apply не выполнялся. Ниже приведены точная причина и граница остановки. Это действующий backend с открытым блокером Terraform; развёртывание нельзя считать полностью завершённым по всем критериям пользователя.
