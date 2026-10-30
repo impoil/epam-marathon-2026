@@ -1,5 +1,7 @@
 # Green&Tasty: фактическое развёртывание AWS backend, 30.10.2026
 
+**Актуальный итог:** [drift correction apply](aws-drift-apply.md) завершён, контрольный remote plan **0/0/0**. Angular уже опубликован пользователем: https://greentasty-epam-impoil.pages.dev. Ниже сохранён исторический отчёт первоначального создания backend; ограничения публикации относятся к тому этапу.
+
 **Следующий этап — исправление drift, без apply:** [актуальный отчёт](terraform-drift-correction.md). Gateway templates теперь явно соответствуют AWS, trigger использует стабильные desired inputs. Новый remote plan **1/1/1**, 28 no-op; необходима одна замена deployment и переключение stage. Post-apply 0/0/0 ещё не проверен. Ниже — результаты предшествующего создания backend и исходный контрольный plan 1/3/1.
 
 Настоящий .NET backend создан и отвечает по HTTPS: **https://7srgpvk8of.execute-api.eu-north-1.amazonaws.com/demo**. Разрешённый saved-plan apply завершился успешно: **8 Add / 0 Change / 0 Destroy**. Всего в отдельном hw6 state теперь **30 managed resources**. Все исходные 22 ресурса сохранены; HW4 и HelloWorld не изменились.
@@ -39,7 +41,7 @@
 | Output | Значение |
 | --- | --- |
 | `backend_url` | `https://7srgpvk8of.execute-api.eu-north-1.amazonaws.com/demo` |
-| `frontend_url` | `https://greentasty-epam-impoil.pages.dev` — подтверждённый origin; публикация Angular агентом не выполнялась |
+| `frontend_url` | `https://greentasty-epam-impoil.pages.dev` — Angular опубликован пользователем; агент не выполнял deployment Pages |
 | `frontend_bucket` | `hw6-greentasty-frontend-071954286972-eu-north-1` — сохранённый unused bucket |
 | `user_pool_id` | `eu-north-1_r64xyLOtR` |
 | `user_pool_client_id` | `2bafp42t5s2f6iqao13s2bu61u` — public client, без secret |
@@ -68,7 +70,7 @@
 | GET `/dishes` | **200**, `[]` из настоящего backend / пустой DynamoDB |
 | GET `/guest/sessions/verification-nonexistent` | **401**, проверка гостевого токена в .NET |
 
-Каждый ответ содержит правильный Access-Control-Allow-Origin. Эти проверки подтверждают API routing, запуск .NET, чтение DynamoDB и отказ без авторизации. Авторизованный E2E бронирования/корзины ещё не выполнен: users/seed/публикация Angular запрещены на этом этапе.
+Каждый ответ содержит правильный Access-Control-Allow-Origin. Эти проверки подтверждают API routing, запуск .NET, чтение DynamoDB и отказ без авторизации. Авторизованный E2E бронирования/корзины ещё не выполнен: users/seed не разрешены. Angular впоследствии опубликован пользователем, см. актуальный итог выше.
 
 ## Контрольный plan: причина остановки
 
@@ -102,6 +104,6 @@ Free Plan после apply: **FREE / ACTIVE**, API показывает **140 US
 
 Фиксированные compute-компоненты не добавлены: нет NAT/EC2/ALB/provisioned concurrency. По ранее полученным 29.10.2026 региональным ставкам и той же малой модели (10 000 requests, 512 MB × 0.5 s, 50 000 WRU, 100 000 RRU, 0.01 GB DynamoDB, 0.1 GB logs, 3 MAU) остаётся **около $0.20/месяц до allowances/credits**, плюс egress, state и налоги; ориентир резерва **$1–3/месяц**, не spending cap. Восьми smoke requests, ~117 KB state и небольшим логам соответствуют лишь usage/storage charges; фактическую сумму invoice текущие API не показывают. Основание и допущения: [региональные ставки](aws-verification.md#стоимость-по-полученным-aws-price-list-ставкам), [API Gateway pricing](https://aws.amazon.com/api-gateway/pricing/), [Lambda pricing](https://aws.amazon.com/lambda/pricing/).
 
-Пользователи Cognito, seed, cleanup, публикация Angular и merge PR #2 не выполнялись. После разрешения Terraform-блокера следующие отдельно согласуемые этапы — тестовые users/seed, production BACKEND_URL в Cloudflare Pages, публикация Angular и настоящий E2E Customer/Owner/Guest. Существование Pages project и origin подтверждено пользователем; настройки Cloudflare dashboard в этом ходе агент не менял.
+Пользователи Cognito, seed, cleanup и merge PR #2 не выполнялись. Angular впоследствии опубликован пользователем, Terraform-блокер устранён отдельно разрешённым apply. Следующие отдельно согласуемые этапы — тестовые users/seed и настоящий E2E Customer/Owner/Guest. Настройки Cloudflare dashboard агент не менял.
 
 Отчёт сохраняется в той же feature-ветке. Для обновления Git используется префикс commit message **`[CF-Pages-Skip]`**, чтобы существующая Pages Git integration пропустила deployment: [официальная документация Cloudflare](https://developers.cloudflare.com/pages/configuration/git-integration/github-integration/). PR #2 остаётся Draft и не объединён.

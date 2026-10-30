@@ -5,5 +5,5 @@
 reserved_concurrency = null
 
 # Production origin confirmed by the user in Cloudflare Pages on 2026-10-30.
-# Origin confirmation does not imply the Angular application has been published.
+# Angular publication at this origin was confirmed by the user on 2026-10-30.
 frontend_origin = "https://greentasty-epam-impoil.pages.dev"

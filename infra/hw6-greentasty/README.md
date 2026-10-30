@@ -1,10 +1,10 @@
 # Реальный AWS deployment Green&Tasty — подготовка ДЗ №5–6
 
-**Коррекция drift 30.10.2026, без apply:** gateway templates соответствуют AWS, deployment trigger использует стабильные desired inputs. Два remote plan с refresh дали **1 Add / 1 Change / 1 Destroy**, остальные 28 no-op. Одна замена deployment нужна из-за новой формулы hash; применение остановлено. [Актуальный план и влияние на API](../../docs/homework6/terraform-drift-correction.md). Post-apply 0/0/0 ещё не подтверждён; следующие абзацы описывают предшествующий этап.
+**Актуальное состояние 30.10.2026:** [единственный drift correction apply](../../docs/homework6/aws-drift-apply.md) **1/1/1** успешен; контрольный remote plan с refresh **0/0/0**, 30 no-op. Stage `demo` использует deployment `5y05is`. Backend URL сохранён; Angular уже опубликован пользователем: **https://greentasty-epam-impoil.pages.dev**. HW4/HelloWorld и остальные 28 ресурсов не изменены; users/seed/cleanup не выполнялись. Следующие абзацы — история предшествующих этапов.
 
 **Фактическое состояние 30.10.2026:** отдельно разрешённый apply **8 Add / 0 Change / 0 Destroy** успешен, всего 30 resources. Backend **https://7srgpvk8of.execute-api.eu-north-1.amazonaws.com/demo** проверен. Контрольный plan **1 Add / 3 Change / 1 Destroy** выявил default gateway response template / нестабильный deployment trigger; повторный apply остановлен. [Актуальный отчёт](../../docs/homework6/aws-backend-deployment.md). Origin Pages подтверждён пользователем; следующие абзацы — история подготовки.
 
-**Подготовка Cloudflare-варианта до apply 30.10.2026.** Remote plan был **8 Add / 0 Change / 0 Destroy**, все созданные 22 ресурса сохранялись. `frontend_origin` обязателен; в `demo.tfvars.example` указан теперь подтверждённый `https://greentasty-epam-impoil.pages.dev`. Инструкции Pages, CORS и предложение отдельной очистки шести unused hosting resources: [Cloudflare runbook](../../docs/homework6/cloudflare-pages.md). Очистка и публикация по-прежнему не выполнялись; результат apply — в актуальном отчёте выше.
+**Подготовка Cloudflare-варианта до apply 30.10.2026.** Remote plan был **8 Add / 0 Change / 0 Destroy**, все созданные 22 ресурса сохранялись. `frontend_origin` обязателен; в `demo.tfvars.example` указан подтверждённый `https://greentasty-epam-impoil.pages.dev`. Инструкции Pages, CORS и предложение отдельной очистки шести unused hosting resources: [Cloudflare runbook](../../docs/homework6/cloudflare-pages.md). Очистка не выполнялась; Angular впоследствии опубликован пользователем.
 
 Разделы ниже сохранены как **история первоначального CloudFront-варианта**. Для дальнейшей подготовки использовать новый runbook; старые 32/0/0 и 10/0/0 планы/инструкции S3 upload больше не соответствуют текущей конфигурации. Terraform backend bucket/key и исходники backend не менялись.
 
@@ -79,7 +79,7 @@ VPC/NAT, EC2, ALB, provisioned concurrency, SQS/SES/report Lambdas и Swagger ho
 
 Сохраняются nullable/obsolete .NET warnings и CommonJS/style/bundle warnings Angular. Initial bundle близок к error budget 1 MB; бюджет не повышен. Исходные homework tests не переписаны и не отключены.
 
-Angular скомпилирован с техническим **несуществующим** `https://0000000000.execute-api.eu-north-1.amazonaws.com/demo`: исключительно проверка компиляции, не готовый к публикации frontend artifact. Реальный URL нельзя получить без создания нового API. `scripts/build-frontend.ps1` берёт настоящий Terraform output и отвергает этот технический адрес; публикация потребует повторной сборки.
+Историческая локальная проверка Angular использовала технический **несуществующий** `https://0000000000.execute-api.eu-north-1.amazonaws.com/demo`; тот artifact не был production build. Теперь настоящий API создан: `https://7srgpvk8of.execute-api.eu-north-1.amazonaws.com/demo`, Angular опубликован пользователем на Cloudflare Pages. `scripts/build-frontend.ps1` берёт настоящий Terraform output и отвергает технический адрес; историческую проверку не считать результатом текущего published bundle.
 
 ```powershell
 # Из корня репозитория, установлен .NET 10 SDK.

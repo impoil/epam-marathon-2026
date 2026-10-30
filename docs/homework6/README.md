@@ -1,8 +1,8 @@
 # Домашнє завдання №6 — Frontend Angular
 
-Актуальное состояние 30.10.2026: [коррекция Terraform drift](terraform-drift-correction.md), новый remote plan **1 Add / 1 Change / 1 Destroy**, 28 no-op. Исправление ещё не применялось: нужен один replacement deployment и переключение stage. Настоящий API работает после успешного [apply 8/0/0](aws-backend-deployment.md). Post-apply 0/0/0 пока не подтверждён; Angular не публиковался. Настройки Pages: [Cloudflare runbook](cloudflare-pages.md).
+Актуальное состояние 30.10.2026: [drift correction apply](aws-drift-apply.md) **1/1/1** успешен; контрольный remote plan с refresh — **0 Add / 0 Change / 0 Destroy**, 30 no-op. Backend работает, **Angular опубликован пользователем**: https://greentasty-epam-impoil.pages.dev. Настройки Pages: [Cloudflare runbook](cloudflare-pages.md). Users/seed и авторизованный E2E — отдельный следующий этап.
 
-Підготовка реального deployment ДЗ №5–6, без apply: [infra/hw6-greentasty](../../infra/hw6-greentasty/README.md). Звіт нижче описує початкову реалізацію frontend.
+Реальний deployment ДЗ №5–6: [infra/hw6-greentasty](../../infra/hw6-greentasty/README.md). Звіт нижче описує початкову реалізацію frontend.
 
 Реалізовано рівні 1–3 та бонус Remove Guest. Основа: `origin/feature/homework-6-frontend-starter`, коміт `86f1781`. Starter-файли не імпортувалися повторно. Backend, інфраструктура та ДЗ №4/№5 не змінювалися.
 
