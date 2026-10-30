@@ -1,0 +1,67 @@
+{
+  "date": "2026-10-30T11:32:23.945Z",
+  "result": "blocked-before-personal-preorder",
+  "infrastructureUnchanged": true,
+  "syntheticUsers": 3,
+  "allConfirmed": true,
+  "seed": {
+    "Records": 5,
+    "TableCapacity": 6,
+    "VerifiedUtc": "2026-10-30T11:22:57.2304897Z",
+    "DishPrices": [
+      17,
+      10
+    ],
+    "Location": 1,
+    "WaiterUsesRealSub": true,
+    "NoOverwrite": true
+  },
+  "tableCounts": {
+    "Feedback": 0,
+    "Locations": 1,
+    "Notifications": 0,
+    "Reservations": 1,
+    "Tables": 1,
+    "Dishes": 2,
+    "Waiters": 1,
+    "Orders": 0,
+    "GuestSessions": 1,
+    "GroupReservations": 1
+  },
+  "group": {
+    "status": "Open",
+    "participants": 1,
+    "total": 0,
+    "finalSubmitVerified": false
+  },
+  "apiChecks": {
+    "passed": 14,
+    "notApplicable": 1
+  },
+  "browserChecks": {
+    "ownerLogin": true,
+    "realMenu": true,
+    "tableSearch": true,
+    "groupReservationCreated": true,
+    "makePreOrderContext": false,
+    "guestCheckout": false,
+    "ownerReviewUi": false,
+    "removeGuestUi": false,
+    "finalSubmitUi": false
+  },
+  "cloudWatch": {
+    "reports": 24,
+    "unexpectedExceptions": 0
+  },
+  "freePlan": {
+    "accountId": "071954286972",
+    "accountPlanType": "FREE",
+    "accountPlanStatus": "ACTIVE",
+    "accountPlanRemainingCredits": {
+      "amount": 140,
+      "unit": "USD"
+    },
+    "accountPlanExpirationDate": "2027-04-26T20:11:35.07+03:00"
+  },
+  "credentials": "Windows DPAPI; local only; no secrets in evidence"
+}

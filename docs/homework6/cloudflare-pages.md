@@ -1,5 +1,7 @@
 # Green&Tasty: AWS backend и Cloudflare Pages frontend
 
+**Обновление реального E2E:** [украиноязычный отчёт](real-e2e.md). Три синтетические учётные записи и пять seed items созданы; одно бронирование подтверждено production UI. Дальнейшие записи остановлены из-за Make Pre-Order routing defect. Полный guest/Owner/Remove Guest/Submit E2E ещё не подтверждён; statements ниже об отсутствии users/seed относятся к предыдущему infrastructure stage.
+
 **Актуально на 30 октября 2026:** Angular **опубликован пользователем** на **https://greentasty-epam-impoil.pages.dev**; чтение HTTPS страницы подтвердило **200**, Angular root и 3 script tags. Настоящий backend **https://7srgpvk8of.execute-api.eu-north-1.amazonaws.com/demo** работает. [Drift correction apply](aws-drift-apply.md) **1/1/1** успешен; контрольный remote plan с refresh — **0/0/0**, все 30 ресурсов no-op. PR #2 остаётся Draft.
 
 Это текущий runbook размещения. Пользователи Cognito, seed и cleanup не выполнялись; авторизованный E2E — отдельный следующий этап. Настройки Cloudflare dashboard агент в этом ходе не менял, повторную публикацию не запускал.

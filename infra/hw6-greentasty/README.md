@@ -1,5 +1,7 @@
 # Реальный AWS deployment Green&Tasty — подготовка ДЗ №5–6
 
+**Реальний E2E 30.10.2026:** [звіт українською](../../docs/homework6/real-e2e.md). Синтетичні users/seed уже створені, одне reservation створене через браузер. Перевірку зупинено на Make Pre-Order routing defect; подальших business writes немає. Інфраструктура/state не змінені, cleanup не виконувався. Не запускати seed або user creation повторно без перевірки поточного стану.
+
 **Актуальное состояние 30.10.2026:** [единственный drift correction apply](../../docs/homework6/aws-drift-apply.md) **1/1/1** успешен; контрольный remote plan с refresh **0/0/0**, 30 no-op. Stage `demo` использует deployment `5y05is`. Backend URL сохранён; Angular уже опубликован пользователем: **https://greentasty-epam-impoil.pages.dev**. HW4/HelloWorld и остальные 28 ресурсов не изменены; users/seed/cleanup не выполнялись. Следующие абзацы — история предшествующих этапов.
 
 **Фактическое состояние 30.10.2026:** отдельно разрешённый apply **8 Add / 0 Change / 0 Destroy** успешен, всего 30 resources. Backend **https://7srgpvk8of.execute-api.eu-north-1.amazonaws.com/demo** проверен. Контрольный plan **1 Add / 3 Change / 1 Destroy** выявил default gateway response template / нестабильный deployment trigger; повторный apply остановлен. [Актуальный отчёт](../../docs/homework6/aws-backend-deployment.md). Origin Pages подтверждён пользователем; следующие абзацы — история подготовки.

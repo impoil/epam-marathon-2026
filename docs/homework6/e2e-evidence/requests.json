@@ -1,0 +1,266 @@
+[
+  {
+    "label": "signin-owner",
+    "method": "POST",
+    "path": "/signin",
+    "status": 200,
+    "expected": 200,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "message": "Sign in successful",
+      "idToken": "[REDACTED]",
+      "accessToken": "[REDACTED]"
+    },
+    "at": "2026-10-30T11:25:21.970Z"
+  },
+  {
+    "label": "signin-other",
+    "method": "POST",
+    "path": "/signin",
+    "status": 200,
+    "expected": 200,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "message": "Sign in successful",
+      "idToken": "[REDACTED]",
+      "accessToken": "[REDACTED]"
+    },
+    "at": "2026-10-30T11:25:22.406Z"
+  },
+  {
+    "label": "owner-me",
+    "method": "GET",
+    "path": "/me",
+    "status": 200,
+    "expected": 200,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "id": "[ID]",
+      "firstName": "Demo",
+      "lastName": "Owner",
+      "email": "[REDACTED]",
+      "role": "Customer"
+    },
+    "at": "2026-10-30T11:25:22.710Z"
+  },
+  {
+    "label": "other-me",
+    "method": "GET",
+    "path": "/me",
+    "status": 200,
+    "expected": 200,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "id": "[ID]",
+      "firstName": "Demo",
+      "lastName": "Customer",
+      "email": "[REDACTED]",
+      "role": "Customer"
+    },
+    "at": "2026-10-30T11:25:23.066Z"
+  },
+  {
+    "label": "owner-reservations",
+    "method": "GET",
+    "path": "/reservations",
+    "status": 200,
+    "expected": 200,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": [
+      {
+        "id": "[ID]",
+        "tableId": "[ID]",
+        "startTime": "2026-10-31T16:00:00Z",
+        "endTime": "2026-10-31T17:30:00Z",
+        "guestCount": 4,
+        "status": 0,
+        "customerId": "[REDACTED]",
+        "waiterId": "[REDACTED]",
+        "locationAddress": "Green&Tasty demo, Stockholm",
+        "restaurantName": "Green & Tasty",
+        "hasSubmittedPreOrder": false,
+        "guestInviteLinkAvailable": true
+      }
+    ],
+    "at": "2026-10-30T11:25:23.251Z"
+  },
+  {
+    "label": "owner-reservations-after-ui",
+    "method": "GET",
+    "path": "/reservations",
+    "status": 200,
+    "expected": 200,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": [
+      {
+        "id": "[ID]",
+        "tableId": "[ID]",
+        "startTime": "2026-10-31T16:00:00Z",
+        "endTime": "2026-10-31T17:30:00Z",
+        "guestCount": 4,
+        "status": 0,
+        "customerId": "[REDACTED]",
+        "waiterId": "[REDACTED]",
+        "locationAddress": "Green&Tasty demo, Stockholm",
+        "restaurantName": "Green & Tasty",
+        "hasSubmittedPreOrder": false,
+        "guestInviteLinkAvailable": true
+      }
+    ],
+    "at": "2026-10-30T11:28:09.471Z"
+  },
+  {
+    "label": "anonymous-me-denied",
+    "method": "GET",
+    "path": "/me",
+    "status": 401,
+    "expected": 401,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "message": "Unauthorized"
+    },
+    "at": "2026-10-30T11:28:09.583Z"
+  },
+  {
+    "label": "owner-reservation-allowed",
+    "method": "GET",
+    "path": "/reservations/[ID]",
+    "status": 200,
+    "expected": 200,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "id": "[ID]",
+      "tableId": "[ID]",
+      "startTime": "2026-10-31T16:00:00Z",
+      "endTime": "2026-10-31T17:30:00Z",
+      "guestCount": 4,
+      "status": 0,
+      "customerId": "[REDACTED]",
+      "waiterId": "[REDACTED]",
+      "locationAddress": "Green&Tasty demo, Stockholm",
+      "restaurantName": "Green & Tasty",
+      "hasSubmittedPreOrder": false,
+      "guestInviteLinkAvailable": false
+    },
+    "at": "2026-10-30T11:28:09.708Z"
+  },
+  {
+    "label": "other-reservation-denied",
+    "method": "GET",
+    "path": "/reservations/[ID]",
+    "status": 403,
+    "expected": 403,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "Only the customer or assigned waiter can access this reservation."
+    },
+    "at": "2026-10-30T11:28:09.808Z"
+  },
+  {
+    "label": "other-order-denied",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 404,
+    "expected": null,
+    "result": "not-applicable: no order exists",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "Order not found."
+    },
+    "at": "2026-10-30T11:28:09.909Z"
+  },
+  {
+    "label": "public-invite-read",
+    "method": "GET",
+    "path": "/guest/invites/[REDACTED]",
+    "status": 200,
+    "expected": 200,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "GroupReservationId": "[ID]",
+      "LocationId": "[ID]",
+      "RestaurantName": "Green & Tasty",
+      "LocationAddress": "Green&Tasty demo, Stockholm",
+      "StartTime": "2026-10-31T16:00:00Z",
+      "EndTime": "2026-10-31T17:30:00Z",
+      "MaxGuestCount": 4,
+      "TableNumber": 1,
+      "InviterName": "Demo Owner"
+    },
+    "at": "2026-10-30T11:29:03.783Z"
+  },
+  {
+    "label": "anonymous-owner-review-denied",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 401,
+    "expected": 401,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "message": "Unauthorized"
+    },
+    "at": "2026-10-30T11:29:03.899Z"
+  },
+  {
+    "label": "other-owner-review-denied",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 403,
+    "expected": 403,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "Only the reservation owner can perform this action."
+    },
+    "at": "2026-10-30T11:29:04.011Z"
+  },
+  {
+    "label": "owner-review-readonly",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [],
+          "total": 0,
+          "isSubmitted": false
+        }
+      ],
+      "total": 0
+    },
+    "at": "2026-10-30T11:29:04.187Z"
+  },
+  {
+    "label": "group-status-readonly",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "result": "pass",
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 1,
+      "maxCapacity": 4,
+      "status": "Open"
+    },
+    "at": "2026-10-30T11:29:04.347Z"
+  }
+]
