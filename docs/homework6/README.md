@@ -1,6 +1,6 @@
 # Домашнє завдання №6 — Frontend Angular
 
-Актуальная подготовка AWS backend + Cloudflare Pages frontend (30.10.2026, без apply/publish): [Cloudflare runbook](cloudflare-pages.md), remote plan **8 Add / 0 Change / 0 Destroy**.
+Актуальное состояние 30.10.2026: [AWS backend deployment](aws-backend-deployment.md). Apply **8/0/0** успешен, настоящий API работает; контрольный plan **1 Add / 3 Change / 1 Destroy** — повторный apply остановлен. Angular не публиковался. Настройки Pages: [Cloudflare runbook](cloudflare-pages.md).
 
 Підготовка реального deployment ДЗ №5–6, без apply: [infra/hw6-greentasty](../../infra/hw6-greentasty/README.md). Звіт нижче описує початкову реалізацію frontend.
 

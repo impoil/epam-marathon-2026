@@ -1,5 +1,7 @@
 # AWS: проверка аккаунта и remote plan Green&Tasty
 
+**Фактическое состояние после 30.10.2026:** [AWS backend deployment](aws-backend-deployment.md), apply 8/0/0 успешен, контрольный plan 1/3/1 остановлен. Ниже — исторические проверки и исходные ставки 29.10.2026.
+
 **Исторический отчёт pre-apply.** После него отдельно разрешённый apply создал 22 ресурса и остановился на CloudFront account verification; актуальный remaining plan **10 Add / 0 Change / 0 Destroy** и реальные outputs: [deployment report](aws-deployment.md).
 
 Проверено **29 октября 2026**, Windows, профиль `fresh-deploy`, регион ресурсов `eu-north-1`. Финальный plan: **23:26:34 Europe/Kyiv / 21:26:34 UTC**. Временная AWS-сессия восстановлена; предыдущий блокер истёкшей сессии снят.

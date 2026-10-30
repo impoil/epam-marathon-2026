@@ -1,6 +1,8 @@
 # Реальный AWS deployment Green&Tasty — подготовка ДЗ №5–6
 
-**Актуальный вариант от 30.10.2026: AWS backend + внешний Cloudflare Pages frontend.** Remote plan **8 Add / 0 Change / 0 Destroy**, все созданные 22 ресурса сохранены. `frontend_origin` обязателен; в `demo.tfvars.example` указан выбранный пользователем, ещё не зарезервированный `https://greentasty-epam-impoil.pages.dev`. Инструкции Pages, CORS, точный список Add и предложение отдельной очистки шести unused hosting resources: [Cloudflare runbook](../../docs/homework6/cloudflare-pages.md). Apply, очистка и публикация не выполнялись.
+**Фактическое состояние 30.10.2026:** отдельно разрешённый apply **8 Add / 0 Change / 0 Destroy** успешен, всего 30 resources. Backend **https://7srgpvk8of.execute-api.eu-north-1.amazonaws.com/demo** проверен. Контрольный plan **1 Add / 3 Change / 1 Destroy** выявил default gateway response template / нестабильный deployment trigger; повторный apply остановлен. [Актуальный отчёт](../../docs/homework6/aws-backend-deployment.md). Origin Pages подтверждён пользователем; следующие абзацы — история подготовки.
+
+**Подготовка Cloudflare-варианта до apply 30.10.2026.** Remote plan был **8 Add / 0 Change / 0 Destroy**, все созданные 22 ресурса сохранялись. `frontend_origin` обязателен; в `demo.tfvars.example` указан теперь подтверждённый `https://greentasty-epam-impoil.pages.dev`. Инструкции Pages, CORS и предложение отдельной очистки шести unused hosting resources: [Cloudflare runbook](../../docs/homework6/cloudflare-pages.md). Очистка и публикация по-прежнему не выполнялись; результат apply — в актуальном отчёте выше.
 
 Разделы ниже сохранены как **история первоначального CloudFront-варианта**. Для дальнейшей подготовки использовать новый runbook; старые 32/0/0 и 10/0/0 планы/инструкции S3 upload больше не соответствуют текущей конфигурации. Terraform backend bucket/key и исходники backend не менялись.
 
