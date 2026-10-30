@@ -1,0 +1,162 @@
+{
+  "checkedAt": "2026-10-30T12:05:35.004Z",
+  "result": "completed: browser Owner/Guest A/Review/Remove/Submit; Guest B via real API",
+  "deployment": {
+    "LocalProductionBuilds": 1,
+    "MatchesLocalProductionBuild": true,
+    "Frontend": "https://greentasty-epam-impoil.pages.dev",
+    "ProductionMainAfter": "main-WSZ525R4.js",
+    "ProductionMainBefore": "main-QBC55UA6.js",
+    "Commit": "a6d76c2871b4c5fc47d931911bf83e099e005af8",
+    "CloudflareCheck": "completed/success",
+    "CloudflareTitle": "Deployed successfully",
+    "ProductionBuildsTriggered": 1
+  },
+  "validation": {
+    "typescriptApp": true,
+    "typescriptSpec": true,
+    "regression": {
+      "passed": 15,
+      "failed": 0
+    },
+    "homework": {
+      "passed": 82,
+      "failed": 0
+    },
+    "full": {
+      "passed": 287,
+      "failed": 47,
+      "baselinePassed": 283,
+      "baselineFailed": 47,
+      "newFailures": 0,
+      "sameFailureNames": true
+    },
+    "productionBuilds": 1,
+    "backendUrl": "https://7srgpvk8of.execute-api.eu-north-1.amazonaws.com/demo",
+    "initialBundleKb": 971.86,
+    "pagesArtifactCheck": true
+  },
+  "browser": {
+    "productionMain": "main-WSZ525R4.js",
+    "ownerCart": 27,
+    "guestACart": 34,
+    "guestBCart": 10,
+    "totalBeforeRemoval": 71,
+    "totalAfterRemoval": 61,
+    "pollingObserved": true,
+    "manualRefreshObserved": true,
+    "removeGuestBViaUi": true,
+    "finalSubmitViaUi": true,
+    "reopenedTabReadOnly": true,
+    "submitButtons": 0,
+    "removeButtons": 0,
+    "guestBTestMethod": "real API; reflected in browser polling"
+  },
+  "final": {
+    "groupStatus": "Submitted",
+    "orderStatus": 3,
+    "total": 61,
+    "participants": 2,
+    "quantities": [
+      {
+        "price": 17,
+        "quantity": 3
+      },
+      {
+        "price": 10,
+        "quantity": 1
+      }
+    ],
+    "removedGuestDenied": 401,
+    "repeatGuestSubmit": 409,
+    "repeatFinalSubmit": 400,
+    "repeatFinalErrorCode": "GroupReservationSubmitted",
+    "ownerEditAfterSubmit": 400,
+    "otherCustomer": 403,
+    "snapshotUnchangedAfterRejections": true,
+    "browserOwnerAndGuestA": true,
+    "guestBViaRealApi": true
+  },
+  "counts": {
+    "Reservations": 1,
+    "Locations": 1,
+    "Tables": 1,
+    "Dishes": 2,
+    "Waiters": 1,
+    "Orders": 1,
+    "Notifications": 1,
+    "GroupReservations": 1,
+    "GuestSessions": 2
+  },
+  "dynamodb": {
+    "GroupStatus": "Submitted",
+    "OrderStatus": "SubmittedByCustomer",
+    "Dishes": {
+      "L": [
+        {
+          "M": {
+            "dishId": {
+              "S": "[ID]"
+            },
+            "quantity": {
+              "N": "3"
+            },
+            "state": {
+              "N": "0"
+            }
+          }
+        },
+        {
+          "M": {
+            "dishId": {
+              "S": "[ID]"
+            },
+            "quantity": {
+              "N": "1"
+            },
+            "state": {
+              "N": "0"
+            }
+          }
+        }
+      ]
+    },
+    "OrderStatusStored": {
+      "N": "3"
+    },
+    "GroupStatusStored": {
+      "N": "1"
+    },
+    "ConsistentRead": true
+  },
+  "cloudWatch": {
+    "events": 561,
+    "reports": 136,
+    "unexpectedExceptions": 0,
+    "lastLogUtc": "2026-10-30T11:59:46.9390000+00:00"
+  },
+  "freePlan": {
+    "accountId": "071954286972",
+    "accountPlanType": "FREE",
+    "accountPlanStatus": "ACTIVE",
+    "accountPlanRemainingCredits": {
+      "amount": 140,
+      "unit": "USD"
+    },
+    "accountPlanExpirationDate": "2027-04-26T20:11:35.07+03:00"
+  },
+  "protectedInfrastructure": {
+    "snapshotsUnchanged": 10,
+    "stateUnchanged": true,
+    "hw4AndHelloWorldUnchanged": true,
+    "lambdaUnchanged": true,
+    "quotasUnchanged": true,
+    "noTerraformCommands": true
+  },
+  "limitations": [
+    "47 pre-existing frontend test failures unchanged",
+    "Optional feedback endpoint toast in Reservations; core flow completed",
+    "Guest B actions tested through actual API, not browser",
+    "Confirmation modal route covered by regression; existing reservation reused instead of creating another"
+  ]
+}

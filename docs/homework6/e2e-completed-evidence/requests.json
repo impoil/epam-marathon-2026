@@ -1,0 +1,2096 @@
+[
+  {
+    "label": "signin-owner",
+    "method": "POST",
+    "path": "/signin",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "message": "Sign in successful",
+      "idToken": "[REDACTED]",
+      "accessToken": "[REDACTED]"
+    },
+    "at": "2026-10-30T11:43:18.128Z"
+  },
+  {
+    "label": "signin-other",
+    "method": "POST",
+    "path": "/signin",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "message": "Sign in successful",
+      "idToken": "[REDACTED]",
+      "accessToken": "[REDACTED]"
+    },
+    "at": "2026-10-30T11:43:18.522Z"
+  },
+  {
+    "label": "owner-me",
+    "method": "GET",
+    "path": "/me",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "id": "[ID]",
+      "firstName": "Demo",
+      "lastName": "Owner",
+      "email": "[REDACTED]",
+      "role": "Customer"
+    },
+    "at": "2026-10-30T11:43:19.031Z"
+  },
+  {
+    "label": "other-me",
+    "method": "GET",
+    "path": "/me",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "id": "[ID]",
+      "firstName": "Demo",
+      "lastName": "Customer",
+      "email": "[REDACTED]",
+      "role": "Customer"
+    },
+    "at": "2026-10-30T11:43:19.359Z"
+  },
+  {
+    "label": "owner-reservations",
+    "method": "GET",
+    "path": "/reservations",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": [
+      {
+        "id": "[ID]",
+        "tableId": "[ID]",
+        "startTime": "2026-10-31T16:00:00Z",
+        "endTime": "2026-10-31T17:30:00Z",
+        "guestCount": 4,
+        "status": 0,
+        "customerId": "[REDACTED]",
+        "waiterId": "[REDACTED]",
+        "locationAddress": "Green&Tasty demo, Stockholm",
+        "restaurantName": "Green & Tasty",
+        "hasSubmittedPreOrder": false,
+        "guestInviteLinkAvailable": true
+      }
+    ],
+    "at": "2026-10-30T11:43:20.044Z"
+  },
+  {
+    "label": "existing-reservation-check",
+    "method": "GET",
+    "path": "/reservations",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": [
+      {
+        "id": "[ID]",
+        "tableId": "[ID]",
+        "startTime": "2026-10-31T16:00:00Z",
+        "endTime": "2026-10-31T17:30:00Z",
+        "guestCount": 4,
+        "status": 0,
+        "customerId": "[REDACTED]",
+        "waiterId": "[REDACTED]",
+        "locationAddress": "Green&Tasty demo, Stockholm",
+        "restaurantName": "Green & Tasty",
+        "hasSubmittedPreOrder": false,
+        "guestInviteLinkAvailable": true
+      }
+    ],
+    "at": "2026-10-30T11:46:21.413Z"
+  },
+  {
+    "label": "owner-invite-read",
+    "method": "GET",
+    "path": "/reservations/[ID]/invite-token",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "token": "[REDACTED]",
+      "invite": {
+        "GroupReservationId": "[ID]",
+        "LocationId": "[ID]",
+        "RestaurantName": "Green & Tasty",
+        "LocationAddress": "Green&Tasty demo, Stockholm",
+        "StartTime": "2026-10-31T16:00:00Z",
+        "EndTime": "2026-10-31T17:30:00Z",
+        "MaxGuestCount": 4,
+        "TableNumber": 1,
+        "InviterName": "Demo Owner"
+      }
+    },
+    "at": "2026-10-30T11:46:21.874Z"
+  },
+  {
+    "label": "public-invite-read",
+    "method": "GET",
+    "path": "/guest/invites/[REDACTED]",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "GroupReservationId": "[ID]",
+      "LocationId": "[ID]",
+      "RestaurantName": "Green & Tasty",
+      "LocationAddress": "Green&Tasty demo, Stockholm",
+      "StartTime": "2026-10-31T16:00:00Z",
+      "EndTime": "2026-10-31T17:30:00Z",
+      "MaxGuestCount": 4,
+      "TableNumber": 1,
+      "InviterName": "Demo Owner"
+    },
+    "at": "2026-10-30T11:46:22.098Z"
+  },
+  {
+    "label": "initial-owner-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [],
+          "total": 0,
+          "isSubmitted": false
+        }
+      ],
+      "total": 0
+    },
+    "at": "2026-10-30T11:46:22.311Z"
+  },
+  {
+    "label": "initial-group-status",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 1,
+      "maxCapacity": 4,
+      "status": "Open"
+    },
+    "at": "2026-10-30T11:46:22.472Z"
+  },
+  {
+    "label": "initial-order-absent",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 404,
+    "expected": 404,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "Order not found."
+    },
+    "at": "2026-10-30T11:46:22.588Z"
+  },
+  {
+    "label": "owner-first-dish-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 17,
+          "isSubmitted": false
+        }
+      ],
+      "total": 17
+    },
+    "at": "2026-10-30T11:50:31.209Z"
+  },
+  {
+    "label": "owner-first-dish-status",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 1,
+      "maxCapacity": 4,
+      "status": "Open"
+    },
+    "at": "2026-10-30T11:50:31.443Z"
+  },
+  {
+    "label": "owner-first-dish-order",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 200,
+    "expected": [
+      200,
+      404
+    ],
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "orderId": "[ID]",
+      "reservationId": "[ID]",
+      "reservationAddress": "Green&Tasty demo, Stockholm",
+      "reservationTime": "Oct 31, 2026, 4:00 PM - 5:30 PM",
+      "orderItems": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo salad",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 17,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "status": 0
+    },
+    "at": "2026-10-30T11:50:31.558Z"
+  },
+  {
+    "label": "before-owner-submit-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": false
+        }
+      ],
+      "total": 27
+    },
+    "at": "2026-10-30T11:50:50.145Z"
+  },
+  {
+    "label": "before-owner-submit-status",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 1,
+      "maxCapacity": 4,
+      "status": "Open"
+    },
+    "at": "2026-10-30T11:50:50.318Z"
+  },
+  {
+    "label": "before-owner-submit-order",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 200,
+    "expected": [
+      200,
+      404
+    ],
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "orderId": "[ID]",
+      "reservationId": "[ID]",
+      "reservationAddress": "Green&Tasty demo, Stockholm",
+      "reservationTime": "Oct 31, 2026, 4:00 PM - 5:30 PM",
+      "orderItems": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo salad",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 17,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        },
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "status": 0
+    },
+    "at": "2026-10-30T11:50:50.422Z"
+  },
+  {
+    "label": "owner-submitted-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        }
+      ],
+      "total": 27
+    },
+    "at": "2026-10-30T11:51:24.506Z"
+  },
+  {
+    "label": "owner-submitted-status",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 1,
+      "maxCapacity": 4,
+      "status": "Open"
+    },
+    "at": "2026-10-30T11:51:24.698Z"
+  },
+  {
+    "label": "owner-submitted-order",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 200,
+    "expected": [
+      200,
+      404
+    ],
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "orderId": "[ID]",
+      "reservationId": "[ID]",
+      "reservationAddress": "Green&Tasty demo, Stockholm",
+      "reservationTime": "Oct 31, 2026, 4:00 PM - 5:30 PM",
+      "orderItems": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo salad",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 17,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        },
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "status": 0
+    },
+    "at": "2026-10-30T11:51:24.797Z"
+  },
+  {
+    "label": "guest-a-created-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest A",
+          "items": [],
+          "total": 0,
+          "isSubmitted": false
+        }
+      ],
+      "total": 27
+    },
+    "at": "2026-10-30T11:52:25.274Z"
+  },
+  {
+    "label": "guest-a-created-status",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 2,
+      "maxCapacity": 4,
+      "status": "Open"
+    },
+    "at": "2026-10-30T11:52:25.458Z"
+  },
+  {
+    "label": "guest-a-created-order",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 200,
+    "expected": [
+      200,
+      404
+    ],
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "orderId": "[ID]",
+      "reservationId": "[ID]",
+      "reservationAddress": "Green&Tasty demo, Stockholm",
+      "reservationTime": "Oct 31, 2026, 4:00 PM - 5:30 PM",
+      "orderItems": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo salad",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 17,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        },
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "status": 0
+    },
+    "at": "2026-10-30T11:52:25.613Z"
+  },
+  {
+    "label": "guest-a-first-dish-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest A",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 17,
+          "isSubmitted": false
+        }
+      ],
+      "total": 44
+    },
+    "at": "2026-10-30T11:52:50.318Z"
+  },
+  {
+    "label": "guest-a-first-dish-status",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 2,
+      "maxCapacity": 4,
+      "status": "Open"
+    },
+    "at": "2026-10-30T11:52:50.549Z"
+  },
+  {
+    "label": "guest-a-first-dish-order",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 200,
+    "expected": [
+      200,
+      404
+    ],
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "orderId": "[ID]",
+      "reservationId": "[ID]",
+      "reservationAddress": "Green&Tasty demo, Stockholm",
+      "reservationTime": "Oct 31, 2026, 4:00 PM - 5:30 PM",
+      "orderItems": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo salad",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 17,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        },
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "status": 0
+    },
+    "at": "2026-10-30T11:52:50.669Z"
+  },
+  {
+    "label": "before-guest-a-submit-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest A",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 2
+            }
+          ],
+          "total": 34,
+          "isSubmitted": false
+        }
+      ],
+      "total": 61
+    },
+    "at": "2026-10-30T11:53:18.636Z"
+  },
+  {
+    "label": "before-guest-a-submit-status",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 2,
+      "maxCapacity": 4,
+      "status": "Open"
+    },
+    "at": "2026-10-30T11:53:18.888Z"
+  },
+  {
+    "label": "before-guest-a-submit-order",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 200,
+    "expected": [
+      200,
+      404
+    ],
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "orderId": "[ID]",
+      "reservationId": "[ID]",
+      "reservationAddress": "Green&Tasty demo, Stockholm",
+      "reservationTime": "Oct 31, 2026, 4:00 PM - 5:30 PM",
+      "orderItems": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo salad",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 17,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        },
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "status": 0
+    },
+    "at": "2026-10-30T11:53:19.009Z"
+  },
+  {
+    "label": "guest-a-submitted-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest A",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 2
+            }
+          ],
+          "total": 34,
+          "isSubmitted": true
+        }
+      ],
+      "total": 61
+    },
+    "at": "2026-10-30T11:54:40.524Z"
+  },
+  {
+    "label": "guest-a-submitted-status",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 2,
+      "maxCapacity": 4,
+      "status": "Open"
+    },
+    "at": "2026-10-30T11:54:40.709Z"
+  },
+  {
+    "label": "guest-a-submitted-order",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 200,
+    "expected": [
+      200,
+      404
+    ],
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "orderId": "[ID]",
+      "reservationId": "[ID]",
+      "reservationAddress": "Green&Tasty demo, Stockholm",
+      "reservationTime": "Oct 31, 2026, 4:00 PM - 5:30 PM",
+      "orderItems": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo salad",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 17,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        },
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "status": 0
+    },
+    "at": "2026-10-30T11:54:40.807Z"
+  },
+  {
+    "label": "before-guest-b-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest A",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 2
+            }
+          ],
+          "total": 34,
+          "isSubmitted": true
+        }
+      ],
+      "total": 61
+    },
+    "at": "2026-10-30T11:55:41.014Z"
+  },
+  {
+    "label": "before-guest-b-status",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 2,
+      "maxCapacity": 4,
+      "status": "Open"
+    },
+    "at": "2026-10-30T11:55:41.627Z"
+  },
+  {
+    "label": "guest-b-create",
+    "method": "POST",
+    "path": "/guest/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "SessionId": "[ID]",
+      "SessionToken": "[REDACTED]"
+    },
+    "at": "2026-10-30T11:55:42.227Z"
+  },
+  {
+    "label": "guest-b-empty",
+    "method": "GET",
+    "path": "/guest/sessions/[ID]",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "name": "Demo Guest B",
+      "items": [],
+      "total": 0,
+      "isSubmitted": false
+    },
+    "at": "2026-10-30T11:55:42.829Z"
+  },
+  {
+    "label": "guest-b-add-main",
+    "method": "POST",
+    "path": "/guest/sessions/[ID]/dishes",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "message": "Dish added successfully."
+    },
+    "at": "2026-10-30T11:55:43.444Z"
+  },
+  {
+    "label": "guest-b-before-submit",
+    "method": "GET",
+    "path": "/guest/sessions/[ID]",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "name": "Demo Guest B",
+      "items": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "total": 10,
+      "isSubmitted": false
+    },
+    "at": "2026-10-30T11:55:44.027Z"
+  },
+  {
+    "label": "guest-b-submit",
+    "method": "POST",
+    "path": "/guest/sessions/[ID]/submit",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "message": "Cart submitted successfully."
+    },
+    "at": "2026-10-30T11:55:44.648Z"
+  },
+  {
+    "label": "guest-b-submitted-read",
+    "method": "GET",
+    "path": "/guest/sessions/[ID]",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "name": "Demo Guest B",
+      "items": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "total": 10,
+      "isSubmitted": true
+    },
+    "at": "2026-10-30T11:55:45.236Z"
+  },
+  {
+    "label": "after-guest-b-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest B",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 10,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest A",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 2
+            }
+          ],
+          "total": 34,
+          "isSubmitted": true
+        }
+      ],
+      "total": 71
+    },
+    "at": "2026-10-30T11:55:45.888Z"
+  },
+  {
+    "label": "before-negative-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest B",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 10,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest A",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 2
+            }
+          ],
+          "total": 34,
+          "isSubmitted": true
+        }
+      ],
+      "total": 71
+    },
+    "at": "2026-10-30T11:56:22.754Z"
+  },
+  {
+    "label": "before-negative-status",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 3,
+      "maxCapacity": 4,
+      "status": "Open"
+    },
+    "at": "2026-10-30T11:56:23.407Z"
+  },
+  {
+    "label": "anonymous-me-denied",
+    "method": "GET",
+    "path": "/me",
+    "status": 401,
+    "expected": 401,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "message": "Unauthorized"
+    },
+    "at": "2026-10-30T11:56:23.953Z"
+  },
+  {
+    "label": "other-reservation-denied",
+    "method": "GET",
+    "path": "/reservations/[ID]",
+    "status": 403,
+    "expected": 403,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "Only the customer or assigned waiter can access this reservation."
+    },
+    "at": "2026-10-30T11:56:24.533Z"
+  },
+  {
+    "label": "other-existing-order-denied",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 403,
+    "expected": 403,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "Forbidden: Only waiters or the customer can access this order."
+    },
+    "at": "2026-10-30T11:56:25.099Z"
+  },
+  {
+    "label": "other-owner-review-denied",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 403,
+    "expected": 403,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "Only the reservation owner can perform this action."
+    },
+    "at": "2026-10-30T11:56:25.729Z"
+  },
+  {
+    "label": "other-group-submit-denied",
+    "method": "POST",
+    "path": "/group-reservations/[ID]/submit",
+    "status": 403,
+    "expected": 403,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "Only the reservation owner can submit the group pre-order."
+    },
+    "at": "2026-10-30T11:56:26.367Z"
+  },
+  {
+    "label": "guest-b-cannot-read-guest-a",
+    "method": "GET",
+    "path": "/guest/sessions/[ID]",
+    "status": 401,
+    "expected": 401,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "Invalid guest session token"
+    },
+    "at": "2026-10-30T11:56:26.934Z"
+  },
+  {
+    "label": "guest-b-cannot-owner-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 401,
+    "expected": 401,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "message": "Unauthorized"
+    },
+    "at": "2026-10-30T11:56:27.477Z"
+  },
+  {
+    "label": "guest-b-before-repeat-submit",
+    "method": "GET",
+    "path": "/guest/sessions/[ID]",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "name": "Demo Guest B",
+      "items": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "total": 10,
+      "isSubmitted": true
+    },
+    "at": "2026-10-30T11:56:28.069Z"
+  },
+  {
+    "label": "guest-b-repeat-submit-rejected",
+    "method": "POST",
+    "path": "/guest/sessions/[ID]/submit",
+    "status": 409,
+    "expected": 409,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "Guest session is already submitted."
+    },
+    "at": "2026-10-30T11:56:28.646Z"
+  },
+  {
+    "label": "after-negative-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest B",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 10,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest A",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 2
+            }
+          ],
+          "total": 34,
+          "isSubmitted": true
+        }
+      ],
+      "total": 71
+    },
+    "at": "2026-10-30T11:56:29.232Z"
+  },
+  {
+    "label": "after-remove-before-final-submit-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest A",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 2
+            }
+          ],
+          "total": 34,
+          "isSubmitted": true
+        }
+      ],
+      "total": 61
+    },
+    "at": "2026-10-30T11:57:29.511Z"
+  },
+  {
+    "label": "after-remove-before-final-submit-status",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 2,
+      "maxCapacity": 4,
+      "status": "Open"
+    },
+    "at": "2026-10-30T11:57:30.127Z"
+  },
+  {
+    "label": "after-remove-before-final-submit-order",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 200,
+    "expected": [
+      200,
+      404
+    ],
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "orderId": "[ID]",
+      "reservationId": "[ID]",
+      "reservationAddress": "Green&Tasty demo, Stockholm",
+      "reservationTime": "Oct 31, 2026, 4:00 PM - 5:30 PM",
+      "orderItems": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo salad",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 17,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        },
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "status": 0
+    },
+    "at": "2026-10-30T11:57:30.704Z"
+  },
+  {
+    "label": "after-final-submit-review",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest A",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 2
+            }
+          ],
+          "total": 34,
+          "isSubmitted": true
+        }
+      ],
+      "total": 61
+    },
+    "at": "2026-10-30T11:58:04.891Z"
+  },
+  {
+    "label": "after-final-submit-status",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 2,
+      "maxCapacity": 4,
+      "status": "Submitted"
+    },
+    "at": "2026-10-30T11:58:05.472Z"
+  },
+  {
+    "label": "after-final-submit-order",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 200,
+    "expected": [
+      200,
+      404
+    ],
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "orderId": "[ID]",
+      "reservationId": "[ID]",
+      "reservationAddress": "Green&Tasty demo, Stockholm",
+      "reservationTime": "Oct 31, 2026, 4:00 PM - 5:30 PM",
+      "orderItems": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo salad",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 17,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 3
+        },
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "status": 3
+    },
+    "at": "2026-10-30T11:58:06.139Z"
+  },
+  {
+    "label": "final-readonly-snapshot",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest A",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 2
+            }
+          ],
+          "total": 34,
+          "isSubmitted": true
+        }
+      ],
+      "total": 61
+    },
+    "at": "2026-10-30T11:59:25.560Z"
+  },
+  {
+    "label": "final-group-submitted",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/status",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "currentParticipants": 2,
+      "maxCapacity": 4,
+      "status": "Submitted"
+    },
+    "at": "2026-10-30T11:59:26.141Z"
+  },
+  {
+    "label": "final-order-read",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "orderId": "[ID]",
+      "reservationId": "[ID]",
+      "reservationAddress": "Green&Tasty demo, Stockholm",
+      "reservationTime": "Oct 31, 2026, 4:00 PM - 5:30 PM",
+      "orderItems": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo salad",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 17,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 3
+        },
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "status": 3
+    },
+    "at": "2026-10-30T11:59:26.914Z"
+  },
+  {
+    "label": "removed-guest-session-denied",
+    "method": "GET",
+    "path": "/guest/sessions/[ID]",
+    "status": 401,
+    "expected": 401,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "Invalid guest session token"
+    },
+    "at": "2026-10-30T11:59:27.517Z"
+  },
+  {
+    "label": "repeat-final-submit-rejected",
+    "method": "POST",
+    "path": "/group-reservations/[ID]/submit",
+    "status": 400,
+    "expected": 400,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "message": "Group reservation was submitted.",
+      "errorCode": "GroupReservationSubmitted"
+    },
+    "at": "2026-10-30T11:59:28.155Z"
+  },
+  {
+    "label": "owner-edit-after-submit-rejected",
+    "method": "PUT",
+    "path": "/orders/[ID]",
+    "status": 400,
+    "expected": 400,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "The group pre-order is no longer editable."
+    },
+    "at": "2026-10-30T11:59:28.776Z"
+  },
+  {
+    "label": "other-final-order-denied",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 403,
+    "expected": 403,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "error": "Forbidden: Only waiters or the customer can access this order."
+    },
+    "at": "2026-10-30T11:59:29.372Z"
+  },
+  {
+    "label": "final-snapshot-after-rejections",
+    "method": "GET",
+    "path": "/guest/groups/[ID]/sessions",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "participants": [
+        {
+          "id": "[ID]",
+          "type": "Owner",
+          "name": "Owner",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 1
+            },
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo main course",
+                "price": 10
+              },
+              "quantity": 1
+            }
+          ],
+          "total": 27,
+          "isSubmitted": true
+        },
+        {
+          "id": "[ID]",
+          "type": "Guest",
+          "name": "Demo Guest A",
+          "items": [
+            {
+              "dish": {
+                "id": "[ID]",
+                "name": "Demo salad",
+                "price": 17
+              },
+              "quantity": 2
+            }
+          ],
+          "total": 34,
+          "isSubmitted": true
+        }
+      ],
+      "total": 61
+    },
+    "at": "2026-10-30T11:59:30.034Z"
+  },
+  {
+    "label": "final-order-after-rejections",
+    "method": "GET",
+    "path": "/orders/[ID]",
+    "status": 200,
+    "expected": 200,
+    "cors": "https://greentasty-epam-impoil.pages.dev",
+    "body": {
+      "orderId": "[ID]",
+      "reservationId": "[ID]",
+      "reservationAddress": "Green&Tasty demo, Stockholm",
+      "reservationTime": "Oct 31, 2026, 4:00 PM - 5:30 PM",
+      "orderItems": [
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo salad",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 17,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 3
+        },
+        {
+          "dish": {
+            "id": "[ID]",
+            "name": "Demo main course",
+            "description": "Demo menu item",
+            "dishType": "Main course",
+            "price": 10,
+            "weight": "250 g",
+            "calories": "250",
+            "proteins": "10",
+            "fats": "8",
+            "carbohydrates": "30",
+            "vitamins": "A, C",
+            "imageUrl": "/assets/img/dish.png",
+            "state": "Available"
+          },
+          "quantity": 1
+        }
+      ],
+      "status": 3
+    },
+    "at": "2026-10-30T11:59:30.636Z"
+  }
+]

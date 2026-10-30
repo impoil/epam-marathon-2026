@@ -1,10 +1,10 @@
 # Green&Tasty: AWS backend и Cloudflare Pages frontend
 
-**Обновление реального E2E:** [украиноязычный отчёт](real-e2e.md). Три синтетические учётные записи и пять seed items созданы; одно бронирование подтверждено production UI. Дальнейшие записи остановлены из-за Make Pre-Order routing defect. Полный guest/Owner/Remove Guest/Submit E2E ещё не подтверждён; statements ниже об отсутствии users/seed относятся к предыдущему infrastructure stage.
+**Реальний E2E завершено:** [український звіт](e2e-completed.md). Frontend routing fix `a6d76c2` опубліковано одним Cloudflare deployment, production asset `main-WSZ525R4.js` підтверджено. Owner/Guest A/Review/Remove/Submit перевірені браузером, Guest B — справжнім API; підсумок **$61**, Group Submitted/read-only. Згадки нижче про відсутність users/seed стосуються попереднього infrastructure stage.
 
 **Актуально на 30 октября 2026:** Angular **опубликован пользователем** на **https://greentasty-epam-impoil.pages.dev**; чтение HTTPS страницы подтвердило **200**, Angular root и 3 script tags. Настоящий backend **https://7srgpvk8of.execute-api.eu-north-1.amazonaws.com/demo** работает. [Drift correction apply](aws-drift-apply.md) **1/1/1** успешен; контрольный remote plan с refresh — **0/0/0**, все 30 ресурсов no-op. PR #2 остаётся Draft.
 
-Это текущий runbook размещения. Пользователи Cognito, seed и cleanup не выполнялись; авторизованный E2E — отдельный следующий этап. Настройки Cloudflare dashboard агент в этом ходе не менял, повторную публикацию не запускал.
+Это текущий runbook размещения. Синтетические Cognito users и seed существуют; авторизованный E2E завершён с указанными в отчёте границами browser/API. Cleanup не выполнялся. Для разрешённого routing fix был один push без skip и один production deployment; Cloudflare dashboard settings не менялись.
 
 ## AWS backend и remote state
 

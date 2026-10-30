@@ -1,8 +1,8 @@
 # Домашнє завдання №6 — Frontend Angular
 
-**Реальна перевірка 30.10.2026:** [E2E-звіт українською](real-e2e.md). Створено 3 синтетичні identities, 5 seed items та одне бронювання через production UI. Подальші записи зупинено: Make Pre-Order з confirmation modal втрачає reservation context. Повний guest/Owner Review/Remove Guest/final Submit E2E поки не підтверджено. Є desktop/mobile screenshots та окремі API 401/403 checks; users/seed повторно не створювати.
+**Реальна перевірка 30.10.2026 завершена:** [актуальний E2E-звіт](e2e-completed.md). Frontend fix `a6d76c2` опубліковано; Owner/Guest A/Review/Remove Guest/Submit перевірені браузером, Guest B — справжнім API. Grand Total **$71 → $61**, Group Submitted, Order SubmittedByCustomer, read-only підтверджено також у новій вкладці. Є desktop/mobile screenshots, 401/403/re-submit checks. Наявні users/seed/reservation не дублювалися; поточне бронювання вже submitted.
 
-Актуальное состояние 30.10.2026: [drift correction apply](aws-drift-apply.md) **1/1/1** успешен; контрольный remote plan с refresh — **0 Add / 0 Change / 0 Destroy**, 30 no-op. Backend работает, **Angular опубликован пользователем**: https://greentasty-epam-impoil.pages.dev. Настройки Pages: [Cloudflare runbook](cloudflare-pages.md). Users/seed и авторизованный E2E — отдельный следующий этап.
+Інфраструктура: [drift correction apply](aws-drift-apply.md) раніше завершився контрольним remote plan **0/0/0**, 30 no-op. Під час E2E state та AWS configuration не змінювалися. Angular: https://greentasty-epam-impoil.pages.dev; [Pages runbook](cloudflare-pages.md).
 
 Реальний deployment ДЗ №5–6: [infra/hw6-greentasty](../../infra/hw6-greentasty/README.md). Звіт нижче описує початкову реалізацію frontend.
 
