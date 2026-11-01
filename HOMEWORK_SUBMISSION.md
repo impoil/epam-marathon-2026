@@ -2,6 +2,8 @@
 
 Дата підготовки: **01.11.2026, Europe/Kyiv**. Репозиторій: [impoil/epam-marathon-2026](https://github.com/impoil/epam-marathon-2026). Нижче наведено наявні матеріали; відсутні результати не відновлювалися й не вигадувалися.
 
+**Repository Public; PR #2 та #3 merged до main.** Основні посилання GitHub перевірено без авторизації: 200. [AQA Quality на main — Passed](https://github.com/impoil/epam-marathon-2026/actions/runs/41315110751). [Підсумок перевірки публікації](https://github.com/impoil/epam-marathon-2026/blob/main/docs/PUBLICATION_AUDIT_UA.md).
+
 | ДЗ | Готові матеріали та результати | Статус / обмеження |
 |---|---|---|
 | №1 | **ПОТРІБНЕ ПОСИЛАННЯ** | Підтверджених матеріалів цього ДЗ у доступному репозиторії не знайдено |

@@ -1,5 +1,7 @@
 # Прискорений аудит перед здачею — 01.11.2026
 
+**Фінальний результат:** PR [#2](https://github.com/impoil/epam-marathon-2026/pull/2) та [#3](https://github.com/impoil/epam-marathon-2026/pull/3) merged у цій послідовності; merge head `6575c49`. Repository переведено в **Public**. Анонімні HEAD-запити до repository, submission index, матеріалів №4–8, XLSX download, AQA source та обох PR — **11 із 11 HTTP 200**. [AQA Quality на main — Passed](https://github.com/impoil/epam-marathon-2026/actions/runs/41315110751). Наявність HW8, workbook і HOMEWORK_SUBMISSION.md у main та незмінні blocking guards перевірено перед публікацією. Подальший commit фіналізації змінює лише документацію; deployment і business tests не запускаються.
+
 Власник прямо дозволив merge PR #2 → PR #3 та публікацію вихідного коду після перевірки секретів. AWS/Cognito/DynamoDB/Cloudflare не змінювалися; нових business records не створювали. Нову ліцензію чужим матеріалам не призначали.
 
 - Отримано актуальні 4 remote branches; перевірено всю доступну reachable Git history: **1 289 blobs**, включно з великими файлами та ZIP/XML members. Додатково перевірено **35 локальних файлів HW7**, включно з XLSX, та переглянуто 52 screenshots/evidence №6–8.
