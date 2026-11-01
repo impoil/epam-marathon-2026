@@ -1,0 +1,12 @@
+{
+  "testedAt": "2026-10-30T16:35:43.042Z",
+  "publicUrl": "https://d28jftogiwtein.cloudfront.net/menu?category=Dessert&sort=PriceDescending",
+  "guest": "Invitation load error, repeated after Try again; session state unknown",
+  "publicChecks": [
+    "Appetizers: Green Salad $9.99 220g; Fresh Avocado Toast $12.00 200g",
+    "Main Courses: 6 cards",
+    "Price Ascending: 14.99,14.99,18.99,18.99,18.99,22.50",
+    "Price Descending: 22.50,18.99,18.99,18.99,14.99,14.99",
+    "Reload: same category and sort selection; data returned; freshness not proven"
+  ]
+}

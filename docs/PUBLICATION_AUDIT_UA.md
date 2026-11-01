@@ -1,0 +1,13 @@
+# Прискорений аудит перед здачею — 01.11.2026
+
+Власник прямо дозволив merge PR #2 → PR #3 та публікацію вихідного коду після перевірки секретів. AWS/Cognito/DynamoDB/Cloudflare не змінювалися; нових business records не створювали. Нову ліцензію чужим матеріалам не призначали.
+
+- Отримано актуальні 4 remote branches; перевірено всю доступну reachable Git history: **1 289 blobs**, включно з великими файлами та ZIP/XML members. Додатково перевірено **35 локальних файлів HW7**, включно з XLSX, та переглянуто 52 screenshots/evidence №6–8.
+- Перевірено AWS/GitHub key patterns, JWT, private keys, guest bearer/invite URLs, credential assignments, tracked `.env`/state/generated files. **Діючих секретів не виявлено**. 10 password-literal candidates класифіковано як negative/unit-test inputs, API documentation examples, mock data та package-lock metadata; їхні значення не виводилися.
+- Переглянуто всі **8 доступних Actions run logs** і вміст обох **2 artifacts** (offline reports HTML/JSON/TRX): secret/invite findings **0**. Для artifacts використано download capability GitHub connector; Git credential fallback на artifact redirects повертав 401. Signed download URLs залишаються лише в ignored local workspace.
+- Workflow Quality читає source, будує/discovers та виконує offline/report checks без Secrets. Manual business E2E — fail-closed stub без checkout/Secrets/browser/tests. Source guards залишено. У Git немає local DPAPI, organizer archive, raw TestResults чи Terraform state.
+- На початку перевірки repository private; branches мають `protected=false`, PR #2/#3 mergeable clean. Protection/ruleset detail endpoints повернули 403; це обмеження перевірки, а не підтвердження налаштованих правил. PR #2 не має зареєстрованих checks; PR #3 має два успішні Quality checks на 68863da. Перед merge refs/checks перевіряються повторно; перевірки не обходяться.
+
+AWS HW4 endpoint і Green&Tasty `/locations` 01.11 повернули **200** тільки на GET. Frontend HTTPS у поточній мережі не пройшов certificate validation; це чесно зазначено в [переліку для здачі](../HOMEWORK_SUBMISSION.md). Не використовували TLS bypass і не змінювали Cloudflare.
+
+Це прискорений heuristic та ручний review, не математичний доказ відсутності секретів. Unreachable objects, сторонні attachments поза репозиторієм та недоступні/expired remote logs не охоплені. Поточний remote inventory містив 8 runs та 2 artifacts; усі доступні на той момент опрацьовано. Git author names/emails, AWS resource metadata, синтетичні навчальні імена й public source links залишаються видимими; secret values та діючі invitation URLs не публікуються. Історичний [HW8 public-readiness audit](homework8/PUBLIC_READINESS_UA.md) збережено як попередній стан.

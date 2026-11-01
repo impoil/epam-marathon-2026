@@ -1,0 +1,76 @@
+- application
+- status: Screenreader support for the board is currently disabled. To enable it via Accessibility settings, press Ctrl+K, type Accessibility Settings, and press Enter. To see available keyboard shortcuts, enter Ctrl+Shift+Question mark .
+- status
+- region "Comments on canvas":
+  - button "Create new comment"
+- region "Left sidebar":
+  - toolbar "Navigation Bar":
+    - button "Main menu":
+    - separator
+    - button "File" [expanded]:
+      - generic: File
+    - button "Agents":
+      - generic: Agents
+    - button "Assets":
+      - generic: Assets
+    - button "Tools":
+      - generic: Tools
+    - separator
+    - button "Variables":
+      - generic: Variables
+  - button "EPAM IT Marathon 6.0 (Copy), file name": EPAM IT Marathon 6.0 (Copy)
+  - generic: File name
+  - button "Edit file menu":
+  - button "Minimize UI":
+  - link "Drafts":
+    - /url: https://www.figma.com/files/team/1118602477528934114/project/147183726
+  - button "Free":
+    - generic: Free
+  - generic: Find
+  - textbox "Find":
+    - /placeholder: Find…
+    - text: Placing pre-order by guest
+  - button "Settings":
+  - button "Close":
+  - status: 11 results
+  - alert: Placing pre-order by guest | Menu, result 3 of 11
+  - generic: ·
+  - button "Search scope set to This page":
+    - text: This page
+  - button "Previous result":
+  - button "Next result":
+  - listbox "Search results":
+    - option "Frame Placing pre-order by guest | Enter name":
+      - img "Frame":
+      - generic: Placing pre-order by guest | Enter name
+    - option "Frame REPlacing pre-order by guest | Button is available":
+      - img "Frame":
+      - generic: REPlacing pre-order by guest | Button is available
+    - option "Frame Placing pre-order by guest | Menu" [selected]:
+      - img "Frame":
+      - generic: Placing pre-order by guest | Menu
+    - option "Frame REPlacing pre-order by guest | Empty Cart":
+      - img "Frame":
+      - generic: REPlacing pre-order by guest | Empty Cart
+    - option "Frame REPlacing pre-order by guest | Empty Cart":
+      - img "Frame":
+      - generic: REPlacing pre-order by guest | Empty Cart
+    - option "Frame Placing pre-order by guest | Cart":
+      - img "Frame":
+      - generic: Placing pre-order by guest | Cart
+    - option "Frame Placing pre-order by guest | Pre-order submitted":
+      - img "Frame":
+      - generic: Placing pre-order by guest | Pre-order submitted
+    - option "Frame Placing pre-order by guest | Dish Card":
+      - img "Frame":
+      - generic: Placing pre-order by guest | Dish Card
+    - option "Frame Placing pre-order by guest | Cart":
+      - img "Frame":
+      - generic: Placing pre-order by guest | Cart
+    - option "Frame Placing pre-order by guest | Dish Card":
+      - img "Frame":
+      - generic: Placing pre-order by guest | Dish Card
+    - option "Frame Placing pre-order by guest | Pre-order submitted":
+      - img "Frame":
+      - generic: Placing pre-order by guest | Pre-order submitted
+  - slider "Resize handle"
