@@ -1,0 +1,16 @@
+name: AQA Controlled E2E (suspended)
+on:
+  workflow_dispatch:
+permissions: {}
+jobs:
+  suspended:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      # Deliberately no checkout, environment, inputs, credentials, browser or test execution.
+      # Re-enabling requires a reviewed code change after fixture cleanup is approved.
+      - name: Refuse business E2E until isolated cleanup is available
+        run: |
+          echo '::error::Business E2E is suspended. No secrets are read and no test data is created.'
+          echo 'Historical reports remain in docs/homework8/results.'
+          exit 1

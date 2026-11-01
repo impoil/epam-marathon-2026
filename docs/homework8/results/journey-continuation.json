@@ -1,0 +1,16 @@
+{
+  "counts": {
+    "Passed": 0,
+    "Failed": 1,
+    "NotExecuted": 0,
+    "Total": 1
+  },
+  "tests": [
+    {
+      "name": "Continue the interrupted Owner and Guest browser journey on its own group",
+      "outcome": "Failed",
+      "duration": "00:00:19.0529911",
+      "reason": "TimeoutException: Timeout 15000ms exceeded.\nCall log:\n  - waiting for GetByRole(AriaRole.Button, new() { Name = \"cart icon\", Exact = true })"
+    }
+  ]
+}

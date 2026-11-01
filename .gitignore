@@ -41,3 +41,11 @@ __pycache__/
 *.pyc
 /frontend/restaurant-frontend-app/src/**/*.css
 /frontend/restaurant-frontend-app/src/**/*.css.map
+
+# Homework 8: local inputs, diagnostics, generated Reqnroll bindings
+/_local_hw8_sources/
+**/TestResults/
+*.feature.cs
+*.dpapi.xml
+**/playwright-report/
+**/test-results/

@@ -1,0 +1,10 @@
+{
+  "scope": "offline synthetic TRX and frozen workflow contracts",
+  "counts": {
+    "Total": 6,
+    "Passed": 6,
+    "Failed": 0,
+    "Skipped": 0
+  },
+  "failures": []
+}
