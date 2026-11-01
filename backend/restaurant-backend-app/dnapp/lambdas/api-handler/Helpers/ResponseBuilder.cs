@@ -12,10 +12,14 @@ namespace APIHandler.Helpers;
 
 public static class ResponseBuilder
 {
-    private static readonly Dictionary<string, string> DefaultHeaders = new()
+    private static string AllowedOrigin => Environment.GetEnvironmentVariable("CORS_ALLOWED_ORIGIN") ?? "*";
+
+    private static Dictionary<string, string> DefaultHeaders => new()
     {
         { "Content-Type", "application/json" },
-        { "Access-Control-Allow-Origin", "*" },
+        { "Access-Control-Allow-Origin", AllowedOrigin },
+        { "Cache-Control", "no-store" },
+        { "Referrer-Policy", "no-referrer" },
         { "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" },
         { "Access-Control-Allow-Headers", "Content-Type, Authorization" }
     };
@@ -103,7 +107,8 @@ public static class ResponseBuilder
             Headers = new Dictionary<string, string>
             {
                 { "Content-Type", "text/plain" },
-                { "Access-Control-Allow-Origin", "*" }
+                { "Access-Control-Allow-Origin", AllowedOrigin },
+                { "Cache-Control", "no-store" }
             }
         };
     }
@@ -126,7 +131,8 @@ public static class ResponseBuilder
             {
                 { "Content-Type", contentType },
                 { "Content-Disposition", $"attachment; filename=\"{fileName}\"" },
-                { "Access-Control-Allow-Origin", "*" },
+                { "Access-Control-Allow-Origin", AllowedOrigin },
+                { "Cache-Control", "no-store" },
                 { "Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS" },
                 { "Access-Control-Allow-Headers", "Content-Type, Authorization" }
             }

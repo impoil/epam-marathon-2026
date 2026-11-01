@@ -1,6 +1,8 @@
 using Amazon.Lambda.APIGatewayEvents;
 using Amazon.Lambda.Core;
 using APIHandler.Helpers;
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace APIHandler.Services.GuestSessions;
@@ -9,11 +11,13 @@ public class GuestAuthorizationService(IGuestSessionService guestSessionService)
 {
     public async ValueTask<APIGatewayProxyResponse?> ValidateAsync(APIGatewayProxyRequest request, ILambdaContext context, string guestSessionid)
     {
-        if (!request.Headers.TryGetValue("Authorization", out string? authorizationValue))
+        var authorizationValue = request.Headers?.FirstOrDefault(
+            header => string.Equals(header.Key, "Authorization", StringComparison.OrdinalIgnoreCase)).Value;
+        if (string.IsNullOrWhiteSpace(authorizationValue))
             return CreateErrorResponse(context);
 
         const string BearerString = "Bearer ";
-        if (!authorizationValue.StartsWith(BearerString) || authorizationValue.Length <= BearerString.Length)
+        if (!authorizationValue.StartsWith(BearerString, StringComparison.OrdinalIgnoreCase) || authorizationValue.Length <= BearerString.Length)
             return CreateErrorResponse(context);
 
         string token = authorizationValue[BearerString.Length..];

@@ -40,7 +40,9 @@ public class OrderServiceTests
             _mockOrderRepository.Object,
             _mockReservationRepository.Object,
             _mockDishService.Object,
-            _mockNotificationService.Object
+            _mockNotificationService.Object,
+            Mock.Of<APIHandler.Repositories.GroupReservations.IGroupReservationRepository>(),
+            Mock.Of<APIHandler.Repositories.GuestSessions.IGuestSessionRepository>()
         );
     }
 

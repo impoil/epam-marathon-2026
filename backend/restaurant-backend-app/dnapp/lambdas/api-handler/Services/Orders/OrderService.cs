@@ -7,6 +7,8 @@ using APIHandler.Exceptions;
 using APIHandler.Helpers;
 using APIHandler.Repositories.Orders;
 using APIHandler.Repositories.Reservations;
+using APIHandler.Repositories.GroupReservations;
+using APIHandler.Repositories.GuestSessions;
 using APIHandler.Services.Dishes;
 using APIHandler.Services.Notifications;
 using System;
@@ -22,17 +24,23 @@ public class OrderService : IOrderService
     private readonly IReservationRepository _reservationRepository;
     private readonly IDishService _dishService;
     private readonly INotificationService _notificationService;
+    private readonly IGroupReservationRepository _groups;
+    private readonly IGuestSessionRepository _sessions;
 
     public OrderService(
         IOrderRepository orderRepository,
         IReservationRepository reservationRepository,
         IDishService dishService,
-        INotificationService notificationService)
+        INotificationService notificationService,
+        IGroupReservationRepository groups,
+        IGuestSessionRepository sessions)
     {
         _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
         _reservationRepository = reservationRepository ?? throw new ArgumentNullException(nameof(reservationRepository));
         _dishService = dishService ?? throw new ArgumentNullException(nameof(dishService));
         _notificationService = notificationService ?? throw new ArgumentNullException(nameof(notificationService));
+        _groups = groups ?? throw new ArgumentNullException(nameof(groups));
+        _sessions = sessions ?? throw new ArgumentNullException(nameof(sessions));
     }
 
     public async Task<IEnumerable<Order>> GetOrdersByCustomerIdAsync(string customerId)
@@ -90,6 +98,7 @@ public class OrderService : IOrderService
     {
         var reservation = await LoadReservationAsync(order.ReservationId);
         EnsurePreOrderEditable(reservation.StartTime);
+        var ownerSession = await GetEditableOwnerSessionAsync(order.ReservationId, order.CustomerId);
 
         var existingActiveOrder = await GetActiveOrderByReservationIdAsync(order.ReservationId, throwIfNotFound: false);
         if (existingActiveOrder != null)
@@ -99,6 +108,7 @@ public class OrderService : IOrderService
 
         order.Status = OrderStatus.Created;
         await _orderRepository.SaveOrderAsync(order);
+        await SaveOwnerCartAsync(ownerSession, order, false);
 
         if (!string.IsNullOrEmpty(reservation.WaiterId))
         {
@@ -129,6 +139,7 @@ public class OrderService : IOrderService
         List<OrderItem> newDishes,
         ILambdaContext context)
     {
+        var ownerSession = await GetEditableOwnerSessionAsync(reservationId, customerId);
         await EditPreOrderInternalAsync(
             reservationId,
             newDishes,
@@ -143,6 +154,8 @@ public class OrderService : IOrderService
 
                 EnsurePreOrderEditable(reservation.StartTime);
             });
+        if (ownerSession is not null)
+            await SaveOwnerCartAsync(ownerSession, (await _orderRepository.GetOrderByReservationIdAsync(reservationId))!, false);
     }
 
     public async Task EditPreOrderForWaiterAsync(
@@ -174,10 +187,17 @@ public class OrderService : IOrderService
             throw new ActionForbiddenException("You are not authorized to cancel this pre-order.");
         }
 
+        var ownerSession = await GetEditableOwnerSessionAsync(reservationId, customerId);
         var order = await GetActiveOrderByReservationIdAsync(reservationId, throwIfNotFound: true);
         order!.Status = OrderStatus.Cancelled;
 
         await _orderRepository.SaveOrderAsync(order);
+        if (ownerSession is not null)
+        {
+            ownerSession.Dishes = [];
+            ownerSession.IsSubmitted = false;
+            await _sessions.SaveAsync(ownerSession);
+        }
         context.Logger.LogLine($"Pre-order {order.OrderId} for reservation {reservationId} cancelled by customer {customerId}.");
     }
 
@@ -191,6 +211,16 @@ public class OrderService : IOrderService
         }
 
         var order = await GetActiveOrderByReservationIdAsync(reservationId, throwIfNotFound: true);
+        var ownerSession = await GetEditableOwnerSessionAsync(reservationId, customerId);
+        if (ownerSession is not null)
+        {
+            EnsurePreOrderEditable(reservation.StartTime);
+            if (order!.Dishes.Count == 0) throw new ValidationException("The owner cart is empty.");
+            // Group submission alone sends the consolidated order to the restaurant.
+            // Keep the actual Order Created while confirming this participant's cart.
+            await SaveOwnerCartAsync(ownerSession, order, true);
+            return;
+        }
         order!.Status = OrderStatus.SubmittedByCustomer;
 
         await _orderRepository.SaveOrderAsync(order);
@@ -212,11 +242,33 @@ public class OrderService : IOrderService
             throw new ValidationException("No pre-order found for the given reservation.");
         }
         EnsurePreOrderEditable(reservation.StartTime);
+        var ownerSession = await GetEditableOwnerSessionAsync(reservationId, customerId);
 
         order.Status = OrderStatus.Created;
 
         await _orderRepository.SaveOrderAsync(order);
+        await SaveOwnerCartAsync(ownerSession, order, false);
         context.Logger.LogLine($"Pre-order {order.OrderId} for reservation {reservationId} submitted by customer {customerId}.");
+    }
+
+    private async Task<GuestSession?> GetEditableOwnerSessionAsync(string reservationId, string customerId)
+    {
+        var group = await _groups.GetByReservationIdAsync(reservationId);
+        if (group is null) return null;
+        if (group.Status != GroupReservationStatus.Open)
+            throw new ValidationException("The group pre-order is no longer editable.");
+        var sessions = await _sessions.GetAllByGroupReservationIdAsync(group.GroupReservationId);
+        return sessions.SingleOrDefault(session => session.IsOwnerSession && session.OwnerUserId == customerId)
+            ?? throw new ActionForbiddenException("Only the group owner can change the owner cart.");
+    }
+
+    private async Task SaveOwnerCartAsync(GuestSession? session, Order order, bool submitted)
+    {
+        if (session is null) return;
+        session.Dishes = order.Dishes.Select(item => new OrderItem
+            { DishId = item.DishId, Quantity = item.Quantity, State = item.State }).ToList();
+        session.IsSubmitted = submitted;
+        await _sessions.SaveAsync(session);
     }
 
     private async Task EditPreOrderInternalAsync(

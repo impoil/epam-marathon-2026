@@ -12,4 +12,5 @@ export interface GuestInvite {
 
 export interface GroupInviteToken {
   token: string;
+  invite?: GuestInvite;
 }

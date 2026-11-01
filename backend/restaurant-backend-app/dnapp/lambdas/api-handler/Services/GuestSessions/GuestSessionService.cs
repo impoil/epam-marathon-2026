@@ -33,7 +33,11 @@ public class GuestSessionService(
 {
     public async Task<bool> IsAuthorizedAsync(string guestSessionToken, string guestSessionId)
     {
-        string hash = Convert.ToBase64String(SHA256.HashData(Convert.FromBase64String(guestSessionToken)));
+        // A malformed public bearer token must result in 401, never a FormatException/500.
+        Span<byte> tokenBytes = stackalloc byte[256];
+        if (!Convert.TryFromBase64String(guestSessionToken, tokenBytes, out var written) || written == 0)
+            return false;
+        string hash = Convert.ToBase64String(SHA256.HashData(tokenBytes[..written]));
         GuestSession? guestSession = await guestSessionRepository.GetByTokenHash(hash);
         if (guestSession is null)
             return false;

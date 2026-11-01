@@ -35,7 +35,7 @@ public class LocationRepository : ILocationRepository
 
     public async Task<IEnumerable<Location>> GetAllLocationsAsync()
     {
-        return await _dynamoDbContext.ScanAsync<Location>(new List<ScanCondition>()).GetRemainingAsync();
+        return await _dynamoDbContext.ScanAsync<Location>(new List<ScanCondition>(), DynamoConfig.ScanConfig(LocationsTableName)).GetRemainingAsync();
     }
 
     public async Task<List<Table>> GetTablesByLocationIdAsync(string locationId)

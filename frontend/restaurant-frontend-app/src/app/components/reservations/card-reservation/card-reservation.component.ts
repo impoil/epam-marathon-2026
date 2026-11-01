@@ -8,7 +8,8 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { Params, Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { buildPreOrderQueryParams } from '@app/shared/helpers/pre-order-query-params';
 
 import { CreateOrderRequest } from '@app/models/cart/create-order-request.model';
 import {
@@ -150,27 +151,8 @@ export class CardReservationComponent {
   });
 
   onPreOrder(): void {
-    const reservation = this.r();
-    const startTime = new Date(reservation.startTime);
-    const endTime = new Date(reservation.endTime);
-
-    const tableLabel =
-      reservation.tableName ||
-      `Table ${reservation.tableId}`;
-
-    const queryParams: Params = {
-      preOrder: 'true',
-      reservationId: reservation.id,
-      reservationLabel: [
-        reservation.locationAddress,
-        tableLabel,
-        startTime.toDateString(),
-        `${startTime.toLocaleTimeString()} - ${endTime.toLocaleTimeString()}`,
-      ].join(', '),
-    };
-
     void this.router.navigate(['/menu'], {
-      queryParams,
+      queryParams: buildPreOrderQueryParams(this.r()),
     });
   }
   onPreOrderWaiter(): void {
