@@ -20,6 +20,8 @@ pwsh bin/Debug/net10.0/playwright.ps1 install chromium
 
 Для mutating прогону потрібні **обидва** дозволи `AQA_ALLOW_WRITES=true` і `AQA_RETAIN_TEST_DATA=true`. У мінімальному deployment немає reservation cleanup API. Власні Guests відкритої group видаляються, решта записів реєструється в lifecycle manifest. Не запускайте весь набір багаторазово без перегляду журналу. Це документований fallback homework-aqa.md, а не повне прибирання.
 
+`AQA_MAX_RESERVATIONS` обмежує кількість POST /reservations у процесі (приклад конфігурації: 4); `0` забороняє створення. Для повного набору потрібно окремо погодити бюджет до 35 після lifecycle review. Для чотирьох основних UI flows: filter `Category=hw8-ui` і budget=4. Diagnostics `readonly` та `continuation` не створюють reservation; continuation явно використовує manifest того самого перерваного HW8 scenario, відмовляє для Closed/Submitted group або group з Guests. Це інструмент відновлення, а не залежність основних незалежних scenarios від fixed data.
+
 ```powershell
 dotnet run --no-build -- --report-trx --treenode-filter '/*/*/*/*[Category=hw8]'
 dotnet run --no-build -- --report-trx --treenode-filter '/*/*/*/*[Category=l1]'

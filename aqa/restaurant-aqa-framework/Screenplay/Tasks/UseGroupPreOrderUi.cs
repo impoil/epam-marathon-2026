@@ -17,6 +17,9 @@ public sealed class UseGroupPreOrderUi(string action) : ITask
         actor.Remember(checks);
         var page = actor.LookingAtThePage();
         await actor.AttemptsToAsync(new SignInThroughTheLoginForm(GroupTestSettings.Require("OWNER_USERNAME"), GroupTestSettings.Require("OWNER_PASSWORD")));
+        // Sign-in redirects before asynchronous /me finishes. Wait for the actual Customer UI
+        // before a full navigation can abort that profile request and leave the header anonymous.
+        await Microsoft.Playwright.Assertions.Expect(page.GetByRole(AriaRole.Link, new() { Name = "Reservations", Exact = true })).ToBeVisibleAsync();
         var ui = new GroupPreOrderPage(page);
         if (action == "journey")
         {
@@ -96,6 +99,7 @@ public sealed class UseGroupPreOrderUi(string action) : ITask
         var status = await f.Api.SendAsync("GET", $"/guest/groups/{f.Group}/status", f.Owner);
         f.FinalSubmitted = status.Status == 200 && status.Json.GetProperty("status").GetString() == "Submitted";
         await Microsoft.Playwright.Assertions.Expect(page.Locator(".read-only")).ToContainTextAsync("Sent to Restaurant");
+        f.FinalSubmitted = true;
         await page.ReloadAsync();
         await Microsoft.Playwright.Assertions.Expect(page.Locator(".read-only")).ToContainTextAsync("read-only");
         await Microsoft.Playwright.Assertions.Expect(page.GetByRole(AriaRole.Button, new() { Name = "Submit Pre-Order", Exact = true })).ToHaveCountAsync(0);

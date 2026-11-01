@@ -7,8 +7,10 @@
 | Перший повний `hw8`, 32 tests | 19 | 11 | 2 | 2m 43.022s | **Failed**, збережено всі причини; не є підтвердженням готовності всього набору |
 | Read-only UI після DNS/locator fix | 1 | 0 | 0 | 6.670s | Справжній login, participant cards/dishes/quantity/flags/subtotals/consolidated total; жодного business write |
 | Actual Waiter preflight, 4 tests | 0 | 0 | 4 | 4.299s | **Blocked**, а не чотири успішні waiter tests |
+| Дозволений повтор чотирьох UI scenarios | 2 | 2 | 0 | 37.609s | Review/Remove Passed; Submit assertions passed, teardown failed; journey interrupted before Guests |
+| Продовження того самого E2E без нової reservation | 1 | 0 | 0 | 14.019s | Guest browser, review/remove/recalculate/final submit/reload пройдено; Owner cart UI submit виконано на попередньому етапі того самого scenario |
 
-Поточна фінальна discovery знаходить **35 scenarios**: основний набір і додатковий read-only diagnostic. Повтор усього фінального набору не виконано. Після першого прогону додано окремий waiter visibility test, single-person/no-group test, точну перевірку fixture quantities/prices/flags та runtime Waiter preflight. Їх не позначено як реально Passed без запуску.
+Поточна фінальна discovery знаходить **36 scenarios**: основний набір і додаткові read-only/continuation diagnostics. Повтор усього фінального набору не виконано. Після першого прогону додано окремий waiter visibility test, single-person/no-group test, точну перевірку fixture quantities/prices/flags та runtime Waiter preflight. Не виконані після змін API cases не позначено як реально Passed.
 
 ## Причини 11 невдач першого повного прогону
 
@@ -26,23 +28,27 @@
 
 ## Дані та обмеження повтору
 
-Створено **30 власних reservation records**: 6 у development smoke та 24 у першому повному прогоні. Точні IDs/майбутні timeslots — у локальних lifecycle manifests. Частина має власні group/order/owner-session; Guests відкритих groups точково видалено, крім двох ранніх DTO partial failures. Reservation cleanup API відсутній; записи **не скасовані й не мають TTL**. Демо 31.10.2026/$61 не змінено. Нова й історична тестові дані не змішуються.
+Створено **34 власних reservation records**: 6 у development smoke, 24 у першому повному прогоні та рівно 4 після окремого дозволу користувача. Точні IDs/майбутні timeslots — у локальних lifecycle manifests. Частина має власні group/order/owner-session; Guests відкритих groups точково видалено, включно з двома ранніми DTO partial failures, відновленими за власними manifests. Reservation cleanup API відсутній; записи **не скасовані й не мають TTL**. Демо 31.10.2026/$61 не змінено.
 
-Автоматична safety review **відхилила другий повний прогін** через накопичення persistent data без cleanup API. Запитано окремий дозвіл на максимум 4 нових reservation для основних UI flows; без відповіді нові business writes не виконуються. Поточний read-only повтор і Waiter preflight не створили додаткових об’єктів.
+Автоматична safety review **відхилила другий повний прогін** через накопичення persistent data. Користувач після цього явно дозволив максимум 4 нових reservation. Виконано лише цей обмежений повтор із `AQA_MAX_RESERVATIONS=4`. Подальші продовження того самого interrupted scenario використовували `AQA_MAX_RESERVATIONS=0`; п’яту reservation не створено. Read-only і Waiter preflight також не створювали об’єктів.
+
+У повторі Submit пройшов усі business assertions, але cleanup помилково довіряв ранньому Open snapshot. Виправлено читання фактичного group status перед cleanup і збереження підтвердженого Submitted. Journey виявив тестові synchronization errors: передчасний GET order (404), перехід до завершення асинхронного /me (header без cart), хибне очікування зникнення order card. За контрактом Group Owner submit лишає Order=Created до фінального submit; неправильний Count=0 замінено перевіркою справжньої UI confirmation і persisted Owner.isSubmitted. Жодний product assertion не вимкнено заради зеленого результату.
+
+Два проміжні continuation failures збережено окремо: [profile wait](results/journey-continuation.json), 21.163s, і [Owner card expectation](results/journey-finished.json), 13.014s. Фінальне [continuation Passed](results/journey-completed.json) завершило ті самі дані автоматично: Owner UI cart submit з попереднього етапу, новий anonymous Guest через UI (2 страви), API Guest для remove, UI Review → Remove → Grand Total $47 → $30 → Submit → read-only після reload; API Order=SubmittedByCustomer та Group=Submitted. Це відновлений scenario у кілька автоматичних проходів, **не один безперервний green fresh run**. Waiter visibility не перевірено через некоректну роль.
 
 ## Перевірки та звіти
 
 Locked restore, format verification, Release build (**0 warnings/errors**), Gherkin lint 4.2.4 і discovery виконано локально. Quality workflow без secrets підготовлено для PR. Manual E2E workflow не запускався в GitHub: потрібні налаштовані variables/Secrets/environment та коректний Waiter. Його успіх не заявляється.
 
-Обезособлені per-test results з тривалістю й причиною: [full-first](results/full-first.json), [read-only](results/readonly-verified.json), [waiter preflight](results/waiter-verified.json). TRX/TUnit HTML/Reqnroll HTML, screenshots/traces, lifecycle diagnostics зберігаються локально; CI завантажує їх навіть після Failed, зберігаючи фінальний failure status.
+Обезособлені per-test results: [full-first](results/full-first.json), [read-only](results/readonly-verified.json), [waiter preflight](results/waiter-verified.json), [чотири UI](results/ui-approved-four.json), [E2E continuation](results/journey-completed.json). TRX/TUnit HTML/Reqnroll HTML, screenshots/traces, lifecycle diagnostics зберігаються локально; CI завантажує їх після Failed зі збереженням failure status.
 
 [Screenshot справжнього readonly стану](evidence/readonly-after-submit.png) знято під час попереднього read-only проходу до виправлення Owner locator. Стан продукту не змінювався; повтор після locator fix пройшов. $30 — новий тестовий order цього запуску, не історичний $61.
 
 ## Мінімальні наступні дії
 
-1. Погодити обмежений UI повтор із контролем залишених записів або надати ізольоване AQA environment з cleanup API.
+1. Надати ізольоване AQA environment з cleanup API або контрольованим lifecycle перед наступним повним прогоном: додатковий дозволений бюджет 4 уже використано повністю.
 2. Надати наявну справжню Waiter identity, призначену локації/бронюванню. Поточний account не має потрібної Cognito group; тести самі її не змінюють.
-3. Запустити фінальні UI mutations та API cases з виправленими fixtures і зберегти новий звіт окремо від історичного Failed.
+3. Перевірити один безперервний fresh E2E та повний фінальний API suite після налаштування середовища; зберегти звіт окремо від історичних Failed/continuation.
 4. Узгодити fixture механізм для двох недосяжних станів і product-рішення щодо окремого UI total усіх carts, якщо суворо вимагати його за L1.
 5. Налаштувати CI environment/Secrets і перевірити manual E2E; пройти public readiness audit перед зміною visibility.
 

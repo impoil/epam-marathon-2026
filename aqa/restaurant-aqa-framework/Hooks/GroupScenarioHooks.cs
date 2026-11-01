@@ -22,7 +22,7 @@ public sealed class GroupScenarioHooks(IObjectContainer container)
         if (profile.Json.GetProperty("role").GetString() != "Waiter")
             throw new TUnit.Core.Exceptions.SkipTestException("BLOCKED: configured waiter identity is Customer (/me), Cognito Waiter group absent. Requires owner-authorized identity configuration; tests never change Cognito.");
     }
-    [AfterScenario("hw8", Order = -200)]
+    [AfterScenario("hw8", "continuation", Order = -200)]
     public async Task CleanOwnObjectsAsync()
     {
         if (!container.IsRegistered<Actor>()) return;

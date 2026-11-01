@@ -1,7 +1,7 @@
 @hw8 @l1
 Feature: Owner reviews a group pre-order
 
-  @ui @smoke
+  @ui @smoke @hw8-ui
   Scenario: Owner sees dishes quantities subtotals submitted and empty draft carts
     Given an isolated group pre-order in "review" state
     When the owner completes the "review" browser flow

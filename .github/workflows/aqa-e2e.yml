@@ -12,6 +12,11 @@ on:
         description: 'Acknowledge isolated records remain: this deployment has no reservation cleanup API'
         required: true
         default: false
+      max_reservations:
+        type: choice
+        description: 'Hard limit of new reservations (35 only after reviewing lifecycle records)'
+        options: ['4', '35']
+        default: '4'
 permissions:
   contents: read
 concurrency:
@@ -62,6 +67,7 @@ jobs:
           WAITER_PASSWORD: ${{ secrets.AQA_WAITER_PASSWORD }}
           AQA_ALLOW_WRITES: 'true'
           AQA_RETAIN_TEST_DATA: 'true'
+          AQA_MAX_RESERVATIONS: ${{ inputs.max_reservations }}
         run: |
           test -n "$OWNER_USERNAME" && test -n "$OTHER_USERNAME" && test -n "$WAITER_USERNAME"
           test -n "$OWNER_PASSWORD" && test -n "$OTHER_PASSWORD" && test -n "$WAITER_PASSWORD"

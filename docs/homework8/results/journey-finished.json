@@ -1,0 +1,16 @@
+{
+  "counts": {
+    "Passed": 0,
+    "Failed": 1,
+    "NotExecuted": 0,
+    "Total": 1
+  },
+  "tests": [
+    {
+      "name": "Continue the interrupted Owner and Guest browser journey on its own group",
+      "outcome": "Failed",
+      "duration": "00:00:10.7078593",
+      "reason": "PlaywrightException: Locator expected to have count '0'\nBut was: '2' \nCall log:\n  - Expect \"ToHaveCountAsync\" Locator(\"app-not-submitted-order\").Filter(new() { HasText = \"a2ca2245-0a5d-4d92-9465-3065dadab041\" }) with timeout 5000ms\n  - waiting for Locator(\"app-not-submitted-order\").Filter(new() { HasText = \"a2ca2245-0a5d-4d92-9465-3065dadab041\" })\n    14 × locator resolved to 2 elements\n       - unexpected value \"2\""
+    }
+  ]
+}

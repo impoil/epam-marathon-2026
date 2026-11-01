@@ -20,10 +20,16 @@ public sealed record GroupReply(int Status, JsonElement Json)
 /// <summary>No mutation retries. Only bounded, observable read polling for DynamoDB GSI propagation.</summary>
 public sealed class GroupPreOrderApi(IAPIRequestContext context)
 {
+    private static int reservationAttempts;
     public ConcurrentQueue<object> Diagnostics { get; } = new();
 
     public async Task<GroupReply> SendAsync(string method, string path, string? token = null, object? body = null)
     {
+        if (method == "POST" && path == "/reservations" && int.TryParse(Environment.GetEnvironmentVariable("AQA_MAX_RESERVATIONS"), out var limit))
+        {
+            if (limit < 1 || Interlocked.Increment(ref reservationAttempts) > limit)
+                throw new InvalidOperationException("Reservation creation budget exhausted. No additional request was sent.");
+        }
         var headers = new Dictionary<string, string> { ["Content-Type"] = "application/json", ["Origin"] = Settings.Current.UiBaseUrl };
         if (token is not null) headers["Authorization"] = $"Bearer {token}";
         var response = await context.FetchAsync(Settings.Current.ApiBaseUrl.TrimEnd('/') + path,
@@ -61,7 +67,7 @@ public sealed class GroupPreOrderApi(IAPIRequestContext context)
     public Task<GroupReply> RemoveAsync(string group, string session, string? token) => SendAsync("DELETE", $"/guest/groups/{group}/sessions/{session}", token);
     public Task<GroupReply> SubmitAsync(string group, string reservation, string? token) => SendAsync("POST", $"/group-reservations/{group}/submit", token, new { reservationId = reservation });
 
-    public async Task<GroupReply> PollAsync(Func<Task<GroupReply>> read, Func<GroupReply, bool> ready)
+    public async Task<GroupReply> PollAsync(Func<Task<GroupReply>> read, Func<GroupReply, bool> ready, bool allowNotFound = false)
     {
         var deadline = DateTime.UtcNow.AddSeconds(20);
         GroupReply result;
@@ -70,7 +76,7 @@ public sealed class GroupPreOrderApi(IAPIRequestContext context)
             result = await read();
             Diagnostics.Enqueue(new { action = "consistency-read", status = result.Status });
             if (ready(result)) return result;
-            if (result.Status >= 400) return result;
+            if (result.Status >= 400 && !(allowNotFound && result.Status == 404)) return result;
             // A bounded read consistency poll, never a retry of a failed business action.
             await Task.Delay(500);
         } while (DateTime.UtcNow < deadline);

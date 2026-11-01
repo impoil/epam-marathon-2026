@@ -1,7 +1,7 @@
 @hw8 @l2
 Feature: Owner sends a consolidated pre-order to the restaurant
 
-  @ui
+  @ui @hw8-ui
   Scenario: Browser submission excludes draft dishes and becomes read-only
     Given an isolated group pre-order in "ready" state
     When the owner completes the "submit" browser flow

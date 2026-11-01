@@ -96,6 +96,24 @@ public sealed class GroupFixture(GroupPreOrderApi api) : IAsyncDisposable
         await ReviewReadyAsync(1);
     }
 
+    public async Task ResumeForContinuationAsync(string manifest)
+    {
+        GroupTestSettings.RequireWrites();
+        await ResumeReadOnlyAsync(manifest);
+        var status = (await Api.SendAsync("GET", $"/guest/groups/{Group}/status", Owner)).Require(200);
+        if (status.Json.GetProperty("status").GetString() != "Open" || Guests.Count != 0)
+            throw new InvalidOperationException("Continuation requires this run's Open group before any Guest joined.");
+        var metadata = (await Api.SendAsync("GET", $"/reservations/{Reservation}/invite-token", Owner)).Require(200);
+        Location = metadata.Json.GetProperty("invite").GetProperty("LocationId").GetString()!;
+        OwnerSession = (await Api.SendAsync("GET", $"/reservations/{Reservation}/guest-session-id", Owner)).Require(200).Json.GetProperty("guestSessionId").GetString()!;
+        ExpectedCarts[OwnerSession] = new ExpectedCart();
+        var dishes = (await Api.SendAsync("GET", $"/dishes?locationId={Location}")).Require(200).Json;
+        Dishes.AddRange(dishes.EnumerateArray().Where(d => d.GetProperty("state").GetString() == "Available")
+            .Select(d => new TestDish(d.GetProperty("id").GetString()!, d.GetProperty("name").GetString()!, d.GetProperty("price").GetDecimal())).Take(2));
+        ReadOnly = false;
+        Lifecycle.Add(new { action = "continued-own-interrupted-scenario", reservationId = Reservation, newReservations = 0 });
+    }
+
     public async Task<TestGuest> JoinAsync(string label)
     {
         var name = $"{RunId}-{label}";
@@ -135,6 +153,11 @@ public sealed class GroupFixture(GroupPreOrderApi api) : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         if (Reservation.Length == 0 || ReadOnly) return;
+        if (Group.Length > 0)
+        {
+            var status = (await Api.SendAsync("GET", $"/guest/groups/{Group}/status", Owner)).Require(200);
+            FinalSubmitted |= status.Json.GetProperty("status").GetString() == "Submitted";
+        }
         // Open groups: remove only this fixture's guests. Minimal HW6 deployment has no reservation
         // cancellation route. Explicit retention mode records every leftover instead of claiming cleanup.
         if (!FinalSubmitted && Group.Length > 0)

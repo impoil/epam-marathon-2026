@@ -1,0 +1,16 @@
+{
+  "counts": {
+    "Passed": 1,
+    "Failed": 0,
+    "NotExecuted": 0,
+    "Total": 1
+  },
+  "tests": [
+    {
+      "name": "Continue the interrupted Owner and Guest browser journey on its own group",
+      "outcome": "Passed",
+      "duration": "00:00:12.1465628",
+      "reason": ""
+    }
+  ]
+}

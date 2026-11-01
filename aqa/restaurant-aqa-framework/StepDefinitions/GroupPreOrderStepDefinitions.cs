@@ -10,6 +10,9 @@ public sealed class GroupPreOrderStepDefinitions(Actor actor) : StepDefinitionBa
     [Given("a retained group from this run is opened without changing it")]
     public Task ReadOnly() => Actor.AttemptsToAsync(new ResumeOwnGroupReadOnly());
 
+    [Given("the interrupted group from this run is continued without another reservation")]
+    public Task ContinueOwn() => Actor.AttemptsToAsync(new ResumeOwnGroupReadOnly(continueInterruptedScenario: true));
+
     [Given("an isolated group pre-order in {string} state")]
     public Task Prepare(string state) => Actor.AttemptsToAsync(new PrepareGroupPreOrder(state));
 

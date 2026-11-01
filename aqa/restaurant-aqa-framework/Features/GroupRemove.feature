@@ -1,7 +1,7 @@
 @hw8 @l3
 Feature: Owner removes a guest before sending the pre-order
 
-  @ui
+  @ui @hw8-ui
   Scenario: Removing a submitted guest recalculates the browser Grand Total
     Given an isolated group pre-order in "ready" state
     When the owner completes the "remove" browser flow
@@ -49,7 +49,7 @@ Feature: Owner removes a guest before sending the pre-order
     When the "waiter" attempts the protected "remove" action
     Then all group pre-order expectations hold
 
-  @ui @e2e @trace-always
+  @ui @e2e @trace-always @hw8-ui
   Scenario: Owner and invited guest order remove a guest and send the final order
     Given an isolated group pre-order in "empty" state
     When the owner completes the "journey" browser flow

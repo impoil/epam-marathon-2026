@@ -94,7 +94,7 @@
       "name": "A group without participants returns an empty review",
       "outcome": "NotExecuted",
       "duration": "00:00:00.0043478",
-      "reason": ""
+      "reason": "Skipped: BLOCKED: every new group gets an Owner session and removing Owner is forbidden; zero participants cannot be created through public APIs."
     },
     {
       "name": "Missing group cannot be reviewed",
@@ -130,7 +130,7 @@
       "name": "Incomplete group submissions explain why they are refused (empty-submitted, no dishes)",
       "outcome": "NotExecuted",
       "duration": "00:00:00.0069234",
-      "reason": ""
+      "reason": "Skipped: BLOCKED: public guest submit rejects empty carts; no safe API can create a submitted empty cart. Requires isolated fixture API; no DynamoDB writes."
     },
     {
       "name": "Browser submission excludes draft dishes and becomes read-only",
