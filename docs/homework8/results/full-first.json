@@ -1,0 +1,202 @@
+{
+  "counts": {
+    "Passed": 19,
+    "Failed": 11,
+    "NotExecuted": 2,
+    "Total": 32
+  },
+  "tests": [
+    {
+      "name": "Only the Owner can remove a guest (waiter)",
+      "outcome": "Passed",
+      "duration": "00:00:05.4908330",
+      "reason": ""
+    },
+    {
+      "name": "Owner and invited guest order remove a guest and send the final order",
+      "outcome": "Failed",
+      "duration": "00:00:17.4857141",
+      "reason": "TimeoutException: Timeout 15000ms exceeded.\nCall log:\n  - waiting for GetByLabel(\"Email\", new() { Exact = true })"
+    },
+    {
+      "name": "Owner sees dishes quantities subtotals submitted and empty draft carts",
+      "outcome": "Failed",
+      "duration": "00:00:18.5889443",
+      "reason": "TimeoutException: Timeout 15000ms exceeded.\nCall log:\n  - waiting for GetByLabel(\"Email\", new() { Exact = true })"
+    },
+    {
+      "name": "A newly created group contains only the empty Owner cart",
+      "outcome": "Passed",
+      "duration": "00:00:02.2863127",
+      "reason": ""
+    },
+    {
+      "name": "Only the Owner can remove a guest (guest)",
+      "outcome": "Passed",
+      "duration": "00:00:04.1222243",
+      "reason": ""
+    },
+    {
+      "name": "The last Guest can be removed while the Owner remains",
+      "outcome": "Passed",
+      "duration": "00:00:03.8527333",
+      "reason": ""
+    },
+    {
+      "name": "Only the Owner can remove a guest (other customer)",
+      "outcome": "Failed",
+      "duration": "00:00:01.6024111",
+      "reason": "InvalidOperationException: API setup expected 201, received 400: {\"error\":\"Reservation from 17:00 to 18:30 overlaps with an existing reservation for table \\u002760000000-0000-4000-8000-000000000002\\u0027.\"}"
+    },
+    {
+      "name": "A submitted guest is removed and cannot be removed twice",
+      "outcome": "Passed",
+      "duration": "00:00:04.3542969",
+      "reason": ""
+    },
+    {
+      "name": "Invalid participants cannot be removed (owner)",
+      "outcome": "Passed",
+      "duration": "00:00:04.2093965",
+      "reason": ""
+    },
+    {
+      "name": "Removing a submitted guest recalculates the browser Grand Total",
+      "outcome": "Failed",
+      "duration": "00:00:19.1503842",
+      "reason": "TimeoutException: Timeout 15000ms exceeded.\nCall log:\n  - waiting for GetByLabel(\"Email\", new() { Exact = true })"
+    },
+    {
+      "name": "Invalid participants cannot be removed (missing)",
+      "outcome": "Passed",
+      "duration": "00:00:03.6233781",
+      "reason": ""
+    },
+    {
+      "name": "Only the Owner can remove a guest (anonymous)",
+      "outcome": "Failed",
+      "duration": "00:00:01.6169066",
+      "reason": "InvalidOperationException: API setup expected 201, received 400: {\"error\":\"Reservation from 15:30 to 17:00 overlaps with an existing reservation for table \\u002760000000-0000-4000-8000-000000000002\\u0027.\"}"
+    },
+    {
+      "name": "Invalid participants cannot be removed (foreign)",
+      "outcome": "Failed",
+      "duration": "00:00:01.5043032",
+      "reason": "InvalidOperationException: API setup expected 201, received 400: {\"error\":\"Reservation from 16:00 to 17:30 overlaps with an existing reservation for table \\u002760000000-0000-4000-8000-000000000002\\u0027.\"}"
+    },
+    {
+      "name": "Review total changes when a guest adds another dish",
+      "outcome": "Passed",
+      "duration": "00:00:03.0074333",
+      "reason": ""
+    },
+    {
+      "name": "A group without participants returns an empty review",
+      "outcome": "NotExecuted",
+      "duration": "00:00:00.0043478",
+      "reason": ""
+    },
+    {
+      "name": "Missing group cannot be reviewed",
+      "outcome": "Passed",
+      "duration": "00:00:02.1668157",
+      "reason": ""
+    },
+    {
+      "name": "Only the Owner can review participants (other customer)",
+      "outcome": "Passed",
+      "duration": "00:00:03.6565281",
+      "reason": ""
+    },
+    {
+      "name": "Only the Owner can review participants (guest)",
+      "outcome": "Failed",
+      "duration": "00:00:01.5370931",
+      "reason": "InvalidOperationException: API setup expected 201, received 400: {\"error\":\"Reservation from 14:30 to 16:00 overlaps with an existing reservation for table \\u002760000000-0000-4000-8000-000000000002\\u0027.\"}"
+    },
+    {
+      "name": "Only the Owner can review participants (anonymous)",
+      "outcome": "Passed",
+      "duration": "00:00:03.4324028",
+      "reason": ""
+    },
+    {
+      "name": "Only the Owner can review participants (waiter)",
+      "outcome": "Passed",
+      "duration": "00:00:03.8459896",
+      "reason": ""
+    },
+    {
+      "name": "Incomplete group submissions explain why they are refused (empty-submitted, no dishes)",
+      "outcome": "NotExecuted",
+      "duration": "00:00:00.0069234",
+      "reason": ""
+    },
+    {
+      "name": "Browser submission excludes draft dishes and becomes read-only",
+      "outcome": "Failed",
+      "duration": "00:00:18.3975524",
+      "reason": "TimeoutException: Timeout 15000ms exceeded.\nCall log:\n  - waiting for GetByLabel(\"Email\", new() { Exact = true })"
+    },
+    {
+      "name": "Only the Owner can submit the group (anonymous)",
+      "outcome": "Passed",
+      "duration": "00:00:03.8338436",
+      "reason": ""
+    },
+    {
+      "name": "Only the Owner can submit the group (guest)",
+      "outcome": "Passed",
+      "duration": "00:00:03.5983844",
+      "reason": ""
+    },
+    {
+      "name": "Only the Owner can submit the group (waiter)",
+      "outcome": "Passed",
+      "duration": "00:00:03.5026955",
+      "reason": ""
+    },
+    {
+      "name": "Incomplete group submissions explain why they are refused (ready, invalid reservation)",
+      "outcome": "Passed",
+      "duration": "00:00:03.5255978",
+      "reason": ""
+    },
+    {
+      "name": "Only the Owner can submit the group (other customer)",
+      "outcome": "Passed",
+      "duration": "00:00:04.0152609",
+      "reason": ""
+    },
+    {
+      "name": "Matching dishes aggregate and a second submission is refused",
+      "outcome": "Failed",
+      "duration": "00:00:04.6081358",
+      "reason": "AssertionException: Expected to be empty, because Expected 200, received 403: {\"error\":\"Forbidden: Only waiters or the customer can access this order.\"}\nExpected 200, received 403: {\"error\":\"Forbidden: Only waiters or the customer can access this order.\"}\nbut collection contains items: [Expected 200, received 403: {\"error\":\"Forbidden: Only waiters or the customer can access this order.\"}, Expected 200, received 403: {\"error\":\"Forbidden: Only waiters or the customer can access this order.\"}]\n\nat Assert.That(checks.Failures).IsEmpty().Because(\"Expected 200, received 403: {\"error\":\"Forbidden: Only waiters or the customer can access this order.\"}\nExpected 200, received 403: {\"error\":\"Forbidden: Only waiters or the customer can access this order.\"}\")"
+    },
+    {
+      "name": "Incomplete group submissions explain why they are refused (missing-order, missing order)",
+      "outcome": "Passed",
+      "duration": "00:00:02.8223755",
+      "reason": ""
+    },
+    {
+      "name": "Incomplete group submissions explain why they are refused (ready, missing group)",
+      "outcome": "Failed",
+      "duration": "00:00:01.5314155",
+      "reason": "InvalidOperationException: API setup expected 201, received 400: {\"error\":\"Reservation from 15:00 to 16:30 overlaps with an existing reservation for table \\u002760000000-0000-4000-8000-000000000002\\u0027.\"}"
+    },
+    {
+      "name": "Incomplete group submissions explain why they are refused (draft, no submitted carts)",
+      "outcome": "Passed",
+      "duration": "00:00:03.0449029",
+      "reason": ""
+    },
+    {
+      "name": "Incomplete group submissions explain why they are refused (ready, missing reservation)",
+      "outcome": "Failed",
+      "duration": "00:00:01.5082208",
+      "reason": "InvalidOperationException: API setup expected 201, received 400: {\"error\":\"Reservation from 12:30 to 14:00 overlaps with an existing reservation for table \\u002760000000-0000-4000-8000-000000000002\\u0027.\"}"
+    }
+  ]
+}

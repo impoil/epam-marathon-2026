@@ -1,3 +1,15 @@
+# Green&Tasty — EPAM IT Marathon 2026
+
+Навігація домашніми завданнями. Статуси посилаються на збережені матеріали; AQA PR не повторює infrastructure deployment.
+
+| ДЗ | Матеріали | Підтверджений обсяг |
+|---|---|---|
+| №4 | [Terraform/Lambda](infra/homework4/README.md) | Історичний звіт розгортання й перевірок 27.10.2026 |
+| №5 | [Backend](docs/homework5/README.md) | Group Pre-Order, три рівні, C# source/tests |
+| №6 | [Frontend](docs/homework6/README.md), [реальний E2E](docs/homework6/e2e-completed.md) | Історичний AWS/Cloudflare E2E; PR #2 лишається Draft |
+| №7 | Локальні матеріали `docs/homework7/` | Не включені до AQA PR; Git-публікація й завершення тут не підтверджуються |
+| №8 | [AQA](aqa/restaurant-aqa-framework/README.md), [результати](docs/homework8/RESULTS_UA.md), [аудит](docs/homework8/PUBLIC_READINESS_UA.md) | Напрям 1 із фактичними Passed/Failed/Skipped і явними blockers |
+
 # Deployment Guide
 
 Homework #6 frontend starter materials and local commands:

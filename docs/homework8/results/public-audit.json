@@ -1,0 +1,11 @@
+{
+  "trackedFiles": 1051,
+  "textScans": 1886,
+  "historyBlobs": 922,
+  "findings": [],
+  "limitations": [
+    "Heuristics, not proof of absence of secrets.",
+    "Binary images, archives, blobs >=2 MB, unreachable Git objects, remote refs not fetched, GitHub artifacts and logs require separate review.",
+    "Licensing and personal information need human review."
+  ]
+}

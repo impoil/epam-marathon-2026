@@ -1,0 +1,16 @@
+{
+  "counts": {
+    "Passed": 1,
+    "Failed": 0,
+    "NotExecuted": 0,
+    "Total": 1
+  },
+  "tests": [
+    {
+      "name": "Owner reads only the group recorded in a local HW8 lifecycle manifest",
+      "outcome": "Passed",
+      "duration": "00:00:05.1950991",
+      "reason": ""
+    }
+  ]
+}
