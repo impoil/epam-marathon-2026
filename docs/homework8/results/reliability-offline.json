@@ -1,0 +1,367 @@
+{
+  "counts": {
+    "Passed": 35,
+    "Failed": 0,
+    "NotExecuted": 0,
+    "Total": 35
+  },
+  "acceptance_counts": {
+    "Passed": 0,
+    "Failed": 0,
+    "NotExecuted": 0
+  },
+  "diagnostic_count": 0,
+  "fresh_acceptance_e2e_passed": false,
+  "tests": [
+    {
+      "name": "CleanupNeverDeletesAfterConfirmedOrUncertainSubmit(False, Closed, False, RetainClosed)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.1819190",
+      "reason": ""
+    },
+    {
+      "name": "CleanupNeverDeletesAfterConfirmedOrUncertainSubmit(False, Submitted, False, RetainSubmitted)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.1819207",
+      "reason": ""
+    },
+    {
+      "name": "UnknownCleanupStateFailsClosed",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.1796265",
+      "reason": ""
+    },
+    {
+      "name": "CleanupNeverDeletesAfterConfirmedOrUncertainSubmit(False, Open, False, DeleteOwnGuests)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.1818961",
+      "reason": ""
+    },
+    {
+      "name": "CleanupNeverDeletesAfterConfirmedOrUncertainSubmit(False, Open, True, RetainUncertainSubmission)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.1818851",
+      "reason": ""
+    },
+    {
+      "name": "CleanupNeverDeletesAfterConfirmedOrUncertainSubmit(True, Open, False, RetainSubmitted)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000404",
+      "reason": ""
+    },
+    {
+      "name": "BoundedBudgetParsesWithoutEnablingWrites(0, 0)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0081203",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(POST, /guest/sessions)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0032594",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(POST, /orders)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000472",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(POST, /group-reservations/g/submit)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000448",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(DELETE, /guest/groups/g/sessions/s)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000202",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(DELETE, /reservations)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000151",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(PUT, /orders/r)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000149",
+      "reason": ""
+    },
+    {
+      "name": "BoundedBudgetParsesWithoutEnablingWrites(4, 4)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000131",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(PATCH, /reservations/r/status)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000123",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed()",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0004277",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed(35)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000385",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed(5)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000153",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed(-1)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000233",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed(bad)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000065",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed( 4)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000371",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(POST, /reservations)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000484",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed(null)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0002383",
+      "reason": ""
+    },
+    {
+      "name": "IncompleteSuccessfulReadTimesOutInsteadOfReturningFalseReady",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0249227",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(balanced-price)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2310935",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(total)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2310753",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(duplicate)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2310831",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(missing)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2311176",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(correct)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2311107",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(quantity)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0367873",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(draft)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2310843",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(name)",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2311054",
+      "reason": ""
+    },
+    {
+      "name": "RemoveCannotSilentlyChangeASurvivingCart",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0381818",
+      "reason": ""
+    },
+    {
+      "name": "ReadConsistencyCanWaitForNewOrderWithoutRetryingAMutation",
+      "outcome": "Passed",
+      "tags": [
+        "offline"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:00.5069576",
+      "reason": ""
+    },
+    {
+      "name": "BrowserBlocksBusinessWritesAndCrossOriginSignInBeforeNetwork",
+      "outcome": "Passed",
+      "tags": [
+        "offline-browser"
+      ],
+      "classification": "local-or-other",
+      "duration": "00:00:03.6327961",
+      "reason": ""
+    }
+  ]
+}

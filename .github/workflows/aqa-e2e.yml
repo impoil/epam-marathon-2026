@@ -1,100 +1,16 @@
-name: AQA Controlled E2E
+name: AQA Controlled E2E (suspended)
 on:
   workflow_dispatch:
-    inputs:
-      scope:
-        type: choice
-        description: Test selection
-        options: [hw8, l1, l2, l3, ui, api, e2e]
-        default: hw8
-      retain_test_data:
-        type: boolean
-        description: 'Acknowledge isolated records remain: this deployment has no reservation cleanup API'
-        required: true
-        default: false
-      max_reservations:
-        type: choice
-        description: 'Hard limit of new reservations (35 only after reviewing lifecycle records)'
-        options: ['4', '35']
-        default: '4'
-permissions:
-  contents: read
-concurrency:
-  group: aqa-production-e2e
-  cancel-in-progress: false
+permissions: {}
 jobs:
-  e2e:
-    if: github.event_name == 'workflow_dispatch' && inputs.retain_test_data
-    environment: aqa-production
+  suspended:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-    defaults:
-      run:
-        working-directory: aqa/restaurant-aqa-framework
-    env:
-      HEADLESS: 'true'
-      MAX_PARALLEL_TESTS: '1'
-      TRACE_MODE: OnFailureOnly
-      ARTIFACTS_DIR: ${{ github.workspace }}/aqa/restaurant-aqa-framework/TestResults
-      TUNIT_DISABLE_ARTIFACT_UPLOAD: 'true'
+    timeout-minutes: 2
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.0.x'
-      - run: dotnet restore --locked-mode
-      - run: dotnet build -c Release --no-restore
-      - name: Install Chromium in runner only
-        run: pwsh bin/Release/net10.0/playwright.ps1 install --with-deps chromium
-      - name: Validate controlled scope
-        env:
-          SCOPE: ${{ inputs.scope }}
+      # Deliberately no checkout, environment, inputs, credentials, browser or test execution.
+      # Re-enabling requires a reviewed code change after fixture cleanup is approved.
+      - name: Refuse business E2E until isolated cleanup is available
         run: |
-          case "$SCOPE" in hw8|l1|l2|l3|ui|api|e2e) ;; *) exit 1 ;; esac
-      - name: Run real E2E
-        id: tests
-        continue-on-error: true
-        env:
-          SCOPE: ${{ inputs.scope }}
-          UI_URL: ${{ vars.AQA_UI_URL }}
-          API_URL: ${{ vars.AQA_API_URL }}
-          TESTTABLE_ID: ${{ vars.AQA_TESTTABLE_ID }}
-          OWNER_USERNAME: ${{ secrets.AQA_OWNER_USERNAME }}
-          OWNER_PASSWORD: ${{ secrets.AQA_OWNER_PASSWORD }}
-          OTHER_USERNAME: ${{ secrets.AQA_OTHER_USERNAME }}
-          OTHER_PASSWORD: ${{ secrets.AQA_OTHER_PASSWORD }}
-          WAITER_USERNAME: ${{ secrets.AQA_WAITER_USERNAME }}
-          WAITER_PASSWORD: ${{ secrets.AQA_WAITER_PASSWORD }}
-          AQA_ALLOW_WRITES: 'true'
-          AQA_RETAIN_TEST_DATA: 'true'
-          AQA_MAX_RESERVATIONS: ${{ inputs.max_reservations }}
-        run: |
-          test -n "$OWNER_USERNAME" && test -n "$OTHER_USERNAME" && test -n "$WAITER_USERNAME"
-          test -n "$OWNER_PASSWORD" && test -n "$OTHER_PASSWORD" && test -n "$WAITER_PASSWORD"
-          test -n "$UI_URL" && test -n "$API_URL" && test -n "$TESTTABLE_ID"
-          dotnet bin/Release/net10.0/restaurant-aqa-framework.dll --report-trx --results-directory TestResults --treenode-filter "/*/*/*/*[Category=$SCOPE]"
-      - name: Sanitize reports before publication
-        id: sanitize
-        if: always()
-        env:
-          OWNER_USERNAME: ${{ secrets.AQA_OWNER_USERNAME }}
-          OWNER_PASSWORD: ${{ secrets.AQA_OWNER_PASSWORD }}
-          OTHER_USERNAME: ${{ secrets.AQA_OTHER_USERNAME }}
-          OTHER_PASSWORD: ${{ secrets.AQA_OTHER_PASSWORD }}
-          WAITER_USERNAME: ${{ secrets.AQA_WAITER_USERNAME }}
-          WAITER_PASSWORD: ${{ secrets.AQA_WAITER_PASSWORD }}
-        run: python3 scripts/sanitize-artifacts.py TestResults
-      - name: Generate verified summary
-        if: always()
-        run: python3 scripts/summarize.py TestResults --require-results >> "$GITHUB_STEP_SUMMARY"
-      - name: Upload diagnostics even on failure
-        if: always() && steps.sanitize.outcome == 'success'
-        uses: actions/upload-artifact@v4
-        with:
-          name: aqa-${{ github.run_id }}-${{ inputs.scope }}
-          path: aqa/restaurant-aqa-framework/TestResults/
-          retention-days: 7
-          if-no-files-found: warn
-      - name: Preserve failed result
-        if: always() && steps.tests.outcome != 'success'
-        run: exit 1
+          echo '::error::Business E2E is suspended. No secrets are read and no test data is created.'
+          echo 'Historical reports remain in docs/homework8/results.'
+          exit 1

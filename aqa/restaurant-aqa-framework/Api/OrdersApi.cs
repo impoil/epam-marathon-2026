@@ -12,7 +12,7 @@ public sealed class OrdersApi(IAPIRequestContext api) : ApiClientBase(api)
         GetAsync(Url($"/orders/{reservationId}"), new APIRequestContextOptions { Headers = Headers(bearerToken) });
 
     public Task<IAPIResponse> CreateOrderAsync(CreateOrderRequest request, string? bearerToken = null) =>
-        Api.PostAsync(Url("/orders"), new APIRequestContextOptions
+        PostAsync(Url("/orders"), new APIRequestContextOptions
         {
             DataString = Serialize(request),
             Headers = Headers(bearerToken),
@@ -33,13 +33,13 @@ public sealed class OrdersApi(IAPIRequestContext api) : ApiClientBase(api)
         });
 
     public Task<IAPIResponse> SubmitOrderAsync(string reservationId, string? bearerToken = null) =>
-        Api.PostAsync(Url($"/orders/{reservationId}/submit"), new APIRequestContextOptions
+        PostAsync(Url($"/orders/{reservationId}/submit"), new APIRequestContextOptions
         {
             Headers = Headers(bearerToken),
         });
 
     public Task<IAPIResponse> UnsubmitOrderAsync(string reservationId, string? bearerToken = null) =>
-        Api.PostAsync(Url($"/orders/{reservationId}/unsubmit"), new APIRequestContextOptions
+        PostAsync(Url($"/orders/{reservationId}/unsubmit"), new APIRequestContextOptions
         {
             Headers = Headers(bearerToken),
         });

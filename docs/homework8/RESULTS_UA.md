@@ -1,5 +1,7 @@
 # Реальне виконання AQA — 01.11.2026
 
+Це **історичний звіт** business-прогонів. Подальший [аудит надійності](RELIABILITY_AUDIT_UA.md) не повторював ці сценарії: business writes зупинено, додано окремі offline regressions. Жодний із Failed результатів нижче не замінено на Passed.
+
 Об’єкт: власні Cloudflare Pages frontend та AWS API Gateway backend Green&Tasty. Наявний локальний SDK **10.0.403**, надані versions framework, встановлений Chrome headless. Нове глобальне ПЗ не встановлювалося. Production sources/deployment, AWS/Cognito configuration та історичні reservation/order не змінено.
 
 | Прогін | Passed | Failed | Skipped | Тривалість | Оцінка |

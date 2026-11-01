@@ -7,14 +7,14 @@ namespace Restaurant_Aqa_Framework.Api;
 public sealed class AuthApi(IAPIRequestContext api) : ApiClientBase(api)
 {
     public Task<IAPIResponse> RegisterAsync(RegisterRequest request) =>
-        Api.PostAsync(Url("/register"), new APIRequestContextOptions
+        PostAsync(Url("/register"), new APIRequestContextOptions
         {
             DataString = Serialize(request),
             Headers = Headers(),
         });
 
     public Task<IAPIResponse> SignInAsync(SignInRequest request) =>
-        Api.PostAsync(Url("/signin"), new APIRequestContextOptions
+        PostAsync(Url("/signin"), new APIRequestContextOptions
         {
             DataString = Serialize(request),
             Headers = Headers(),

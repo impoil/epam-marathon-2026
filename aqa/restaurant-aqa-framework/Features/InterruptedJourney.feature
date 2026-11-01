@@ -1,4 +1,4 @@
-@continuation @ui @trace-always
+@diagnostic @nonacceptance @continuation @ui @trace-always
 Feature: Finish the same interrupted scenario without another reservation
 
   Scenario: Continue the interrupted Owner and Guest browser journey on its own group

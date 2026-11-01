@@ -58,8 +58,17 @@ public sealed class ProbeGroupPreOrder(string operation, string persona = "owner
         }
         if (operation is "submit" or "waiter visibility")
         {
+            CheckSnapshot(checks, before.Json, f);
+            if (operation == "waiter visibility")
+            {
+                var waiter = (await api.SendAsync("GET", "/me", f.Waiter)).Require(200);
+                var booking = (await api.SendAsync("GET", $"/reservations/{f.Reservation}", f.Owner)).Require(200);
+                if (waiter.Json.GetProperty("id").GetString() != booking.Json.GetProperty("waiterId").GetString())
+                    throw new InvalidOperationException("Fixture waiter is not assigned to this reservation; final submit was not attempted.");
+            }
             var group = variant == "missing group" ? Guid.NewGuid().ToString() : f.Group;
             var reservation = variant == "missing reservation" ? Guid.NewGuid().ToString() : variant == "invalid reservation" ? " " : f.Reservation;
+            f.SubmissionAttempted = true;
             var reply = await api.SubmitAsync(group, reservation, f.Owner);
             if (variant != "success")
             {
@@ -74,6 +83,7 @@ public sealed class ProbeGroupPreOrder(string operation, string persona = "owner
             }
             CheckStatus(checks, reply, 200);
             f.FinalSubmitted = reply.Status == 200;
+            if (reply.Status == 200) GroupOrderAssertions.CheckSubmittedResponse(checks, reply.Json, before.Json);
             await CheckFinalAsync(checks, f, before.Json);
             if (operation == "waiter visibility")
             {
@@ -82,7 +92,7 @@ public sealed class ProbeGroupPreOrder(string operation, string persona = "owner
                 if (waiterOrder.Status == 200)
                 {
                     var ownerOrder = (await api.SendAsync("GET", $"/orders/{f.Reservation}", f.Owner)).Require(200);
-                    checks.Check(ownerOrder.Json.GetProperty("orderItems").ToString() == waiterOrder.Json.GetProperty("orderItems").ToString(), "Waiter and Owner see different consolidated order items.");
+                    checks.Check(GroupOrderAssertions.CanonicalItems(ownerOrder.Json.GetProperty("orderItems")) == GroupOrderAssertions.CanonicalItems(waiterOrder.Json.GetProperty("orderItems")), "Waiter and Owner see different consolidated order items.");
                 }
                 return;
             }
@@ -115,6 +125,7 @@ public sealed class ProbeGroupPreOrder(string operation, string persona = "owner
                     return;
                 }
                 CheckStatus(checks, reply, 200);
+                GroupOrderAssertions.CheckRemoval(checks, before.Json, reply.Json, id);
                 var deleted = before.Json.GetProperty("participants").EnumerateArray().Single(p => p.GetProperty("id").GetString() == id);
                 checks.Check(reply.Json.GetProperty("total").GetDecimal() == before.Json.GetProperty("total").GetDecimal() - deleted.GetProperty("total").GetDecimal(), "Remove did not subtract exactly the removed subtotal.");
                 checks.Check(!reply.Json.GetProperty("participants").EnumerateArray().Any(p => p.GetProperty("id").GetString() == id), "Removed guest remains in immediate response.");
@@ -136,6 +147,8 @@ public sealed class ProbeGroupPreOrder(string operation, string persona = "owner
         var participants = review.GetProperty("participants").EnumerateArray().ToArray();
         checks.Check(participants.Count(p => p.GetProperty("type").GetString() == "Owner") == 1, "Exactly one Owner session must be present.");
         checks.Check(participants.Length == 1 + f.Guests.Count, "Participant count differs from own created sessions.");
+        if (!f.ReadOnly)
+            checks.Check(f.ExpectedCarts.Keys.ToHashSet(StringComparer.Ordinal).SetEquals(participants.Select(p => p.GetProperty("id").GetString()!)), "Participant session IDs differ from this fixture, including the Owner session.");
         foreach (var guest in f.Guests) checks.Check(participants.Any(p => p.GetProperty("id").GetString() == guest.Id && p.GetProperty("name").GetString() == guest.Name && p.GetProperty("type").GetString() == "Guest"), "Missing or misidentified Guest.");
         decimal sum = 0;
         foreach (var participant in participants)
@@ -144,6 +157,8 @@ public sealed class ProbeGroupPreOrder(string operation, string persona = "owner
             {
                 var actualItems = participant.GetProperty("items").EnumerateArray().ToArray();
                 checks.Check(participant.GetProperty("isSubmitted").GetBoolean() == cart.Submitted, "Cart submitted/draft flag differs from the actions performed.");
+                var actualIds = actualItems.Select(i => i.GetProperty("dish").GetProperty("id").GetString()!).ToArray();
+                checks.Check(actualIds.Distinct(StringComparer.Ordinal).Count() == actualIds.Length && cart.Quantities.Keys.ToHashSet(StringComparer.Ordinal).SetEquals(actualIds), "Review contains duplicate or unexpected dish IDs, or is missing an expected dish.");
                 checks.Check(actualItems.Length == cart.Quantities.Count && actualItems.All(i => cart.Quantities.TryGetValue(i.GetProperty("dish").GetProperty("id").GetString()!, out var quantity) && quantity == i.GetProperty("quantity").GetInt32()), "Cart dishes or quantities differ from the actions performed.");
                 checks.Check(actualItems.All(i => f.Dishes.Any(d => d.Id == i.GetProperty("dish").GetProperty("id").GetString() && d.Price == i.GetProperty("dish").GetProperty("price").GetDecimal() && d.Name == i.GetProperty("dish").GetProperty("name").GetString())), "Review dish name/price differs from the independently read live catalog.");
             }
@@ -166,7 +181,8 @@ public sealed class ProbeGroupPreOrder(string operation, string persona = "owner
             var order = await f.Api.PollAsync(() => f.Api.SendAsync("GET", $"/orders/{f.Reservation}", token), r => r.Status == 200 && IsSubmittedOrder(r.Json.GetProperty("status")));
             CheckStatus(checks, order, 200);
             if (order.Status != 200) continue;
-            checks.Check(IsSubmittedOrder(order.Json.GetProperty("status")), "Owner/waiter order status differs from SubmittedByCustomer (wire value 3).");
+            checks.Check(IsSubmittedOrder(order.Json.GetProperty("status")), "Owner order status differs from SubmittedByCustomer (wire value 3).");
+            GroupOrderAssertions.CheckOrder(checks, order.Json, review);
             var items = order.Json.GetProperty("orderItems").EnumerateArray().ToArray();
             checks.Check(items.Length == expected.Count, "Consolidated order has missing, duplicate or draft dishes.");
             checks.Check(items.All(i => expected.TryGetValue(i.GetProperty("dish").GetProperty("id").GetString()!, out var q) && q == i.GetProperty("quantity").GetInt32()), "Consolidated quantities differ from submitted carts.");
@@ -174,12 +190,16 @@ public sealed class ProbeGroupPreOrder(string operation, string persona = "owner
             var expectedTotal = review.GetProperty("participants").EnumerateArray().Where(p => p.GetProperty("isSubmitted").GetBoolean()).Sum(p => p.GetProperty("total").GetDecimal());
             checks.Check(total == expectedTotal, "Final order total includes draft/removed dishes or incorrect prices.");
         }
+        var beforeRejections = (await f.Api.SendAsync("GET", $"/orders/{f.Reservation}", f.Owner)).Require(200);
         var edit = await f.Api.SendAsync("PUT", $"/orders/{f.Reservation}", f.Owner, new { orderItems = new[] { new { dishId = f.Dishes[0].Id, quantity = 99 } } });
         CheckStatus(checks, edit, 400);
         if (f.Guests.Count > 0) CheckStatus(checks, await f.Api.RemoveAsync(f.Group, f.Guests[0].Id, f.Owner), 400);
+        var afterRejections = (await f.Api.SendAsync("GET", $"/orders/{f.Reservation}", f.Owner)).Require(200);
+        checks.Check(GroupOrderAssertions.CanonicalItems(beforeRejections.Json.GetProperty("orderItems")) == GroupOrderAssertions.CanonicalItems(afterRejections.Json.GetProperty("orderItems")), "Rejected edit/remove changed the submitted order.");
+        checks.Check(beforeRejections.Json.GetProperty("orderId").GetString() == afterRejections.Json.GetProperty("orderId").GetString() && IsSubmittedOrder(afterRejections.Json.GetProperty("status")), "Rejected edit/remove replaced the order or changed its status.");
     }
 
-    private static string Snapshot(JsonElement review) => string.Join("|", review.GetProperty("participants").EnumerateArray().OrderBy(p => p.GetProperty("id").GetString(), StringComparer.Ordinal).Select(p => p.ToString())) + review.GetProperty("total").ToString();
+    private static string Snapshot(JsonElement review) => GroupOrderAssertions.CanonicalReview(review);
 
     private static bool IsSubmittedOrder(JsonElement status) => status.ValueKind == JsonValueKind.Number
         ? status.GetInt32() == (int)Api.Dtos.Orders.OrderStatus.SubmittedByCustomer

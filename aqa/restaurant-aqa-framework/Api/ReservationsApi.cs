@@ -9,7 +9,7 @@ namespace Restaurant_Aqa_Framework.Api;
 public sealed class ReservationsApi(IAPIRequestContext api) : ApiClientBase(api)
 {
     public Task<IAPIResponse> CreateReservationAsync(CreateReservationRequest request, string? bearerToken = null) =>
-        Api.PostAsync(Url("/reservations"), new APIRequestContextOptions
+        PostAsync(Url("/reservations"), new APIRequestContextOptions
         {
             DataString = Serialize(request),
             Headers = Headers(bearerToken),
@@ -40,7 +40,7 @@ public sealed class ReservationsApi(IAPIRequestContext api) : ApiClientBase(api)
 
     public Task<IAPIResponse> UpdateReservationStatusAsync(
         string reservationId, ReservationStatus newStatus, string? bearerToken = null) =>
-        Api.PatchAsync(Url($"/reservations/{reservationId}/status"), new APIRequestContextOptions
+        PatchAsync(Url($"/reservations/{reservationId}/status"), new APIRequestContextOptions
         {
             DataString = Serialize(new UpdateReservationStatusRequest(newStatus)),
             Headers = Headers(bearerToken),
@@ -48,7 +48,7 @@ public sealed class ReservationsApi(IAPIRequestContext api) : ApiClientBase(api)
 
     public Task<IAPIResponse> UpdateReservationTableAsync(
         string reservationId, string tableId, string? bearerToken = null) =>
-        Api.PatchAsync(Url($"/reservations/{reservationId}/table"), new APIRequestContextOptions
+        PatchAsync(Url($"/reservations/{reservationId}/table"), new APIRequestContextOptions
         {
             DataString = Serialize(new UpdateReservationTableRequest(tableId)),
             Headers = Headers(bearerToken),
@@ -62,14 +62,14 @@ public sealed class ReservationsApi(IAPIRequestContext api) : ApiClientBase(api)
 
     public Task<IAPIResponse> ConfirmPreOrderDishAsync(
         string reservationId, string dishId, string? bearerToken = null) =>
-        Api.PatchAsync(Url($"/reservations/{reservationId}/order/confirmations/{dishId}"), new APIRequestContextOptions
+        PatchAsync(Url($"/reservations/{reservationId}/order/confirmations/{dishId}"), new APIRequestContextOptions
         {
             Headers = Headers(bearerToken),
         });
 
     public Task<IAPIResponse> CancelPreOrderDishAsync(
         string reservationId, string dishId, string? bearerToken = null) =>
-        Api.PatchAsync(Url($"/reservations/{reservationId}/order/cancellations/{dishId}"), new APIRequestContextOptions
+        PatchAsync(Url($"/reservations/{reservationId}/order/cancellations/{dishId}"), new APIRequestContextOptions
         {
             Headers = Headers(bearerToken),
         });

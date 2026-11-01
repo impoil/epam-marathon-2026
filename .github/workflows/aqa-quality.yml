@@ -35,3 +35,20 @@ jobs:
         run: npx --yes gherkin-lint@4.2.4 -c .gherkin-lintrc 'Features/*.feature'
       - name: Discover tests without credentials or network calls
         run: dotnet bin/Release/net10.0/restaurant-aqa-framework.dll --list-tests
+      - name: Audit level and diagnostic classification
+        run: python3 scripts/audit-scenarios.py
+      - name: Restore isolated regression project (no live BDD reference)
+        run: dotnet restore ../restaurant-aqa-verification --locked-mode
+      - name: Build isolated regressions
+        run: dotnet build ../restaurant-aqa-verification -c Release --no-restore
+      - name: Run offline safeguards and assertion regressions
+        run: dotnet ../restaurant-aqa-verification/bin/Release/net10.0/restaurant-aqa-verification.dll --report-trx --results-directory ../restaurant-aqa-verification/TestResults/ci --treenode-filter '/*/*/*/*[Category=offline]'
+      - name: Verify diagnostic reporting cannot satisfy fresh E2E
+        run: python3 ../restaurant-aqa-verification/run_reporting_checks.py --output ../restaurant-aqa-verification/TestResults/ci/reporting-contract.json
+      - name: Upload offline verification reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: offline-reliability-${{ github.run_id }}
+          path: aqa/restaurant-aqa-verification/TestResults/ci/
+          retention-days: 7

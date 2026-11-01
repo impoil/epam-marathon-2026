@@ -7,6 +7,8 @@ public sealed class PrepareGroupPreOrder(string state) : ITask
 {
     public async Task PerformAsAsync(Actor actor)
     {
+        if (state is not ("empty" or "review" or "ready" or "draft" or "no-group" or "missing-order" or "empty-submitted" or "zero-participants"))
+            throw new InvalidOperationException("Unknown fixture state; no setup was attempted.");
         if (state is "empty-submitted" or "zero-participants")
             throw new TUnit.Core.Exceptions.SkipTestException(state == "empty-submitted"
                 ? "BLOCKED: public guest submit rejects empty carts; no safe API can create a submitted empty cart. Requires isolated fixture API; no DynamoDB writes."

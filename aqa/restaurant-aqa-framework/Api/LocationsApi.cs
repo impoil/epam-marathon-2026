@@ -10,7 +10,7 @@ namespace Restaurant_Aqa_Framework.Api;
 public sealed class LocationsApi(IAPIRequestContext api) : ApiClientBase(api)
 {
     public Task<IAPIResponse> CreateLocationAsync(CreateLocationRequest request, string? bearerToken = null) =>
-        Api.PostAsync(Url("/locations"), new APIRequestContextOptions
+        PostAsync(Url("/locations"), new APIRequestContextOptions
         {
             DataString = Serialize(request),
             Headers = Headers(bearerToken),

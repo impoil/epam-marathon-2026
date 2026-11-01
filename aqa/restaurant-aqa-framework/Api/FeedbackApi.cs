@@ -17,7 +17,7 @@ public sealed class FeedbackApi(IAPIRequestContext api) : ApiClientBase(api)
         }));
 
     public Task<IAPIResponse> CreateFeedbackAsync(CreateFeedbackRequest request, string? bearerToken = null) =>
-        Api.PostAsync(Url("/feedback"), new APIRequestContextOptions
+        PostAsync(Url("/feedback"), new APIRequestContextOptions
         {
             DataString = Serialize(request),
             Headers = Headers(bearerToken),

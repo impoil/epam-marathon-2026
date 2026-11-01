@@ -20,6 +20,8 @@ public static class GroupTestSettings
 
     public static void RequireWrites()
     {
+        BusinessWriteSafety.RequireEnabled();
+        _ = BusinessWriteSafety.ParseReservationLimit(Environment.GetEnvironmentVariable("AQA_MAX_RESERVATIONS"));
         if (Require("AQA_ALLOW_WRITES") != "true")
             throw new InvalidOperationException("Set AQA_ALLOW_WRITES=true to create isolated test reservations.");
         if (Environment.GetEnvironmentVariable("AQA_CANCEL_RESERVATIONS") != "true" && Require("AQA_RETAIN_TEST_DATA") != "true")

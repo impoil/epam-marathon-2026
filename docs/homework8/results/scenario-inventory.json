@@ -1,0 +1,413 @@
+{
+  "total": 36,
+  "counts": {
+    "l3": 11,
+    "l1": 10,
+    "l2": 13,
+    "diagnostic-nonacceptance": 2
+  },
+  "fresh_e2e_scenarios": 1,
+  "fresh_e2e_verified_by_discovery": false,
+  "scenarios": [
+    {
+      "file": "GroupRemove.feature",
+      "name": "Removing a submitted guest recalculates the browser Grand Total",
+      "tags": [
+        "hw8",
+        "l3",
+        "ui",
+        "hw8-ui"
+      ],
+      "classification": "l3"
+    },
+    {
+      "file": "GroupRemove.feature",
+      "name": "A submitted guest is removed and cannot be removed twice",
+      "tags": [
+        "hw8",
+        "l3",
+        "api"
+      ],
+      "classification": "l3"
+    },
+    {
+      "file": "GroupRemove.feature",
+      "name": "The last Guest can be removed while the Owner remains",
+      "tags": [
+        "hw8",
+        "l3",
+        "api"
+      ],
+      "classification": "l3"
+    },
+    {
+      "file": "GroupRemove.feature",
+      "name": "Invalid participants cannot be removed (owner)",
+      "tags": [
+        "hw8",
+        "l3",
+        "api",
+        "negative"
+      ],
+      "classification": "l3"
+    },
+    {
+      "file": "GroupRemove.feature",
+      "name": "Invalid participants cannot be removed (missing)",
+      "tags": [
+        "hw8",
+        "l3",
+        "api",
+        "negative"
+      ],
+      "classification": "l3"
+    },
+    {
+      "file": "GroupRemove.feature",
+      "name": "Invalid participants cannot be removed (foreign)",
+      "tags": [
+        "hw8",
+        "l3",
+        "api",
+        "negative"
+      ],
+      "classification": "l3"
+    },
+    {
+      "file": "GroupRemove.feature",
+      "name": "Only the Owner can remove a guest (other customer)",
+      "tags": [
+        "hw8",
+        "l3",
+        "api",
+        "negative"
+      ],
+      "classification": "l3"
+    },
+    {
+      "file": "GroupRemove.feature",
+      "name": "Only the Owner can remove a guest (guest)",
+      "tags": [
+        "hw8",
+        "l3",
+        "api",
+        "negative"
+      ],
+      "classification": "l3"
+    },
+    {
+      "file": "GroupRemove.feature",
+      "name": "Only the Owner can remove a guest (anonymous)",
+      "tags": [
+        "hw8",
+        "l3",
+        "api",
+        "negative"
+      ],
+      "classification": "l3"
+    },
+    {
+      "file": "GroupRemove.feature",
+      "name": "A real waiter cannot remove an Owner guest",
+      "tags": [
+        "hw8",
+        "l3",
+        "api",
+        "negative",
+        "requires-waiter"
+      ],
+      "classification": "l3"
+    },
+    {
+      "file": "GroupRemove.feature",
+      "name": "Owner and invited guest order remove a guest and send the final order",
+      "tags": [
+        "hw8",
+        "l3",
+        "ui",
+        "e2e",
+        "trace-always",
+        "hw8-ui"
+      ],
+      "classification": "l3"
+    },
+    {
+      "file": "GroupReview.feature",
+      "name": "Owner sees dishes quantities subtotals submitted and empty draft carts",
+      "tags": [
+        "hw8",
+        "l1",
+        "ui",
+        "smoke",
+        "hw8-ui"
+      ],
+      "classification": "l1"
+    },
+    {
+      "file": "GroupReview.feature",
+      "name": "A newly created group contains only the empty Owner cart",
+      "tags": [
+        "hw8",
+        "l1",
+        "api"
+      ],
+      "classification": "l1"
+    },
+    {
+      "file": "GroupReview.feature",
+      "name": "Review total changes when a guest adds another dish",
+      "tags": [
+        "hw8",
+        "l1",
+        "api"
+      ],
+      "classification": "l1"
+    },
+    {
+      "file": "GroupReview.feature",
+      "name": "A single-person reservation has no group to review",
+      "tags": [
+        "hw8",
+        "l1",
+        "api",
+        "negative"
+      ],
+      "classification": "l1"
+    },
+    {
+      "file": "GroupReview.feature",
+      "name": "A group without participants returns an empty review",
+      "tags": [
+        "hw8",
+        "l1",
+        "api",
+        "negative"
+      ],
+      "classification": "l1"
+    },
+    {
+      "file": "GroupReview.feature",
+      "name": "Missing group cannot be reviewed",
+      "tags": [
+        "hw8",
+        "l1",
+        "api",
+        "negative"
+      ],
+      "classification": "l1"
+    },
+    {
+      "file": "GroupReview.feature",
+      "name": "Only the Owner can review participants (other customer)",
+      "tags": [
+        "hw8",
+        "l1",
+        "api",
+        "negative"
+      ],
+      "classification": "l1"
+    },
+    {
+      "file": "GroupReview.feature",
+      "name": "Only the Owner can review participants (guest)",
+      "tags": [
+        "hw8",
+        "l1",
+        "api",
+        "negative"
+      ],
+      "classification": "l1"
+    },
+    {
+      "file": "GroupReview.feature",
+      "name": "Only the Owner can review participants (anonymous)",
+      "tags": [
+        "hw8",
+        "l1",
+        "api",
+        "negative"
+      ],
+      "classification": "l1"
+    },
+    {
+      "file": "GroupReview.feature",
+      "name": "A real waiter cannot review Owner participants",
+      "tags": [
+        "hw8",
+        "l1",
+        "api",
+        "negative",
+        "requires-waiter"
+      ],
+      "classification": "l1"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "Browser submission excludes draft dishes and becomes read-only",
+      "tags": [
+        "hw8",
+        "l2",
+        "ui",
+        "hw8-ui"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "Matching dishes aggregate and a second submission is refused",
+      "tags": [
+        "hw8",
+        "l2",
+        "api",
+        "smoke"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "Assigned waiter sees the same submitted order as the Owner",
+      "tags": [
+        "hw8",
+        "l2",
+        "api",
+        "requires-waiter"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "Incomplete group submissions explain why they are refused (draft, no submitted carts)",
+      "tags": [
+        "hw8",
+        "l2",
+        "api",
+        "negative"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "Incomplete group submissions explain why they are refused (empty-submitted, no dishes)",
+      "tags": [
+        "hw8",
+        "l2",
+        "api",
+        "negative"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "Incomplete group submissions explain why they are refused (missing-order, missing order)",
+      "tags": [
+        "hw8",
+        "l2",
+        "api",
+        "negative"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "Incomplete group submissions explain why they are refused (ready, missing group)",
+      "tags": [
+        "hw8",
+        "l2",
+        "api",
+        "negative"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "Incomplete group submissions explain why they are refused (ready, missing reservation)",
+      "tags": [
+        "hw8",
+        "l2",
+        "api",
+        "negative"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "Incomplete group submissions explain why they are refused (ready, invalid reservation)",
+      "tags": [
+        "hw8",
+        "l2",
+        "api",
+        "negative"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "Only the Owner can submit the group (other customer)",
+      "tags": [
+        "hw8",
+        "l2",
+        "api",
+        "negative"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "Only the Owner can submit the group (guest)",
+      "tags": [
+        "hw8",
+        "l2",
+        "api",
+        "negative"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "Only the Owner can submit the group (anonymous)",
+      "tags": [
+        "hw8",
+        "l2",
+        "api",
+        "negative"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "GroupSubmit.feature",
+      "name": "A real waiter cannot submit the Owner group",
+      "tags": [
+        "hw8",
+        "l2",
+        "api",
+        "negative",
+        "requires-waiter"
+      ],
+      "classification": "l2"
+    },
+    {
+      "file": "InterruptedJourney.feature",
+      "name": "Continue the interrupted Owner and Guest browser journey on its own group",
+      "tags": [
+        "diagnostic",
+        "nonacceptance",
+        "continuation",
+        "ui",
+        "trace-always"
+      ],
+      "classification": "diagnostic-nonacceptance"
+    },
+    {
+      "file": "ReadOnlyVerification.feature",
+      "name": "Owner reads only the group recorded in a local HW8 lifecycle manifest",
+      "tags": [
+        "diagnostic",
+        "nonacceptance",
+        "readonly",
+        "ui",
+        "trace-always"
+      ],
+      "classification": "diagnostic-nonacceptance"
+    }
+  ]
+}

@@ -1,0 +1,745 @@
+{
+  "counts": {
+    "Passed": 32,
+    "Failed": 36,
+    "NotExecuted": 0,
+    "Total": 68
+  },
+  "acceptance_counts": {
+    "Passed": 0,
+    "Failed": 34,
+    "NotExecuted": 0
+  },
+  "diagnostic_count": 2,
+  "fresh_acceptance_e2e_passed": false,
+  "tests": [
+    {
+      "name": "BusinessRequestsStopBeforeTransport(DELETE, /guest/groups/g/sessions/s)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2325163",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(POST, /orders)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2325386",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(PUT, /orders/r)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2325038",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed()",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2301466",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed(5)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2301671",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(POST, /guest/sessions)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2325610",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(DELETE, /reservations)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2325241",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed(null)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2302328",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(PATCH, /reservations/r/status)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2325920",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(POST, /reservations)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2325423",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed(35)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2301881",
+      "reason": ""
+    },
+    {
+      "name": "BusinessRequestsStopBeforeTransport(POST, /group-reservations/g/submit)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.2325367",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed( 4)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000446",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed(bad)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000377",
+      "reason": ""
+    },
+    {
+      "name": "MissingInvalidOrOldReservationBudgetFailsClosed(-1)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000459",
+      "reason": ""
+    },
+    {
+      "name": "BoundedBudgetParsesWithoutEnablingWrites(0, 0)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0072206",
+      "reason": ""
+    },
+    {
+      "name": "CleanupNeverDeletesAfterConfirmedOrUncertainSubmit(False, Submitted, False, RetainSubmitted)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0040924",
+      "reason": ""
+    },
+    {
+      "name": "CleanupNeverDeletesAfterConfirmedOrUncertainSubmit(False, Open, False, DeleteOwnGuests)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0113767",
+      "reason": ""
+    },
+    {
+      "name": "CleanupNeverDeletesAfterConfirmedOrUncertainSubmit(False, Closed, False, RetainClosed)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0114370",
+      "reason": ""
+    },
+    {
+      "name": "CleanupNeverDeletesAfterConfirmedOrUncertainSubmit(False, Open, True, RetainUncertainSubmission)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0114061",
+      "reason": ""
+    },
+    {
+      "name": "CleanupNeverDeletesAfterConfirmedOrUncertainSubmit(True, Open, False, RetainSubmitted)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000509",
+      "reason": ""
+    },
+    {
+      "name": "BoundedBudgetParsesWithoutEnablingWrites(4, 4)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0000313",
+      "reason": ""
+    },
+    {
+      "name": "UnknownCleanupStateFailsClosed",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0008595",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(draft)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0332342",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(duplicate)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0335685",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(quantity)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0332606",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(missing)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0332159",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(correct)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0332273",
+      "reason": ""
+    },
+    {
+      "name": "FinalAssertionsRejectCorruptOrdersIncludingSamePriceDuplicates(total)",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0332773",
+      "reason": ""
+    },
+    {
+      "name": "IncompleteSuccessfulReadTimesOutInsteadOfReturningFalseReady",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0358966",
+      "reason": ""
+    },
+    {
+      "name": "RemoveCannotSilentlyChangeASurvivingCart",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.0384906",
+      "reason": ""
+    },
+    {
+      "name": "ReadConsistencyCanWaitForNewOrderWithoutRetryingAMutation",
+      "outcome": "Passed",
+      "tags": [],
+      "classification": "local-or-other",
+      "duration": "00:00:00.7532652",
+      "reason": ""
+    },
+    {
+      "name": "Only the Owner can remove a guest (anonymous)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l3",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Owner and invited guest order remove a guest and send the final order",
+      "outcome": "Failed",
+      "tags": [
+        "e2e",
+        "hw8",
+        "hw8-ui",
+        "l3",
+        "trace-always",
+        "ui"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Removing a submitted guest recalculates the browser Grand Total",
+      "outcome": "Failed",
+      "tags": [
+        "hw8",
+        "hw8-ui",
+        "l3",
+        "ui"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "A submitted guest is removed and cannot be removed twice",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l3"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "A real waiter cannot remove an Owner guest",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l3",
+        "negative",
+        "requires-waiter"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "The last Guest can be removed while the Owner remains",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l3"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Invalid participants cannot be removed (missing)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l3",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Owner sees dishes quantities subtotals submitted and empty draft carts",
+      "outcome": "Failed",
+      "tags": [
+        "hw8",
+        "hw8-ui",
+        "l1",
+        "smoke",
+        "ui"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Invalid participants cannot be removed (foreign)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l3",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "A newly created group contains only the empty Owner cart",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l1"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "A group without participants returns an empty review",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l1",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Review total changes when a guest adds another dish",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l1"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "A single-person reservation has no group to review",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l1",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Only the Owner can remove a guest (other customer)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l3",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Missing group cannot be reviewed",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l1",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "A real waiter cannot review Owner participants",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l1",
+        "negative",
+        "requires-waiter"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Only the Owner can review participants (anonymous)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l1",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Assigned waiter sees the same submitted order as the Owner",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l2",
+        "requires-waiter"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Matching dishes aggregate and a second submission is refused",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l2",
+        "smoke"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Incomplete group submissions explain why they are refused (empty-submitted, no dishes)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l2",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Incomplete group submissions explain why they are refused (draft, no submitted carts)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l2",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Incomplete group submissions explain why they are refused (ready, missing reservation)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l2",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Incomplete group submissions explain why they are refused (ready, missing group)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l2",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Only the Owner can submit the group (anonymous)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l2",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Only the Owner can submit the group (other customer)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l2",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Only the Owner can submit the group (guest)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l2",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "A real waiter cannot submit the Owner group",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l2",
+        "negative",
+        "requires-waiter"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Incomplete group submissions explain why they are refused (missing-order, missing order)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l2",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Invalid participants cannot be removed (owner)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l3",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Browser submission excludes draft dishes and becomes read-only",
+      "outcome": "Failed",
+      "tags": [
+        "hw8",
+        "hw8-ui",
+        "l2",
+        "ui"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Only the Owner can review participants (other customer)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l1",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Continue the interrupted Owner and Guest browser journey on its own group",
+      "outcome": "Failed",
+      "tags": [
+        "continuation",
+        "diagnostic",
+        "nonacceptance",
+        "trace-always",
+        "ui"
+      ],
+      "classification": "diagnostic-nonacceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Incomplete group submissions explain why they are refused (ready, invalid reservation)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l2",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Owner reads only the group recorded in a local HW8 lifecycle manifest",
+      "outcome": "Failed",
+      "tags": [
+        "diagnostic",
+        "nonacceptance",
+        "readonly",
+        "trace-always",
+        "ui"
+      ],
+      "classification": "diagnostic-nonacceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Only the Owner can review participants (guest)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l1",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    },
+    {
+      "name": "Only the Owner can remove a guest (guest)",
+      "outcome": "Failed",
+      "tags": [
+        "api",
+        "hw8",
+        "l3",
+        "negative"
+      ],
+      "classification": "acceptance",
+      "duration": "00:00:00.0000000",
+      "reason": "BeforeAssemblyException: BeforeAssembly hook failed: Missing required configuration 'UI_URL'. Set it in '.env' or as an environment variable. See '.env.example' for the full list of supported settings."
+    }
+  ]
+}

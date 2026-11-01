@@ -25,8 +25,10 @@ public sealed class GroupPreOrderApi(IAPIRequestContext context)
 
     public async Task<GroupReply> SendAsync(string method, string path, string? token = null, object? body = null)
     {
-        if (method == "POST" && path == "/reservations" && int.TryParse(Environment.GetEnvironmentVariable("AQA_MAX_RESERVATIONS"), out var limit))
+        BusinessWriteSafety.CheckRequest(method, path);
+        if (method == "POST" && path == "/reservations")
         {
+            var limit = BusinessWriteSafety.ParseReservationLimit(Environment.GetEnvironmentVariable("AQA_MAX_RESERVATIONS"));
             if (limit < 1 || Interlocked.Increment(ref reservationAttempts) > limit)
                 throw new InvalidOperationException("Reservation creation budget exhausted. No additional request was sent.");
         }
@@ -67,9 +69,9 @@ public sealed class GroupPreOrderApi(IAPIRequestContext context)
     public Task<GroupReply> RemoveAsync(string group, string session, string? token) => SendAsync("DELETE", $"/guest/groups/{group}/sessions/{session}", token);
     public Task<GroupReply> SubmitAsync(string group, string reservation, string? token) => SendAsync("POST", $"/group-reservations/{group}/submit", token, new { reservationId = reservation });
 
-    public async Task<GroupReply> PollAsync(Func<Task<GroupReply>> read, Func<GroupReply, bool> ready, bool allowNotFound = false)
+    public async Task<GroupReply> PollAsync(Func<Task<GroupReply>> read, Func<GroupReply, bool> ready, bool allowNotFound = false, TimeSpan? timeout = null)
     {
-        var deadline = DateTime.UtcNow.AddSeconds(20);
+        var deadline = DateTime.UtcNow + (timeout ?? TimeSpan.FromSeconds(20));
         GroupReply result;
         do
         {
@@ -78,8 +80,8 @@ public sealed class GroupPreOrderApi(IAPIRequestContext context)
             if (ready(result)) return result;
             if (result.Status >= 400 && !(allowNotFound && result.Status == 404)) return result;
             // A bounded read consistency poll, never a retry of a failed business action.
-            await Task.Delay(500);
+            await Task.Delay(TimeSpan.FromMilliseconds(Math.Max(1, Math.Min(500, (deadline - DateTime.UtcNow).TotalMilliseconds))));
         } while (DateTime.UtcNow < deadline);
-        return result;
+        throw new TimeoutException($"Required API state was not observed before the consistency deadline; last status={result.Status}. No mutation was retried.");
     }
 }

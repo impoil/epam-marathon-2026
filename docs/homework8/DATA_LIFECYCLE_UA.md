@@ -1,5 +1,7 @@
 # Ізоляція та життєвий цикл
 
+**Поточний режим:** business writes і cleanup writes тимчасово зупинено. Опис нижче зберігає історичний механізм попередніх запусків. Нові обмеження та isolated cleanup proposal — у [додатковому аудиті](RELIABILITY_AUDIT_UA.md) та [плані AQA](AQA_ENVIRONMENT_PROPOSAL_UA.md).
+
 Кожна mutating fixture має `AQA-HW8-<guid>`, власні API reservation/group/session/order IDs, дату `UtcNow+7..59 days` і конкретний вільний 90-хвилинний timeslot. Guest names мають run-prefix. Catalog/table/identities лише читаються. Reservation 31.10.2026 та order $61 не використовуються; business writes до них не виконувалися.
 
 Fixture запам’ятовується **до** першого write. Teardown знає тільки IDs власних create calls. У відкритій group видаляються тільки власні Guests; 200 і вже відсутній 404 прийнятні, інша помилка робить cleanup неуспішним. Submitted groups не змінюються. Журнал містить create/remove/retention/status без invitation/bearer. Read-only diagnostic teardown не виконує business writes.

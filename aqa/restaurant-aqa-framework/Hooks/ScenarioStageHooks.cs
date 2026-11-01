@@ -26,9 +26,11 @@ public class ScenarioStageHooks(IObjectContainer container, ScenarioContext scen
         var browserContext = await PlaywrightRunHooks.Browser.NewContextAsync(new BrowserNewContextOptions
         {
             BaseURL = settings.UiBaseUrl,
+            ServiceWorkers = ServiceWorkerPolicy.Block,
         });
         browserContext.SetDefaultTimeout(settings.DefaultTimeoutMs);
         browserContext.SetDefaultNavigationTimeout(settings.NavigationTimeoutMs);
+        await BusinessWriteSafety.ProtectBrowserAsync(browserContext);
         await browserContext.Tracing.StartAsync(new TracingStartOptions { Screenshots = true, Snapshots = true, Sources = true });
         var page = await browserContext.NewPageAsync();
 

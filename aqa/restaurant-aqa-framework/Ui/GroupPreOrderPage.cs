@@ -34,7 +34,11 @@ public sealed class GroupPreOrderPage(IPage page)
             await Page.RunAndWaitForResponseAsync(() => dish.GetByRole(AriaRole.Button, new() { Name = "Pre-Order", Exact = true }).ClickAsync(),
                 r => r.Url.EndsWith("/orders", StringComparison.Ordinal) && r.Request.Method == "POST" && r.Status == 201);
         }
-        else existing.Require(200); // only the same scenario's interrupted cart may already exist
+        else
+        {
+            existing.Require(200);
+            if (!fixture.IsContinuation) throw new InvalidOperationException("Fresh E2E unexpectedly found an existing order; refusing to reuse it.");
+        }
         // Wait for the real order, then scope the cart action by its generated order ID.
         var order = await fixture.Api.PollAsync(() => fixture.Api.SendAsync("GET", $"/orders/{fixture.Reservation}", fixture.Owner), r => r.Status == 200, allowNotFound: true);
         order.Require(200);
@@ -43,7 +47,11 @@ public sealed class GroupPreOrderPage(IPage page)
             throw new InvalidOperationException("Own UI cart differs from the one dish added; refusing to modify an unexpected cart.");
         var review = (await fixture.Api.ReviewAsync(fixture.Group, fixture.Owner)).Require(200);
         if (review.Json.GetProperty("participants").EnumerateArray().Single(p => p.GetProperty("type").GetString() == "Owner").GetProperty("isSubmitted").GetBoolean())
-            return; // the same interrupted scenario already submitted this exact cart in its previous UI phase
+        {
+            if (!fixture.IsContinuation) throw new InvalidOperationException("Fresh E2E cannot skip an already submitted Owner cart.");
+            fixture.Lifecycle.Add(new { action = "continuation-reused-owner-submit", acceptanceRun = false });
+            return;
+        }
         var orderId = order.Json.GetProperty("orderId").GetString()!;
         await Page.GetByRole(AriaRole.Button, new() { Name = "cart icon", Exact = true }).ClickAsync();
         var target = Page.Locator("app-not-submitted-order").Filter(new() { HasText = orderId });

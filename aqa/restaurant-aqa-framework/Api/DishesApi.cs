@@ -8,7 +8,7 @@ namespace Restaurant_Aqa_Framework.Api;
 public sealed class DishesApi(IAPIRequestContext api) : ApiClientBase(api)
 {
     public Task<IAPIResponse> CreateDishAsync(CreateDishRequest request, string? bearerToken = null) =>
-        Api.PostAsync(Url("/dishes"), new APIRequestContextOptions
+        PostAsync(Url("/dishes"), new APIRequestContextOptions
         {
             DataString = Serialize(request),
             Headers = Headers(bearerToken),

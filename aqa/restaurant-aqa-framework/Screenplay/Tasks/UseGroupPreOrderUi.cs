@@ -12,6 +12,9 @@ public sealed class UseGroupPreOrderUi(string action) : ITask
 {
     public async Task PerformAsAsync(Actor actor)
     {
+        if (action is not ("verify" or "review" or "remove" or "submit" or "journey"))
+            throw new InvalidOperationException("Unknown group UI flow.");
+        if (action != "verify") GroupTestSettings.RequireWrites();
         var f = actor.Recall<GroupFixture>();
         var checks = new GroupChecks();
         actor.Remember(checks);
@@ -28,8 +31,9 @@ public sealed class UseGroupPreOrderUi(string action) : ITask
             f.ExpectedCarts[f.OwnerSession].Submitted = true;
             // A separate anonymous browser context performs a genuine invitation join and cart flow.
             var browser = actor.AbilityTo<IBrowseTheWeb>().Context.Browser!;
-            await using var guestContext = await browser.NewContextAsync(new() { BaseURL = Settings.Current.UiBaseUrl });
+            await using var guestContext = await browser.NewContextAsync(new() { BaseURL = Settings.Current.UiBaseUrl, ServiceWorkers = ServiceWorkerPolicy.Block });
             guestContext.SetDefaultTimeout(Settings.Current.DefaultTimeoutMs);
+            await BusinessWriteSafety.ProtectBrowserAsync(guestContext);
             await guestContext.Tracing.StartAsync(new() { Screenshots = true, Snapshots = true, Sources = false });
             var guestPage = await guestContext.NewPageAsync();
             try
@@ -87,13 +91,16 @@ public sealed class UseGroupPreOrderUi(string action) : ITask
         if (action is "remove" or "journey")
         {
             var target = action == "journey" ? f.Guests[^1] : f.Guests[0];
+            var beforeRemoval = snapshot.Json;
             await ui.RemoveAsync(target.Name);
             await Microsoft.Playwright.Assertions.Expect(ui.Card(target.Name)).ToHaveCountAsync(0);
             snapshot = (await f.Api.PollAsync(() => f.Api.ReviewAsync(f.Group, f.Owner), r => r.Status == 200 && !r.Json.GetProperty("participants").EnumerateArray().Any(p => p.GetProperty("id").GetString() == target.Id))).Require(200);
+            GroupOrderAssertions.CheckRemoval(checks, beforeRemoval, snapshot.Json, target.Id);
             submittedTotal = snapshot.Json.GetProperty("participants").EnumerateArray().Where(p => p.GetProperty("isSubmitted").GetBoolean()).Sum(p => p.GetProperty("total").GetDecimal());
             await Microsoft.Playwright.Assertions.Expect(ui.GrandTotal).ToHaveTextAsync(GroupPreOrderPage.Money(submittedTotal));
             if (action == "remove") return;
         }
+        f.SubmissionAttempted = true;
         await ui.SubmitAsync();
         // Remember the write before waiting for the UI so cleanup can handle failed transitions safely.
         var status = await f.Api.SendAsync("GET", $"/guest/groups/{f.Group}/status", f.Owner);

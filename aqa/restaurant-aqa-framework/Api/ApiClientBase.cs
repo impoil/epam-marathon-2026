@@ -17,20 +17,35 @@ public abstract class ApiClientBase(IAPIRequestContext api)
     protected IAPIRequestContext Api { get; } = api;
 
     // The shared "develop" backend answers an occasional transient 500 ({"message": "Internal server
-    // error"} from API Gateway/Lambda). Idempotent calls are retried a couple of times so that noise
-    // doesn't fail an unrelated scenario; POST is never retried (it could create twice), and every retry
-    // is logged so real flakiness stays visible.
+    // error"} from API Gateway/Lambda). Only GET reads are retried; mutations never are.
+    // Every read retry is logged so real flakiness stays visible.
     protected Task<IAPIResponse> GetAsync(string url, APIRequestContextOptions? options = null) =>
         SendWithRetryAsync("GET", url, () => Api.GetAsync(url, options));
 
     protected Task<IAPIResponse> PutAsync(string url, APIRequestContextOptions? options = null) =>
-        SendWithRetryAsync("PUT", url, () => Api.PutAsync(url, options));
+        SendMutationAsync("PUT", url, () => Api.PutAsync(url, options));
 
     protected Task<IAPIResponse> DeleteAsync(string url, APIRequestContextOptions? options = null) =>
-        SendWithRetryAsync("DELETE", url, () => Api.DeleteAsync(url, options));
+        SendMutationAsync("DELETE", url, () => Api.DeleteAsync(url, options));
+
+    protected Task<IAPIResponse> PatchAsync(string url, APIRequestContextOptions? options = null) =>
+        SendMutationAsync("PATCH", url, () => Api.PatchAsync(url, options));
+
+    private static Task<IAPIResponse> SendMutationAsync(string method, string url, Func<Task<IAPIResponse>> send)
+    {
+        BusinessWriteSafety.CheckRequest(method, new Uri(url).AbsolutePath);
+        return send();
+    }
+
+    protected Task<IAPIResponse> PostAsync(string url, APIRequestContextOptions? options = null)
+    {
+        BusinessWriteSafety.CheckRequest("POST", url == Url("/signin") ? "/signin" : new Uri(url).AbsolutePath);
+        return Api.PostAsync(url, options); // never retry POST
+    }
 
     private static async Task<IAPIResponse> SendWithRetryAsync(string method, string url, Func<Task<IAPIResponse>> send)
     {
+        BusinessWriteSafety.CheckRequest(method, new Uri(url).AbsolutePath);
         for (var attempt = 1; ; attempt++)
         {
             var response = await send();

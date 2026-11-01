@@ -10,7 +10,7 @@ namespace Restaurant_Aqa_Framework.Api;
 public sealed class TablesApi(IAPIRequestContext api) : ApiClientBase(api)
 {
     public Task<IAPIResponse> CreateTableAsync(CreateTableRequest request, string? bearerToken = null) =>
-        Api.PostAsync(Url("/tables"), new APIRequestContextOptions
+        PostAsync(Url("/tables"), new APIRequestContextOptions
         {
             DataString = Serialize(request),
             Headers = Headers(bearerToken),

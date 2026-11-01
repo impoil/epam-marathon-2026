@@ -1,4 +1,4 @@
-@readonly @ui @trace-always
+@diagnostic @nonacceptance @readonly @ui @trace-always
 Feature: Diagnose a retained test group without creating more records
 
   Scenario: Owner reads only the group recorded in a local HW8 lifecycle manifest

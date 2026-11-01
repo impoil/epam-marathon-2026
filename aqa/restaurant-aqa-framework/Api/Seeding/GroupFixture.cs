@@ -18,6 +18,7 @@ public sealed class GroupFixture(GroupPreOrderApi api) : IAsyncDisposable
 {
     public string RunId { get; private set; } = $"AQA-HW8-{Guid.NewGuid():N}";
     public bool ReadOnly { get; private set; }
+    public bool IsContinuation { get; private set; }
     public GroupPreOrderApi Api { get; } = api;
     public string Owner { get; private set; } = "";
     public string Other { get; private set; } = "";
@@ -30,7 +31,10 @@ public sealed class GroupFixture(GroupPreOrderApi api) : IAsyncDisposable
     public List<TestDish> Dishes { get; } = [];
     public List<TestGuest> Guests { get; } = [];
     public Dictionary<string, ExpectedCart> ExpectedCarts { get; } = new(StringComparer.Ordinal);
-    public bool FinalSubmitted { get; set; }
+    private bool finalSubmitted;
+    private bool submissionAttempted;
+    public bool FinalSubmitted { get => finalSubmitted; set => finalSubmitted |= value; }
+    public bool SubmissionAttempted { get => submissionAttempted; set => submissionAttempted |= value; }
     public List<object> Lifecycle { get; } = [];
 
     public async Task ResumeReadOnlyAsync(string manifest)
@@ -111,6 +115,7 @@ public sealed class GroupFixture(GroupPreOrderApi api) : IAsyncDisposable
         Dishes.AddRange(dishes.EnumerateArray().Where(d => d.GetProperty("state").GetString() == "Available")
             .Select(d => new TestDish(d.GetProperty("id").GetString()!, d.GetProperty("name").GetString()!, d.GetProperty("price").GetDecimal())).Take(2));
         ReadOnly = false;
+        IsContinuation = true;
         Lifecycle.Add(new { action = "continued-own-interrupted-scenario", reservationId = Reservation, newReservations = 0 });
     }
 
@@ -153,26 +158,43 @@ public sealed class GroupFixture(GroupPreOrderApi api) : IAsyncDisposable
     public async ValueTask DisposeAsync()
     {
         if (Reservation.Length == 0 || ReadOnly) return;
+        if (BusinessWriteSafety.IsSuspended)
+        {
+            Lifecycle.Add(new { action = "cleanup-suspended-no-business-writes", reservationId = Reservation });
+            return;
+        }
+        var disposition = FinalSubmitted ? CleanupDisposition.RetainSubmitted : CleanupDisposition.DeleteOwnGuests;
         if (Group.Length > 0)
         {
             var status = (await Api.SendAsync("GET", $"/guest/groups/{Group}/status", Owner)).Require(200);
             FinalSubmitted |= status.Json.GetProperty("status").GetString() == "Submitted";
+            disposition = GroupLifecycle.Decide(FinalSubmitted, status.Json.GetProperty("status").GetString()!, SubmissionAttempted);
         }
         // Open groups: remove only this fixture's guests. Minimal HW6 deployment has no reservation
         // cancellation route. Explicit retention mode records every leftover instead of claiming cleanup.
-        if (!FinalSubmitted && Group.Length > 0)
+        var failures = new List<string>();
+        if (disposition == CleanupDisposition.DeleteOwnGuests && Group.Length > 0)
             foreach (var guest in Guests)
             {
-                var removed = await Api.RemoveAsync(Group, guest.Id, Owner);
-                Lifecycle.Add(new { sessionId = guest.Id, action = "remove-own-guest", status = removed.Status });
-                if (removed.Status is not (200 or 404)) throw new InvalidOperationException($"Own guest cleanup failed: {removed.Status} {removed.Text}");
+                try
+                {
+                    var removed = await Api.RemoveAsync(Group, guest.Id, Owner);
+                    Lifecycle.Add(new { sessionId = guest.Id, action = "remove-own-guest", status = removed.Status });
+                    if (removed.Status is not (200 or 404)) failures.Add($"Own guest cleanup failed: {removed.Status} {removed.Text}");
+                }
+                catch (Exception error)
+                {
+                    Lifecycle.Add(new { sessionId = guest.Id, action = "remove-own-guest-failed", error = SecretRedactor.Clean(error.Message) });
+                    failures.Add(SecretRedactor.Clean(error.Message));
+                }
             }
-        if (Environment.GetEnvironmentVariable("AQA_CANCEL_RESERVATIONS") == "true")
+        if (Environment.GetEnvironmentVariable("AQA_CANCEL_RESERVATIONS") == "true" && disposition == CleanupDisposition.DeleteOwnGuests)
         {
             var cancel = await Api.SendAsync("DELETE", "/reservations", Owner, new { reservationId = Reservation });
             Lifecycle.Add(new { reservationId = Reservation, action = "cancel-own-reservation", status = cancel.Status });
             if (cancel.Status != 200) throw new InvalidOperationException($"Own reservation cleanup failed: {cancel.Status} {cancel.Text}");
         }
-        else Lifecycle.Add(new { reservationId = Reservation, groupId = Group, action = "retained-no-cleanup-route", finalSubmitted = FinalSubmitted, reason = "Minimal deployment: no reservation cancellation/hard-delete API, no TTL. Future slot and IDs belong only to this run. Never reused; manual lifecycle review required." });
+        else Lifecycle.Add(new { reservationId = Reservation, groupId = Group, action = "retained-no-cleanup-route", finalSubmitted = FinalSubmitted, cleanupDisposition = disposition.ToString(), reason = "Minimal deployment: no reservation cancellation/hard-delete API, no TTL. Future slot and IDs belong only to this run. Never reused; manual lifecycle review required." });
+        if (failures.Count > 0) throw new InvalidOperationException(string.Join(Environment.NewLine, failures));
     }
 }

@@ -1,3 +1,4 @@
 # Keep generated JSON for HW8 stable between Windows authoring and Linux CI.
 /aqa/restaurant-aqa-framework/*.json text eol=lf
+/aqa/restaurant-aqa-verification/*.json text eol=lf
 /docs/homework8/results/*.json text eol=lf

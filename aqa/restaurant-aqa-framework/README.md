@@ -2,6 +2,10 @@
 
 **Підхід: BDD + Screenplay; .NET 10, Reqnroll 3.3.4, TUnit 1.72.10, Playwright 1.63.0.** Інтегровано наданий EPAM AQA Framework у спільний Green&Tasty repository. Production-код та infrastructure не змінено.
 
+**Актуальний режим: business writes тимчасово зупинено в коді та manual workflow.** Secrets/workflow inputs не можуть їх увімкнути. Приклади mutating команд нижче збережено як інструкцію для майбутньої погодженої AQA-середовища, а не дозвіл на поточний AWS backend. [Аудит надійності](../../docs/homework8/RELIABILITY_AUDIT_UA.md), [мінімальна пропозиція середовища](../../docs/homework8/AQA_ENVIRONMENT_PROPOSAL_UA.md).
+
+Безпечні поточні перевірки: build/format/lint/discovery; `python scripts/audit-scenarios.py`; окремий [verification project](../restaurant-aqa-verification/README.md) (34 offline regressions + одна локальна synthetic browser verification). Verification компілює linked source files, **не** посилається на live BDD assembly. CI виконує тільки 34 offline cases і 6 Python reporting/workflow tests; browser verification — окремо локально на встановленому Chrome.
+
 [Фактичні результати](../../docs/homework8/RESULTS_UA.md) · [покриття](../../docs/homework8/COVERAGE_UA.md) · [дані](../../docs/homework8/DATA_LIFECYCLE_UA.md) · [аудит публікації](../../docs/homework8/PUBLIC_READINESS_UA.md).
 
 ## Налаштування й запуск
@@ -20,7 +24,7 @@ pwsh bin/Debug/net10.0/playwright.ps1 install chromium
 
 Для mutating прогону потрібні **обидва** дозволи `AQA_ALLOW_WRITES=true` і `AQA_RETAIN_TEST_DATA=true`. У мінімальному deployment немає reservation cleanup API. Власні Guests відкритої group видаляються, решта записів реєструється в lifecycle manifest. Не запускайте весь набір багаторазово без перегляду журналу. Це документований fallback homework-aqa.md, а не повне прибирання.
 
-`AQA_MAX_RESERVATIONS` обмежує кількість POST /reservations у процесі (приклад конфігурації: 4); `0` забороняє створення. Для повного набору потрібно окремо погодити бюджет до 35 після lifecycle review. Для чотирьох основних UI flows: filter `Category=hw8-ui` і budget=4. Diagnostics `readonly` та `continuation` не створюють reservation; continuation явно використовує manifest того самого перерваного HW8 scenario, відмовляє для Closed/Submitted group або group з Guests. Це інструмент відновлення, а не залежність основних незалежних scenarios від fixed data.
+`AQA_MAX_RESERVATIONS` тепер вимагає явне число 0..4; відсутнє/хибне значення і старий ліміт 35 відхиляються. На час code stop жоден ліміт не дозволяє writes. `readonly` не змінює business data; `continuation` не створює reservation, але **змінює** carts/Guests/order, тому також зупинено. Обидва diagnostics мають `diagnostic/nonacceptance`, не входять до `hw8`/рівнів/`e2e`. Fresh scenario не може повторно використати існуючий order або пропустити вже submitted Owner cart.
 
 ```powershell
 dotnet run --no-build -- --report-trx --treenode-filter '/*/*/*/*[Category=hw8]'
@@ -64,8 +68,8 @@ TRX, TUnit HTML, Reqnroll HTML/messages, screenshots, traces та `AQA-HW8-*-lif
 
 Trace viewer: `pwsh bin/Debug/net10.0/playwright.ps1 show-trace <trace.zip>`. Traces редагуються до attachment: passwords, JWT, invitation та guest bearers замінюються. CI додатково запускає `sanitize-artifacts.py`; ручний перегляд screenshots усе ще потрібен. Артефакти мають retention 7 днів і автоматично не комітяться.
 
-`aqa-quality.yml`: PR та feature push — locked restore, format, build, pinned Gherkin lint, discovery, tracked secret/generated file check. Без secrets, браузерів і business writes.
+`aqa-quality.yml`: PR та feature push — locked restore, format, build, pinned Gherkin lint, discovery, inventory, tracked secret/generated file check і offline regression/report checks. Без secrets, браузерів і business writes.
 
-`aqa-e2e.yml`: **тільки workflow_dispatch**, фіксований scope, checkbox retention, environment `aqa-production`, concurrency 1, без auto-retry. Немає schedule/`pull_request_target`/PR trigger. `continue-on-error` лише забезпечує artifacts; фінальний крок повертає Failed. Variables: `AQA_UI_URL`, `AQA_API_URL`, `AQA_TESTTABLE_ID`; secrets: `AQA_{OWNER,OTHER,WAITER}_{USERNAME,PASSWORD}`. Environment required reviewers/allowed refs налаштовує власник окремо.
+`aqa-e2e.yml` зараз — тільки fail-closed `workflow_dispatch` notification job: без checkout, inputs, environment, Secrets, test process або browser; завершується Failed з причиною suspension. Старий вибір 35 прибрано. Повернення справжнього E2E потребує reviewed code change після погодження cleanup та перевірки реальних Environment controls. GitHub API під час аудиту показав **0 Environments / 0 repository Secrets**, тому попередній запис `environment: aqa-production` сам по собі не був approval gate.
 
 Локальний DNS 01.11.2026 повертав 10.0.0.43 замість Cloudflare. `AQA_UI_DNS_ADDRESS` дозволяє **свіжу перевірену** public DNS answer лише в процесі Chromium. Hostname/SNI/origin/TLS validation збережено. IP не переноситься в CI; TLS bypass у фінальному коді відсутній.

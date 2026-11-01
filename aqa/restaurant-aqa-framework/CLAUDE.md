@@ -49,9 +49,10 @@ Guidance for extending these tests, by hand or with an AI assistant. The command
 
 ## Test data and the shared environment
 
+- Business writes are temporarily code-suspended. Do not lift the stop or execute mutating scenarios against the demo. Only approved isolated fixtures/cleanup can justify a later reviewed re-enable change.
 - HW8 fixtures use `AQA-HW8-<guid>` and remember only IDs returned by their own API creates. GroupScenarioHooks removes only those Guests while their group is Open. The minimal deployment has no reservation cancellation/hard-delete API: explicit retention opt-in and lifecycle manifests are mandatory. See docs/homework8/DATA_LIFECYCLE_UA.md.
 - No global sweep is allowed. Do not rely on fixed historical bookings. ReferenceFeatures are non-executable examples; never run their generic seeding against the shared deployment.
-- GET/PUT/DELETE calls retry on a transient 500; POST never does. Do not add blanket retries to hide a real failure.
+- Only legacy GET reads may retry a transient 500. POST/PUT/PATCH/DELETE are never automatically retried and currently stop before transport. Never use diagnostic continuation as fresh acceptance evidence.
 - Parallelism defaults to the CPU count, capped at 4 (`MAX_PARALLEL_TESTS`). Seed per scenario so scenarios stay independent.
 
 ## A failing test is information

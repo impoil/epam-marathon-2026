@@ -1,0 +1,29 @@
+{
+  "counts": {
+    "Passed": 1,
+    "Failed": 0,
+    "NotExecuted": 0,
+    "Total": 1
+  },
+  "acceptance_counts": {
+    "Passed": 0,
+    "Failed": 0,
+    "NotExecuted": 0
+  },
+  "diagnostic_count": 1,
+  "fresh_acceptance_e2e_passed": false,
+  "tests": [
+    {
+      "name": "Continue the interrupted Owner and Guest browser journey on its own group",
+      "outcome": "Passed",
+      "tags": [
+        "continuation",
+        "trace-always",
+        "ui"
+      ],
+      "classification": "diagnostic-nonacceptance",
+      "duration": "00:00:12.1465628",
+      "reason": ""
+    }
+  ]
+}
